@@ -1,0 +1,22 @@
+{
+  "name": "x",
+  "authors": [
+    "GuillaumeLiard <liardg@gmail.com>"
+  ],
+  "description": "game to understand x",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "backbone.marionette": "marionette#^3.0.0",
+    "jquery": "^3.1.1",
+    "lodash": "^4.16.4"
+  }
+}

@@ -13,6 +13,12 @@ var PlayView = Marionette.View.extend({
     modelEvents: {
         'change:x': 'xChanged'
     },
+    events:{
+        'click': 'pause'
+    },
+    pause:function(){
+        console.log('pause');
+    },
     keyUpdatedPosition:function(){
         var key1 = $('#key-svg');
         var hand1 = $('#hand-svg');

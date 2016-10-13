@@ -1,4 +1,9 @@
 var MainView = Mn.View.extend({
+    channelName: 'general',
+    radioEvents: {
+        'hand:pause': 'pause'
+    },
+
     regions: {
         play: {
             el: '#play',
@@ -19,6 +24,8 @@ var MainView = Mn.View.extend({
         'click': 'pause'
     },
     pause:function(){
-        console.log('pause');
+        var time = Radio.channel('time');
+        time.trigger('hand:pause');
+        // console.log('pause');
     },
 });

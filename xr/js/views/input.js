@@ -1,6 +1,6 @@
 var InputView = Marionette.View.extend({
-    tagName: 'div',
     template: _.template(' <form id="input-form">  Position (Entre -240 and 240): <input id="myNumber" type="number" name="quantity" min="-240" max="240" autofocus></form> <form id="score-form">  Score: <input id="myScore" type="number" >Vies: <input id="myLife" type="number" ></form>'),
+    tagName: 'div',
     onAttach: function() {
         $('#myNumber').focus();
         this.model.set('score',0);

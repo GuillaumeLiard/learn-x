@@ -2,6 +2,8 @@ var time = Radio.channel('time');
 var paused=false;
 
 var GameView = Mn.View.extend({
+    template:_.template('<div id="play"></div><div id="input"></div>'),
+    className:'game',
     regions: {
         play: {
             el: '#play',
@@ -10,8 +12,6 @@ var GameView = Mn.View.extend({
             el: '#input',
         }
     },
-    className:'main',
-    template:_.template('<div id="play"></div><div id="input"></div>'),
     // model:new Backbone.Model({paused:false}),
     // modelEvents:{
     //     'change:paused': 'togglePause'

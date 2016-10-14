@@ -1,48 +1,16 @@
-var time = Radio.channel('time');
-var paused=false;
+var tl;
+var rail;
+var railTemplate = '<svg id="rail" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 48 60" enable-background="new 0 0 48 48" xml:space="preserve"><g><g><path d="M46.1,25.1H1.7c-0.5,0-1-0.399-1-1s0.4-1,1-1h44.5c0.5,0,1,0.4,1,1S46.7,25.1,46.1,25.1z"/></g></g></svg>';
 
 var GameView = Mn.View.extend({
-    template:_.template('<div id="play"></div><div id="input"></div>'),
+    // template:_.template('<svg id="rail" src="xr/images/noun_229873_cc.svg" alt="rail">'),
+    template:_.template(railTemplate),
     className:'game',
-    regions: {
-        play: {
-            el: '#play',
-        },
-        input: {
-            el: '#input',
-        }
-    },
-    // model:new Backbone.Model({paused:false}),
-    // modelEvents:{
-    //     'change:paused': 'togglePause'
-    // },
-    // togglePause:function(){
-    //     this.model.set('paused',!this.model.get('paused'));
-    // },
 
     onAttach:function(){
-        var inputModel = new InputModel();
-        this.showChildView('input', new InputView({model:inputModel}));
-        this.showChildView('play', new PlayView({model:inputModel}));
-        console.log('game2');
-    },
-    events:{
-        'click': 'togglePause'
-    },
-    togglePause:function(){
-        paused=!paused;
-        if(paused){
-            time.trigger('hand:pause');
-            time.trigger('key:pause');
-        }else{
-            time.trigger('hand:resume');
-            time.trigger('key:resume');
-        }
-    },
-    // pause:function(){
-    //
-    //     time.trigger('hand:pause');
-    //     time.trigger('key:pause');
-    //     console.log('pause');
-    // },
+        rail = $('#rail');
+        tl = new TimelineMax();
+        // tl.add(TweenLite.to(rail, 1, {color:"rgba(60, 116, 190, 1)", ease:Power2.easeIn}));
+        tl.add(TweenLite.to(rail, 1, {fill:color5,stroke:color1,opacity:1,scale:2,transformOrigin:"50% 50%"}));
+    }
 });

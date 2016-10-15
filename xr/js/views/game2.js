@@ -11,6 +11,8 @@ var GameView = Mn.View.extend({
         rail = $('#rail');
         tl = new TimelineMax();
         // tl.add(TweenLite.to(rail, 1, {color:"rgba(60, 116, 190, 1)", ease:Power2.easeIn}));
-        tl.add(TweenLite.to(rail, 1, {fill:color5,stroke:color1,opacity:1,scale:2,transformOrigin:"50% 50%"}));
+        TweenLite.to(rail, 1, {opacity:1});
+        TweenLite.to(rail, 1, {scaleX:3});
+        TweenLite.to(rail, 1, {stroke:color4,fill:color5});
     }
 });

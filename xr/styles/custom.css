@@ -37,6 +37,20 @@ html, body {
 	opacity:0;
 
 }
+#chariot{
+	position:absolute;
+	top:50%;
+	left:40%;
+	width: 20%;
+	height:30%;
+	/*scale:5;*/
+	opacity:1;
+
+}
+
+#chariot g g path{
+	fill:red;
+}
 
 #play{
 	position:relative;

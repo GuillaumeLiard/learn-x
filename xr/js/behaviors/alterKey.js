@@ -8,6 +8,13 @@ var AlterKey = Mn.Behavior.extend({
         'keypress @ui.form': 'validate',
         'change @ui.x': 'updateX'
     },
+    onAttach:function(){
+        _.bindAll(this,'focusOnInput');
+        $(document).on('keydown',this.focusOnInput);
+    },
+    focusOnInput:function(){
+        this.ui.x.focus();
+    },
     updateX: function(event) {
         this.view.model.set("x",this.ui.x.val());
     },

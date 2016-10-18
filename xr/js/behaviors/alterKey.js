@@ -14,6 +14,7 @@ var AlterKey = Mn.Behavior.extend({
     },
     focusOnInput:function(){
         this.ui.x.focus();
+        this.view.model.set("x",this.ui.x.val());
     },
     updateX: function(event) {
         this.view.model.set("x",this.ui.x.val());

@@ -68,6 +68,22 @@ html, body {
 
 }
 
+#input-form{
+	display:block;
+	position:absolute;
+	top:90%;
+	left:50%;
+	text-align: center;
+	height:20%;
+	width:30%;
+	opacity:0;
+}
+#x{
+	width:30%;
+	height:20%;
+	font-size:1.5em;
+}
+
 /*#hand{
 	position:absolute;
 	top:30%;
@@ -135,11 +151,11 @@ html, body {
     background-color:green;
 }
 
-#input-form{
+/*#input-form{
 	padding-top : 20px;
 	text-align: center;
 }
 #score-form{
 	padding-top : 20px;
 	text-align: center;
-}
+}*/

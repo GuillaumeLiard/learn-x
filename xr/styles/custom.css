@@ -55,6 +55,11 @@ html, body {
 }
 #chariot{
 	position:absolute;
+	width:128px;
+  	height:160px;
+}
+#chariot2{
+	position:absolute;
 	/*top:50%;
 	left:40%;*/
 	width: 20%;

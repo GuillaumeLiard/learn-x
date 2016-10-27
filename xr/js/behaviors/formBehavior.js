@@ -1,7 +1,7 @@
 var wForm;
 var wGame;
 
-var FormBehavior = MasterBehavior.extend({
+var FormBehavior = Mn.Behavior.extend({
     ui:{
         form:'form'
     },

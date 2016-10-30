@@ -8,6 +8,21 @@ var gutil = require('gulp-util');
 var sourcemaps = require('gulp-sourcemaps');
 var assign = require('lodash.assign');
 
+var concat = require('gulp-concat');
+var template = require('gulp-underscore-template');
+var watch = require('gulp-watch');
+
+
+gulp.task('templates', function () {
+    return watch('./templates/*.html', { ignoreInitial: false},function () {
+        gulp.src('./templates/*.html')
+            .pipe(template())
+            .pipe(concat('templates.js'))
+            .pipe(gulp.dest('./js/utils'));
+    });
+});
+
+
 // add custom browserify options here
 var customOpts = {
   entries: ['./js/app.js'],
@@ -37,3 +52,7 @@ function bundle() {
     .pipe(sourcemaps.write('./')) // writes .map file
     .pipe(gulp.dest('./dist'));
 }
+
+
+// gulp.task('default',['templates']);
+gulp.task('default',['templates','js']);

@@ -1,4 +1,9 @@
-var MasterBehavior = Mn.Behavior.extend({
+var _ = require('underscore');
+var $ = require('jquery');
+var Mn = require('backbone.marionette');
+require('gsap');
+
+module.exports = Mn.Behavior.extend({
     onAttach:function(){
         this.model.set('tl',new TimelineMax());
         this.config();

@@ -1,6 +1,11 @@
+var Backbone = require('backbone');
+var MasterBehavior = require('./masterBehavior');
+
+
 var widthScratch = 480;
 
-var ChariotBehavior = MasterBehavior.extend({
+
+module.exports = MasterBehavior.extend({
     model:new Backbone.Model(),
     ui:{
         chariot:'#chariot',

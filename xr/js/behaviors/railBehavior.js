@@ -1,4 +1,7 @@
-var RailBehavior = MasterBehavior.extend({
+var Backbone = require('backbone');
+var MasterBehavior = require('./masterBehavior');
+
+module.exports = MasterBehavior.extend({
     model:new Backbone.Model(),
     ui:{
         rail:'#rail',

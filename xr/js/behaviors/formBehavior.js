@@ -1,7 +1,10 @@
+var Mn = require('backbone.marionette');
+
+
 var wForm;
 var wGame;
 
-var FormBehavior = Mn.Behavior.extend({
+module.exports = Mn.Behavior.extend({
     ui:{
         form:'form'
     },

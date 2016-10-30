@@ -1,4 +1,8 @@
-var AlterKey = Mn.Behavior.extend({
+var _ = require('underscore');
+var $ = require('jquery');
+var Mn = require('backbone.marionette');
+
+module.exports = Mn.Behavior.extend({
     ui: {
         form: '#input-form',
         x: '#x'

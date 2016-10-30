@@ -1,3 +1,7 @@
+var $ = require('jquery');
+var Mn = require('backbone.marionette');
+var GameView  = require('./views/game2');
+
 $(document).ready(function(){
     var App = Mn.Application.extend({
         region: '#main',

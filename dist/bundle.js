@@ -25093,8 +25093,8 @@ return jQuery;
 }.call(this));
 
 },{}],7:[function(require,module,exports){
-var $ = require("./../../bower_components/jquery/dist/jquery.js");
-var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
+var $ = require("./../bower_components/jquery/dist/jquery.js");
+var Mn = require("./../bower_components/backbone.marionette/lib/backbone.marionette.js");
 var GameView  = require('./views/game2');
 
 $(document).ready(function(){
@@ -25108,10 +25108,10 @@ $(document).ready(function(){
     myApp.start();
 });
 
-},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/jquery/dist/jquery.js":5,"./views/game2":13}],8:[function(require,module,exports){
-var _ = require("./../../../bower_components/underscore/underscore.js");
-var $ = require("./../../../bower_components/jquery/dist/jquery.js");
-var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
+},{"./../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../bower_components/jquery/dist/jquery.js":5,"./views/game2":13}],8:[function(require,module,exports){
+var _ = require("./../../bower_components/underscore/underscore.js");
+var $ = require("./../../bower_components/jquery/dist/jquery.js");
+var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 
 module.exports = Mn.Behavior.extend({
     ui: {
@@ -25154,8 +25154,8 @@ module.exports = Mn.Behavior.extend({
     }
 });
 
-},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/jquery/dist/jquery.js":5,"./../../../bower_components/underscore/underscore.js":6}],9:[function(require,module,exports){
-var Backbone = require("./../../../bower_components/backbone/backbone.js");
+},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/jquery/dist/jquery.js":5,"./../../bower_components/underscore/underscore.js":6}],9:[function(require,module,exports){
+var Backbone = require("./../../bower_components/backbone/backbone.js");
 var MasterBehavior = require('./masterBehavior');
 
 
@@ -25184,8 +25184,8 @@ module.exports = MasterBehavior.extend({
     }
 });
 
-},{"./../../../bower_components/backbone/backbone.js":3,"./masterBehavior":11}],10:[function(require,module,exports){
-var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
+},{"./../../bower_components/backbone/backbone.js":3,"./masterBehavior":11}],10:[function(require,module,exports){
+var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 
 
 var wForm;
@@ -25204,11 +25204,11 @@ onAttach:function(){
 }
 });
 
-},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1}],11:[function(require,module,exports){
-var _ = require("./../../../bower_components/underscore/underscore.js");
-var $ = require("./../../../bower_components/jquery/dist/jquery.js");
-var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
-require("./../../../bower_components/gsap/src/uncompressed/TweenMax.js");
+},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1}],11:[function(require,module,exports){
+var _ = require("./../../bower_components/underscore/underscore.js");
+var $ = require("./../../bower_components/jquery/dist/jquery.js");
+var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
+require("./../../bower_components/gsap/src/uncompressed/TweenMax.js");
 
 module.exports = Mn.Behavior.extend({
     onAttach:function(){
@@ -25237,8 +25237,8 @@ module.exports = Mn.Behavior.extend({
     }
 });
 
-},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/gsap/src/uncompressed/TweenMax.js":4,"./../../../bower_components/jquery/dist/jquery.js":5,"./../../../bower_components/underscore/underscore.js":6}],12:[function(require,module,exports){
-var Backbone = require("./../../../bower_components/backbone/backbone.js");
+},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/gsap/src/uncompressed/TweenMax.js":4,"./../../bower_components/jquery/dist/jquery.js":5,"./../../bower_components/underscore/underscore.js":6}],12:[function(require,module,exports){
+var Backbone = require("./../../bower_components/backbone/backbone.js");
 var MasterBehavior = require('./masterBehavior');
 
 module.exports = MasterBehavior.extend({
@@ -25261,10 +25261,10 @@ module.exports = MasterBehavior.extend({
     }
 });
 
-},{"./../../../bower_components/backbone/backbone.js":3,"./masterBehavior":11}],13:[function(require,module,exports){
-var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
-var Backbone = require("./../../../bower_components/backbone/backbone.js");
-var _ = require("./../../../bower_components/underscore/underscore.js");
+},{"./../../bower_components/backbone/backbone.js":3,"./masterBehavior":11}],13:[function(require,module,exports){
+var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
+var Backbone = require("./../../bower_components/backbone/backbone.js");
+var _ = require("./../../bower_components/underscore/underscore.js");
 
 var AlterKey = require('./../behaviors/alterKey');
 var ChariotBehavior = require('./../behaviors/chariotBehavior');
@@ -25313,7 +25313,7 @@ module.exports = Mn.View.extend({
 
 // };
 
-},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/backbone/backbone.js":3,"./../../../bower_components/underscore/underscore.js":6,"./../behaviors/alterKey":8,"./../behaviors/chariotBehavior":9,"./../behaviors/formBehavior":10,"./../behaviors/railBehavior":12}]},{},[7])
+},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/backbone/backbone.js":3,"./../../bower_components/underscore/underscore.js":6,"./../behaviors/alterKey":8,"./../behaviors/chariotBehavior":9,"./../behaviors/formBehavior":10,"./../behaviors/railBehavior":12}]},{},[7])
 
 
 //# sourceMappingURL=bundle.js.map

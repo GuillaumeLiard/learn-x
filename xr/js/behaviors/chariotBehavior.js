@@ -9,15 +9,15 @@ var ChariotBehavior = MasterBehavior.extend({
     events:{
         'resize window': 'resize'
     },
-  modelEvents: {
-    'change:x': 'xChanged'
-},
-config:function(){
-    this.model.set('state1',{main:this.ui.chariot,left:"50%", top:"70%",wPercent:0.1,xPercent:-50, yPercent:-50});
-},
-xChanged: function(event) {
-      var newX = this.view.model.get('x');
-      var newLeft = 100*(0.5+(newX/widthScratch));
-      TweenLite.to(this.model.get('state1').main, 1, {left:newLeft+"%"});
-}
+    modelEvents: {
+        'change:x': 'xChanged'
+    },
+    config:function(){
+        this.model.set('state1',{main:this.ui.chariot,left:"50%", top:"70%",wPercent:0.1,xPercent:-50, yPercent:-50});
+    },
+    xChanged: function(event) {
+        var newX = this.view.model.get('x');
+        var newLeft = 100*(0.5+(newX/widthScratch));
+        TweenLite.to(this.model.get('state1').main, 1, {left:newLeft+"%"});
+    }
 });

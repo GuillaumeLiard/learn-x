@@ -1,0 +1,25 @@
+{
+  "name": "x",
+  "version": "1.0.0",
+  "description": "game showing isomorphism between horizontal position and number",
+  "main": "xr/js/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GuillaumeLiard/x.git"
+  },
+  "keywords": [
+    "game",
+    "isomorphism",
+    "gsap",
+    "position"
+  ],
+  "author": "Guillaume Liard",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GuillaumeLiard/x/issues"
+  },
+  "homepage": "https://github.com/GuillaumeLiard/x#readme"
+}

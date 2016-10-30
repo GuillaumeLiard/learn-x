@@ -38,6 +38,7 @@ module.exports = Mn.Behavior.extend({
             } else{
                 this.ui.x.val(-1*this.ui.x.val());
             }
+            this.view.triggerMethod('teleport');
             this.view.model.set("x",this.ui.x.val());
         }
     }

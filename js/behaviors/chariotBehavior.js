@@ -24,5 +24,9 @@ module.exports = MasterBehavior.extend({
         var newX = this.view.model.get('x');
         var newLeft = 100*(0.5+(newX/widthScratch));
         TweenLite.to(this.model.get('state1').main, 1, {left:newLeft+"%"});
+    },
+    onTeleport:function(){
+        TweenLite.to(this.ui.chariot, 1, {skewY:"+=180"});
+        console.log('tel');
     }
 });

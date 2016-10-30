@@ -25176,6 +25176,7 @@ module.exports = MasterBehavior.extend({
         'change:x': 'xChanged'
     },
     config:function(){
+        this.model.set('skew',0);
         this.model.set('state1',{main:this.ui.chariot,left:"50%", top:"70%",wPercent:0.1,xPercent:-50, yPercent:-50});
     },
     xChanged: function(event) {
@@ -25184,7 +25185,11 @@ module.exports = MasterBehavior.extend({
         TweenLite.to(this.model.get('state1').main, 1, {left:newLeft+"%"});
     },
     onTeleport:function(){
-        TweenLite.to(this.ui.chariot, 1, {skewY:"+=180"});
+        this.model.set('skew',this.model.get('skew')+180);
+        // TweenLite.to(this.ui.chariot, 0.4, {rotation:360});
+        TweenLite.to(this.ui.chariot, 1, {skewY:this.model.get('skew')});
+        // TweenLite.to(this.ui.chariot, 0.2, {opacity:0,delay:0});
+        // TweenLite.to(this.ui.chariot, 0.2, {opacity:1,delay:0.6});
         console.log('tel');
     }
 });

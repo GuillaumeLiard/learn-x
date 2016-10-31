@@ -9,7 +9,9 @@ var FormBehavior = require('./../behaviors/formBehavior');
 var templates = require('./../utils/templates.js');
 
 module.exports = Mn.View.extend({
-    template:_.template(templates.rail+templates.chariot+templates.input),
+    // template:false,
+    // template:_.template(templates.input),
+    template:templates['templates.js'],
     className:'game',
     model:new Backbone.Model(),
     behaviors: [AlterKey,ChariotBehavior,RailBehavior,FormBehavior],
@@ -19,6 +21,6 @@ module.exports = Mn.View.extend({
     },
 
     // onAttach:function(){
-    //
+    //     console.log(templates.input);
     // },
 });

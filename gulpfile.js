@@ -16,8 +16,8 @@ var watch = require('gulp-watch');
 gulp.task('templates', function () {
     return watch('./templates/*.html', { ignoreInitial: false},function () {
         gulp.src('./templates/*.html')
-            .pipe(template())
             .pipe(concat('templates.js'))
+            .pipe(template())
             .pipe(gulp.dest('./js/utils'));
     });
 });

@@ -12,13 +12,14 @@ module.exports = Mn.View.extend({
     // template:false,
     // template:_.template(templates.input),
     // template:templates['templates.js'],
-    template:templates['full.svg'],
+    template:templates['full_op.svg'],
     className:'game',
     model:new Backbone.Model(),
     // behaviors: [AlterKey,ChariotBehavior,RailBehavior,FormBehavior],
 
     ui:{
-        game:'.game'
+        game:'.game',
+        main:'#layer1'
     },
 
     // onAttach:function(){

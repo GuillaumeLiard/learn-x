@@ -30,6 +30,10 @@ html, body {
 	overflow:hidden;
 
 }
+/*#layer1ds{
+	width:960px;
+	height:800px;
+}*/
 
 #rail{
 	margin: 0 auto;

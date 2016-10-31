@@ -11,10 +11,11 @@ var templates = require('./../utils/templates.js');
 module.exports = Mn.View.extend({
     // template:false,
     // template:_.template(templates.input),
-    template:templates['templates.js'],
+    // template:templates['templates.js'],
+    template:templates['full.svg'],
     className:'game',
     model:new Backbone.Model(),
-    behaviors: [AlterKey,ChariotBehavior,RailBehavior,FormBehavior],
+    // behaviors: [AlterKey,ChariotBehavior,RailBehavior,FormBehavior],
 
     ui:{
         game:'.game'

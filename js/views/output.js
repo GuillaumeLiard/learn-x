@@ -12,7 +12,6 @@ var templates = require('./../utils/templates.js');
 module.exports = Mn.View.extend({
     template:templates['full.svg'],
     className:'output',
-    // model:new Backbone.Model(),
     // behaviors: [ChariotBehavior],
 
     ui:{
@@ -21,10 +20,10 @@ module.exports = Mn.View.extend({
         chariot:'#chariot',
     },
     modelEvents: {
-        'change:x': 'xChanged'
+        'change:x': 'move'
     },
 
-    xChanged: function(event) {
+    move: function(event) {
         TweenLite.to(this.ui.chariot, 1, {x:this.model.get('x')});
     },
 

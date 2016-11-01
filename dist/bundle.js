@@ -25157,44 +25157,38 @@ module.exports = Mn.Behavior.extend({
 
 },{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/jquery/dist/jquery.js":5,"./../../bower_components/underscore/underscore.js":6}],9:[function(require,module,exports){
 var Backbone = require("./../../bower_components/backbone/backbone.js");
-var MasterBehavior = require('./masterBehavior');
+var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 
 
 var widthScratch = 480;
 
 
-module.exports = MasterBehavior.extend({
-    model:new Backbone.Model(),
+module.exports = Mn.View.extend({
     ui:{
         chariot:'#chariot',
-        path:'#chariot g g path'
-    },
-    events:{
-        'resize window': 'resize'
+        // path:'#chariot g g path'
     },
     modelEvents: {
         'change:x': 'xChanged'
     },
-    config:function(){
-        this.model.set('skew',0);
-        this.model.set('state1',{main:this.ui.chariot,left:"50%", top:"70%",wPercent:0.1,xPercent:-50, yPercent:-50});
-    },
+
     xChanged: function(event) {
+        console.log('xchan');
         var newX = this.view.model.get('x');
         var newLeft = 100*(0.5+(newX/widthScratch));
-        TweenLite.to(this.model.get('state1').main, 1, {left:newLeft+"%"});
+        TweenLite.to(this.ui.chariot, 1, {left:newLeft+"%"});
     },
-    onTeleport:function(){
-        this.model.set('skew',this.model.get('skew')+180);
-        // TweenLite.to(this.ui.chariot, 0.4, {rotation:360});
-        TweenLite.to(this.ui.chariot, 1, {skewY:this.model.get('skew')});
-        // TweenLite.to(this.ui.chariot, 0.2, {opacity:0,delay:0});
-        // TweenLite.to(this.ui.chariot, 0.2, {opacity:1,delay:0.6});
-        console.log('tel');
-    }
+    // onTeleport:function(){
+    //     this.model.set('skew',this.model.get('skew')+180);
+    //     // TweenLite.to(this.ui.chariot, 0.4, {rotation:360});
+    //     TweenLite.to(this.ui.chariot, 1, {skewY:this.model.get('skew')});
+    //     // TweenLite.to(this.ui.chariot, 0.2, {opacity:0,delay:0});
+    //     // TweenLite.to(this.ui.chariot, 0.2, {opacity:1,delay:0.6});
+    //     console.log('tel');
+    // }
 });
 
-},{"./../../bower_components/backbone/backbone.js":3,"./masterBehavior":11}],10:[function(require,module,exports){
+},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/backbone/backbone.js":3}],10:[function(require,module,exports){
 var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 
 
@@ -25282,14 +25276,21 @@ return __p;
 exports['full.svg']=function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
+__p+='<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n<!-- Created with Inkscape (http://www.inkscape.org/) -->\n<svg id="compo" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 400" preserveAspectRatio="xMidYMid meet" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">\n    <metadata id="metadata7">\n        <rdf:RDF>\n            <cc:Work rdf:about="">\n                <dc:format>image/svg+xml</dc:format>\n                <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>\n                <dc:title/>\n            </cc:Work>\n        </rdf:RDF>\n    </metadata>\n    <g id="layer1" transform="translate(0,-652.36218)">\n        <g id="g3252" transform="translate(139.17662,819.89404)">\n            <g id="key" transform="matrix(0.41345981,0,0,0.37990032,171.90647,-136.12976)">\n                <path id="path6" d="m49.174,14.246c-2.529,0-4.586-2.057-4.586-4.585,0-2.529,2.057-4.586,4.586-4.586s4.586,2.058,4.586,4.586-2.058,4.585-4.586,4.585zm0-7.172c-1.426,0-2.586,1.16-2.586,2.586s1.16,2.585,2.586,2.585,2.586-1.16,2.586-2.585c0-1.426-1.161-2.586-2.586-2.586z"/>\n                <path id="path8" d="m64.5,86.197c0.55,0,1-0.44,1-1v-4.14c0-0.56-0.45-1-1-1h-11.45v-3.71h1.08c0.55,0,1-0.44,1-1v-5.18c0-0.55-0.45-1-1-1h-1.08v-40.03c6.21-1.71,10.79-7.4,10.79-14.15,0-8.09-6.58-14.67-14.67-14.67-8.08,0-14.67,6.58-14.67,14.67,0,6.77,4.61,12.48,10.85,14.16v40.02h-1.07c-0.56,0-1,0.45-1,1v5.18c0,0.56,0.44,1,1,1h1.07v22.34c0,0.55,0.45,1,1,1h5.7c0.55,0,1-0.45,1-1v-2.63h11.45c0.55,0,1-0.45,1-1v-4.15c0-0.55-0.45-1-1-1h-3.15v-3.71h3.15zm-28-71.21c0-6.99,5.69-12.67,12.67-12.67,6.99,0,12.67,5.68,12.67,12.67s-5.68,12.67-12.67,12.67c-6.98,0-12.67-5.68-12.67-12.67zm14.55,14.54v39.64h-3.7v-39.63c0.6,0.08,1.2,0.12,1.82,0.12,0.64,0,1.27-0.04,1.88-0.13zm0,68.16h-3.7v-21.34h3.7v21.34zm-5.77-23.34v-3.18h7.85v3.18h-7.85zm15.07,17.56h3.15v2.15h-10.45v-12h10.45v2.14h-3.15c-0.55,0-1,0.45-1,1v5.71c0,0.55,0.45,1,1,1z"/>\n            </g>\n            <g id="rail" transform="matrix(10.102235,0,0,2.7677669,-142.74216,39.471711)">\n                <g id="g3238">\n                    <path id="path3240" d="M46.1,25.1h-44.4c-0.5,0-1-0.399-1-1s0.4-1,1-1h44.5c0.5,0,1,0.4,1,1s-0.5,1-1.1,1z"/>\n                </g>\n            </g>\n            <g id="chariot">\n                <g id="g1234" transform="translate(28.868384,-137.79648)">\n                    <g id="g3361" transform="matrix(0.48299279,0,0,0.46834076,56.610567,182.17033)">\n                        <g id="g3363">\n                            <path id="path3365" fill="#000" d="m83.074,53.495h-123c-1.1,0-2-0.9-2-2v-17.5c0-1.1,0.9-2,2-2h123c1.1,0,2,0.9,2,2v17.5c0,1.1-0.9,2-2,2zm-121-4h119v-13.5h-119v13.5z"/>\n                        </g>\n                        <g id="g3367" transform="translate(-42.426407,-0.50507627)">\n                            <path id="path3369" fill="#000" d="m93.7,127.5c-7.2,0-13-5.8-13-13,0-2,0.5-4,1.4-5.8,2.2-4.4,6.7-7.2,11.7-7.2s9.4,2.8,11.7,7.2c0.9,1.8,1.4,3.8,1.4,5.8-0.2,7.2-6,13-13.2,13zm0-22c-3.4,0-6.5,1.9-8.1,5-0.6,1.3-1,2.6-1,4,0,5,4.1,9,9,9,5,0,9-4,9-9,0-1.4-0.3-2.8-1-4-1.4-3.1-4.5-5-7.9-5z"/>\n                        </g>\n                        <g id="g3371" transform="translate(-42.426407,-0.50507627)">\n                            <path id="path3373" fill="#000" d="m93.7,120.5c-3.3,0-6-2.7-6-6,0-0.9,0.2-1.8,0.6-2.7,1-2.1,3.1-3.3,5.4-3.3s4.4,1.3,5.4,3.3c0.4,0.8,0.6,1.7,0.6,2.7,0,3.3-2.7,6-6,6zm0-10c-1.5,0-2.9,0.9-3.6,2.2-0.3,0.6-0.4,1.2-0.4,1.8,0,2.2,1.8,4,4,4s4-1.8,4-4c0-0.6-0.1-1.2-0.4-1.8-0.7-1.4-2.1-2.2-3.6-2.2z"/>\n                        </g>\n                        <g id="g3375" transform="translate(-42.426407,-0.50507627)">\n                            <path id="path3377" fill="#000" d="m34.3,127.5c-7.2,0-13-5.8-13-13,0-2,0.5-4,1.4-5.8,2.2-4.4,6.7-7.2,11.7-7.2s9.4,2.8,11.7,7.2c0.9,1.8,1.4,3.8,1.4,5.8-0.1,7.2-6,13-13.2,13zm0-22c-3.4,0-6.5,1.9-8.1,5-0.6,1.3-1,2.6-1,4,0,5,4.1,9,9,9s9-4,9-9c0-1.4-0.3-2.8-1-4-1.3-3.1-4.4-5-7.9-5z"/>\n                        </g>\n                        <g id="g3379" transform="translate(-42.426407,-0.50507627)">\n                            <path id="path3381" fill="#000" d="m34.3,120.5c-3.3,0-6-2.7-6-6,0-0.9,0.2-1.8,0.6-2.7,1-2.1,3.1-3.3,5.4-3.3s4.4,1.3,5.4,3.3c0.4,0.8,0.6,1.8,0.6,2.7,0.1,3.3-2.6,6-6,6zm0-10c-1.5,0-2.9,0.9-3.6,2.2-0.3,0.6-0.4,1.2-0.4,1.8,0,2.2,1.8,4,4,4s4-1.8,4-4c0-0.6-0.1-1.2-0.4-1.8-0.7-1.4-2-2.2-3.6-2.2z"/>\n                        </g>\n                        <g id="g3387" transform="translate(-42.426407,-0.50507627)">\n                            <path id="path3389" fill="#000" d="m111.3,111.6h-7.7c-0.8,0-1.4-0.4-1.8-1.1-1.5-3.1-4.6-5-8.1-5-3.4,0-6.5,1.9-8.1,5-0.3,0.7-1,1.1-1.8,1.1h-39.6c-0.8,0-1.4-0.4-1.8-1.1-1.5-3.1-4.6-5-8.1-5s-6.5,1.9-8.1,5c-0.3,0.7-1,1.1-1.8,1.1h-7.7c-1,0-1.8-0.7-2-1.7l-8.3-57.6c-0.1-0.6,0.1-1.2,0.5-1.6s0.9-0.7,1.5-0.7h111.3c0.6,0,1.1,0.3,1.5,0.7s0.5,1,0.5,1.6l-8.4,57.5c-0.2,1-1,1.8-2,1.8zm-6.6-4h4.8l7.8-53.5h-106.6l7.8,53.5h4.8c2.4-3.8,6.5-6.1,11-6.1s8.7,2.3,11,6.1h37.3c2.4-3.8,6.5-6.1,11-6.1,4.6,0,8.7,2.3,11.1,6.1z"/>\n                        </g>\n                        <g id="g3391" transform="translate(-42.426407,-0.50507627)">\n                            <path id="path3393" fill="#000" d="m97.7,84.3c-0.6,0-1-0.4-1-1v-22.7c0-0.6,0.4-1,1-1s1,0.4,1,1v22.7c0,0.5-0.5,1-1,1z"/>\n                        </g>\n                        <g id="g3395" transform="translate(-42.426407,-0.50507627)">\n                            <path id="path3397" fill="#000" d="m75.2,84.3c-0.6,0-1-0.4-1-1v-22.7c0-0.6,0.4-1,1-1s1,0.4,1,1v22.7c0,0.5-0.4,1-1,1z"/>\n                        </g>\n                        <g id="g3399" transform="translate(-42.426407,-0.50507627)">\n                            <path id="path3401" fill="#000" d="m52.8,84.3c-0.6,0-1-0.4-1-1v-22.7c0-0.6,0.4-1,1-1s1,0.4,1,1v22.7c0,0.5-0.5,1-1,1z"/>\n                        </g>\n                        <g id="g3403" transform="translate(-42.426407,-0.50507627)">\n                            <path id="path3405" fill="#000" d="m30.3,84.3c-0.6,0-1-0.4-1-1v-22.7c0-0.6,0.4-1,1-1s1,0.4,1,1v22.7c0,0.5-0.4,1-1,1z"/>\n                        </g>\n                        <g id="g3407" transform="translate(-42.426407,-0.50507627)">\n                            <path id="path3409" fill="#000" d="M113.9,92.8h-99.8c-0.6,0-1-0.4-1-1s0.4-1,1-1h99.7c0.6,0,1,0.4,1,1s-0.4,1-0.9,1z"/>\n                        </g>\n                    </g>\n                </g>\n            </g>\n        </g>\n    </g>\n</svg>\n';
+}
+return __p;
+};
+exports['full_old.svg']=function(obj){
+var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
+with(obj||{}){
 __p+='<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n<!-- Created with Inkscape (http://www.inkscape.org/) -->\n\n<svg\n   xmlns:dc="http://purl.org/dc/elements/1.1/"\n   xmlns:cc="http://creativecommons.org/ns#"\n   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"\n   xmlns:svg="http://www.w3.org/2000/svg"\n   xmlns="http://www.w3.org/2000/svg"\n   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"\n   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"\n   width="480"\n   height="400"\n   id="compo"\n   version="1.1"\n   inkscape:version="0.48.4 r9939"\n   sodipodi:docname="full.svg">\n  <defs\n     id="defs4" />\n  <sodipodi:namedview\n     id="base"\n     pagecolor="#ffffff"\n     bordercolor="#666666"\n     borderopacity="1.0"\n     inkscape:pageopacity="0.0"\n     inkscape:pageshadow="2"\n     inkscape:zoom="1.979899"\n     inkscape:cx="214.70031"\n     inkscape:cy="204.26276"\n     inkscape:document-units="px"\n     inkscape:current-layer="layer1"\n     showgrid="false"\n     inkscape:window-width="1855"\n     inkscape:window-height="1176"\n     inkscape:window-x="65"\n     inkscape:window-y="24"\n     inkscape:window-maximized="1" />\n  <metadata\n     id="metadata7">\n    <rdf:RDF>\n      <cc:Work\n         rdf:about="">\n        <dc:format>image/svg+xml</dc:format>\n        <dc:type\n           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />\n        <dc:title></dc:title>\n      </cc:Work>\n    </rdf:RDF>\n  </metadata>\n  <g\n     inkscape:label="Calque 1"\n     inkscape:groupmode="layer"\n     id="layer1"\n     transform="translate(0,-652.36218)">\n    <g\n       id="g3252"\n       transform="translate(139.17662,819.89404)">\n      <g\n         transform="matrix(0.41345981,0,0,0.37990032,171.90647,-136.12976)"\n         id="key">\n        <path\n           inkscape:connector-curvature="0"\n           id="path6"\n           d="m 49.174,14.246 c -2.529,0 -4.586,-2.057 -4.586,-4.585 0,-2.529 2.057,-4.586 4.586,-4.586 2.529,0 4.586,2.058 4.586,4.586 0,2.528 -2.058,4.585 -4.586,4.585 z m 0,-7.172 c -1.426,0 -2.586,1.16 -2.586,2.586 0,1.426 1.16,2.585 2.586,2.585 1.426,0 2.586,-1.16 2.586,-2.585 0,-1.426 -1.161,-2.586 -2.586,-2.586 z" />\n        <path\n           inkscape:connector-curvature="0"\n           id="path8"\n           d="m 64.5,86.197 c 0.55,0 1,-0.44 1,-1 v -4.14 c 0,-0.56 -0.45,-1 -1,-1 H 53.05 v -3.71 h 1.08 c 0.55,0 1,-0.44 1,-1 v -5.18 c 0,-0.55 -0.45,-1 -1,-1 h -1.08 v -40.03 c 6.21,-1.71 10.79,-7.4 10.79,-14.15 0,-8.09 -6.58,-14.67 -14.67,-14.67 -8.08,0 -14.67,6.58 -14.67,14.67 0,6.77 4.61,12.48 10.85,14.16 v 40.02 h -1.07 c -0.56,0 -1,0.45 -1,1 v 5.18 c 0,0.56 0.44,1 1,1 h 1.07 v 22.34 c 0,0.55 0.45,1 1,1 h 5.7 c 0.55,0 1,-0.45 1,-1 v -2.63 H 64.5 c 0.55,0 1,-0.45 1,-1 v -4.15 c 0,-0.55 -0.45,-1 -1,-1 h -3.15 v -3.71 h 3.15 z m -28,-71.21 c 0,-6.99 5.69,-12.67 12.67,-12.67 6.99,0 12.67,5.68 12.67,12.67 0,6.99 -5.68,12.67 -12.67,12.67 -6.98,0 -12.67,-5.68 -12.67,-12.67 z m 14.55,14.54 v 39.64 h -3.7 v -39.63 c 0.6,0.08 1.2,0.12 1.82,0.12 0.64,0 1.27,-0.04 1.88,-0.13 z m 0,68.16 h -3.7 v -21.34 h 3.7 v 21.34 z m -5.77,-23.34 v -3.18 h 7.85 v 3.18 h -7.85 z m 15.07,17.56 h 3.15 v 2.15 H 53.05 v -12 H 63.5 v 2.14 h -3.15 c -0.55,0 -1,0.45 -1,1 v 5.71 c 0,0.55 0.45,1 1,1 z" />\n      </g>\n      <g\n         id="rail"\n         transform="matrix(10.102235,0,0,2.7677669,-142.74216,39.471711)">\n        <g\n           id="g3238">\n          <path\n             id="path3240"\n             d="M 46.1,25.1 H 1.7 c -0.5,0 -1,-0.399 -1,-1 0,-0.601 0.4,-1 1,-1 h 44.5 c 0.5,0 1,0.4 1,1 0,0.6 -0.5,1 -1.1,1 z"\n             inkscape:connector-curvature="0" />\n        </g>\n      </g>\n      <g\n         id="chariot"\n         transform="translate(28.868384,-137.79648)">\n        <g\n           id="g3361"\n           transform="matrix(0.48299279,0,0,0.46834076,56.610567,182.17033)">\n          <g\n             id="g3363">\n            <path\n               id="path3365"\n               d="m 83.073593,53.494924 h -123 c -1.1,0 -2,-0.9 -2,-2 v -17.5 c 0,-1.1 0.9,-2 2,-2 h 123 c 1.1,0 2,0.9 2,2 v 17.5 c 0,1.1 -0.9,2 -2,2 z m -121,-4 h 119 v -13.5 h -119 v 13.5 z"\n               inkscape:connector-curvature="0"\n               style="fill:#000000" />\n          </g>\n          <g\n             id="g3367"\n             transform="translate(-42.426407,-0.50507627)">\n            <path\n               id="path3369"\n               d="m 93.7,127.5 c -7.2,0 -13,-5.8 -13,-13 0,-2 0.5,-4 1.4,-5.8 2.2,-4.4 6.7,-7.2 11.7,-7.2 5,0 9.4,2.8 11.7,7.2 0.9,1.8 1.4,3.8 1.4,5.8 -0.2,7.2 -6,13 -13.2,13 z m 0,-22 c -3.4,0 -6.5,1.9 -8.1,5 -0.6,1.3 -1,2.6 -1,4 0,5 4.1,9 9,9 5,0 9,-4 9,-9 0,-1.4 -0.3,-2.8 -1,-4 -1.4,-3.1 -4.5,-5 -7.9,-5 z"\n               inkscape:connector-curvature="0"\n               style="fill:#000000" />\n          </g>\n          <g\n             id="g3371"\n             transform="translate(-42.426407,-0.50507627)">\n            <path\n               id="path3373"\n               d="m 93.7,120.5 c -3.3,0 -6,-2.7 -6,-6 0,-0.9 0.2,-1.8 0.6,-2.7 1,-2.1 3.1,-3.3 5.4,-3.3 2.3,0 4.4,1.3 5.4,3.3 0.4,0.8 0.6,1.7 0.6,2.7 0,3.3 -2.7,6 -6,6 z m 0,-10 c -1.5,0 -2.9,0.9 -3.6,2.2 -0.3,0.6 -0.4,1.2 -0.4,1.8 0,2.2 1.8,4 4,4 2.2,0 4,-1.8 4,-4 0,-0.6 -0.1,-1.2 -0.4,-1.8 -0.7,-1.4 -2.1,-2.2 -3.6,-2.2 z"\n               inkscape:connector-curvature="0"\n               style="fill:#000000" />\n          </g>\n          <g\n             id="g3375"\n             transform="translate(-42.426407,-0.50507627)">\n            <path\n               id="path3377"\n               d="m 34.3,127.5 c -7.2,0 -13,-5.8 -13,-13 0,-2 0.5,-4 1.4,-5.8 2.2,-4.4 6.7,-7.2 11.7,-7.2 5,0 9.4,2.8 11.7,7.2 0.9,1.8 1.4,3.8 1.4,5.8 -0.1,7.2 -6,13 -13.2,13 z m 0,-22 c -3.4,0 -6.5,1.9 -8.1,5 -0.6,1.3 -1,2.6 -1,4 0,5 4.1,9 9,9 4.9,0 9,-4 9,-9 0,-1.4 -0.3,-2.8 -1,-4 -1.3,-3.1 -4.4,-5 -7.9,-5 z"\n               inkscape:connector-curvature="0"\n               style="fill:#000000" />\n          </g>\n          <g\n             id="g3379"\n             transform="translate(-42.426407,-0.50507627)">\n            <path\n               id="path3381"\n               d="m 34.3,120.5 c -3.3,0 -6,-2.7 -6,-6 0,-0.9 0.2,-1.8 0.6,-2.7 1,-2.1 3.1,-3.3 5.4,-3.3 2.3,0 4.4,1.3 5.4,3.3 0.4,0.8 0.6,1.8 0.6,2.7 0.1,3.3 -2.6,6 -6,6 z m 0,-10 c -1.5,0 -2.9,0.9 -3.6,2.2 -0.3,0.6 -0.4,1.2 -0.4,1.8 0,2.2 1.8,4 4,4 2.2,0 4,-1.8 4,-4 0,-0.6 -0.1,-1.2 -0.4,-1.8 -0.7,-1.4 -2,-2.2 -3.6,-2.2 z"\n               inkscape:connector-curvature="0"\n               style="fill:#000000" />\n          </g>\n          <g\n             id="g3387"\n             transform="translate(-42.426407,-0.50507627)">\n            <path\n               id="path3389"\n               d="m 111.3,111.6 h -7.7 c -0.8,0 -1.4,-0.4 -1.8,-1.1 -1.5,-3.1 -4.6,-5 -8.1,-5 -3.4,0 -6.5,1.9 -8.1,5 -0.3,0.7 -1,1.1 -1.8,1.1 H 44.2 c -0.8,0 -1.4,-0.4 -1.8,-1.1 -1.5,-3.1 -4.6,-5 -8.1,-5 -3.5,0 -6.5,1.9 -8.1,5 -0.3,0.7 -1,1.1 -1.8,1.1 h -7.7 c -1,0 -1.8,-0.7 -2,-1.7 L 6.4,52.3 C 6.3,51.7 6.5,51.1 6.9,50.7 7.3,50.3 7.8,50 8.4,50 h 111.3 c 0.6,0 1.1,0.3 1.5,0.7 0.4,0.4 0.5,1 0.5,1.6 l -8.4,57.5 c -0.2,1 -1,1.8 -2,1.8 z m -6.6,-4 h 4.8 l 7.8,-53.5 H 10.7 l 7.8,53.5 h 4.8 c 2.4,-3.8 6.5,-6.1 11,-6.1 4.5,0 8.7,2.3 11,6.1 h 37.3 c 2.4,-3.8 6.5,-6.1 11,-6.1 4.6,0 8.7,2.3 11.1,6.1 z"\n               inkscape:connector-curvature="0"\n               style="fill:#000000" />\n          </g>\n          <g\n             id="g3391"\n             transform="translate(-42.426407,-0.50507627)">\n            <path\n               id="path3393"\n               d="m 97.7,84.3 c -0.6,0 -1,-0.4 -1,-1 V 60.6 c 0,-0.6 0.4,-1 1,-1 0.6,0 1,0.4 1,1 v 22.7 c 0,0.5 -0.5,1 -1,1 z"\n               inkscape:connector-curvature="0"\n               style="fill:#000000" />\n          </g>\n          <g\n             id="g3395"\n             transform="translate(-42.426407,-0.50507627)">\n            <path\n               id="path3397"\n               d="m 75.2,84.3 c -0.6,0 -1,-0.4 -1,-1 V 60.6 c 0,-0.6 0.4,-1 1,-1 0.6,0 1,0.4 1,1 v 22.7 c 0,0.5 -0.4,1 -1,1 z"\n               inkscape:connector-curvature="0"\n               style="fill:#000000" />\n          </g>\n          <g\n             id="g3399"\n             transform="translate(-42.426407,-0.50507627)">\n            <path\n               id="path3401"\n               d="m 52.8,84.3 c -0.6,0 -1,-0.4 -1,-1 V 60.6 c 0,-0.6 0.4,-1 1,-1 0.6,0 1,0.4 1,1 v 22.7 c 0,0.5 -0.5,1 -1,1 z"\n               inkscape:connector-curvature="0"\n               style="fill:#000000" />\n          </g>\n          <g\n             id="g3403"\n             transform="translate(-42.426407,-0.50507627)">\n            <path\n               id="path3405"\n               d="m 30.3,84.3 c -0.6,0 -1,-0.4 -1,-1 V 60.6 c 0,-0.6 0.4,-1 1,-1 0.6,0 1,0.4 1,1 v 22.7 c 0,0.5 -0.4,1 -1,1 z"\n               inkscape:connector-curvature="0"\n               style="fill:#000000" />\n          </g>\n          <g\n             id="g3407"\n             transform="translate(-42.426407,-0.50507627)">\n            <path\n               id="path3409"\n               d="M 113.9,92.8 H 14.1 c -0.6,0 -1,-0.4 -1,-1 0,-0.6 0.4,-1 1,-1 h 99.7 c 0.6,0 1,0.4 1,1 0,0.6 -0.4,1 -0.9,1 z"\n               inkscape:connector-curvature="0"\n               style="fill:#000000" />\n          </g>\n        </g>\n      </g>\n    </g>\n  </g>\n</svg>\n';
 }
 return __p;
 };
-exports['full_op.svg']=function(obj){
+exports['game']=function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
-__p+='<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n<!-- Created with Inkscape (http://www.inkscape.org/) -->\n<svg id="compo" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 400" preserveAspectRatio="xMidYMid meet" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">\n <metadata id="metadata7">\n  <rdf:RDF>\n   <cc:Work rdf:about="">\n    <dc:format>image/svg+xml</dc:format>\n    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>\n    <dc:title/>\n   </cc:Work>\n  </rdf:RDF>\n </metadata>\n <g id="layer1" transform="translate(0,-652.36218)">\n  <g id="g3252" transform="translate(139.17662,819.89404)">\n   <g id="key" transform="matrix(0.41345981,0,0,0.37990032,171.90647,-136.12976)">\n    <path id="path6" d="m49.174,14.246c-2.529,0-4.586-2.057-4.586-4.585,0-2.529,2.057-4.586,4.586-4.586s4.586,2.058,4.586,4.586-2.058,4.585-4.586,4.585zm0-7.172c-1.426,0-2.586,1.16-2.586,2.586s1.16,2.585,2.586,2.585,2.586-1.16,2.586-2.585c0-1.426-1.161-2.586-2.586-2.586z"/>\n    <path id="path8" d="m64.5,86.197c0.55,0,1-0.44,1-1v-4.14c0-0.56-0.45-1-1-1h-11.45v-3.71h1.08c0.55,0,1-0.44,1-1v-5.18c0-0.55-0.45-1-1-1h-1.08v-40.03c6.21-1.71,10.79-7.4,10.79-14.15,0-8.09-6.58-14.67-14.67-14.67-8.08,0-14.67,6.58-14.67,14.67,0,6.77,4.61,12.48,10.85,14.16v40.02h-1.07c-0.56,0-1,0.45-1,1v5.18c0,0.56,0.44,1,1,1h1.07v22.34c0,0.55,0.45,1,1,1h5.7c0.55,0,1-0.45,1-1v-2.63h11.45c0.55,0,1-0.45,1-1v-4.15c0-0.55-0.45-1-1-1h-3.15v-3.71h3.15zm-28-71.21c0-6.99,5.69-12.67,12.67-12.67,6.99,0,12.67,5.68,12.67,12.67s-5.68,12.67-12.67,12.67c-6.98,0-12.67-5.68-12.67-12.67zm14.55,14.54v39.64h-3.7v-39.63c0.6,0.08,1.2,0.12,1.82,0.12,0.64,0,1.27-0.04,1.88-0.13zm0,68.16h-3.7v-21.34h3.7v21.34zm-5.77-23.34v-3.18h7.85v3.18h-7.85zm15.07,17.56h3.15v2.15h-10.45v-12h10.45v2.14h-3.15c-0.55,0-1,0.45-1,1v5.71c0,0.55,0.45,1,1,1z"/>\n   </g>\n   <g id="rail" transform="matrix(10.102235,0,0,2.7677669,-142.74216,39.471711)">\n    <g id="g3238">\n     <path id="path3240" d="M46.1,25.1h-44.4c-0.5,0-1-0.399-1-1s0.4-1,1-1h44.5c0.5,0,1,0.4,1,1s-0.5,1-1.1,1z"/>\n    </g>\n   </g>\n   <g id="chariot" transform="translate(28.868384,-137.79648)">\n    <g id="g3361" transform="matrix(0.48299279,0,0,0.46834076,56.610567,182.17033)">\n     <g id="g3363">\n      <path id="path3365" fill="#000" d="m83.074,53.495h-123c-1.1,0-2-0.9-2-2v-17.5c0-1.1,0.9-2,2-2h123c1.1,0,2,0.9,2,2v17.5c0,1.1-0.9,2-2,2zm-121-4h119v-13.5h-119v13.5z"/>\n     </g>\n     <g id="g3367" transform="translate(-42.426407,-0.50507627)">\n      <path id="path3369" fill="#000" d="m93.7,127.5c-7.2,0-13-5.8-13-13,0-2,0.5-4,1.4-5.8,2.2-4.4,6.7-7.2,11.7-7.2s9.4,2.8,11.7,7.2c0.9,1.8,1.4,3.8,1.4,5.8-0.2,7.2-6,13-13.2,13zm0-22c-3.4,0-6.5,1.9-8.1,5-0.6,1.3-1,2.6-1,4,0,5,4.1,9,9,9,5,0,9-4,9-9,0-1.4-0.3-2.8-1-4-1.4-3.1-4.5-5-7.9-5z"/>\n     </g>\n     <g id="g3371" transform="translate(-42.426407,-0.50507627)">\n      <path id="path3373" fill="#000" d="m93.7,120.5c-3.3,0-6-2.7-6-6,0-0.9,0.2-1.8,0.6-2.7,1-2.1,3.1-3.3,5.4-3.3s4.4,1.3,5.4,3.3c0.4,0.8,0.6,1.7,0.6,2.7,0,3.3-2.7,6-6,6zm0-10c-1.5,0-2.9,0.9-3.6,2.2-0.3,0.6-0.4,1.2-0.4,1.8,0,2.2,1.8,4,4,4s4-1.8,4-4c0-0.6-0.1-1.2-0.4-1.8-0.7-1.4-2.1-2.2-3.6-2.2z"/>\n     </g>\n     <g id="g3375" transform="translate(-42.426407,-0.50507627)">\n      <path id="path3377" fill="#000" d="m34.3,127.5c-7.2,0-13-5.8-13-13,0-2,0.5-4,1.4-5.8,2.2-4.4,6.7-7.2,11.7-7.2s9.4,2.8,11.7,7.2c0.9,1.8,1.4,3.8,1.4,5.8-0.1,7.2-6,13-13.2,13zm0-22c-3.4,0-6.5,1.9-8.1,5-0.6,1.3-1,2.6-1,4,0,5,4.1,9,9,9s9-4,9-9c0-1.4-0.3-2.8-1-4-1.3-3.1-4.4-5-7.9-5z"/>\n     </g>\n     <g id="g3379" transform="translate(-42.426407,-0.50507627)">\n      <path id="path3381" fill="#000" d="m34.3,120.5c-3.3,0-6-2.7-6-6,0-0.9,0.2-1.8,0.6-2.7,1-2.1,3.1-3.3,5.4-3.3s4.4,1.3,5.4,3.3c0.4,0.8,0.6,1.8,0.6,2.7,0.1,3.3-2.6,6-6,6zm0-10c-1.5,0-2.9,0.9-3.6,2.2-0.3,0.6-0.4,1.2-0.4,1.8,0,2.2,1.8,4,4,4s4-1.8,4-4c0-0.6-0.1-1.2-0.4-1.8-0.7-1.4-2-2.2-3.6-2.2z"/>\n     </g>\n     <g id="g3387" transform="translate(-42.426407,-0.50507627)">\n      <path id="path3389" fill="#000" d="m111.3,111.6h-7.7c-0.8,0-1.4-0.4-1.8-1.1-1.5-3.1-4.6-5-8.1-5-3.4,0-6.5,1.9-8.1,5-0.3,0.7-1,1.1-1.8,1.1h-39.6c-0.8,0-1.4-0.4-1.8-1.1-1.5-3.1-4.6-5-8.1-5s-6.5,1.9-8.1,5c-0.3,0.7-1,1.1-1.8,1.1h-7.7c-1,0-1.8-0.7-2-1.7l-8.3-57.6c-0.1-0.6,0.1-1.2,0.5-1.6s0.9-0.7,1.5-0.7h111.3c0.6,0,1.1,0.3,1.5,0.7s0.5,1,0.5,1.6l-8.4,57.5c-0.2,1-1,1.8-2,1.8zm-6.6-4h4.8l7.8-53.5h-106.6l7.8,53.5h4.8c2.4-3.8,6.5-6.1,11-6.1s8.7,2.3,11,6.1h37.3c2.4-3.8,6.5-6.1,11-6.1,4.6,0,8.7,2.3,11.1,6.1z"/>\n     </g>\n     <g id="g3391" transform="translate(-42.426407,-0.50507627)">\n      <path id="path3393" fill="#000" d="m97.7,84.3c-0.6,0-1-0.4-1-1v-22.7c0-0.6,0.4-1,1-1s1,0.4,1,1v22.7c0,0.5-0.5,1-1,1z"/>\n     </g>\n     <g id="g3395" transform="translate(-42.426407,-0.50507627)">\n      <path id="path3397" fill="#000" d="m75.2,84.3c-0.6,0-1-0.4-1-1v-22.7c0-0.6,0.4-1,1-1s1,0.4,1,1v22.7c0,0.5-0.4,1-1,1z"/>\n     </g>\n     <g id="g3399" transform="translate(-42.426407,-0.50507627)">\n      <path id="path3401" fill="#000" d="m52.8,84.3c-0.6,0-1-0.4-1-1v-22.7c0-0.6,0.4-1,1-1s1,0.4,1,1v22.7c0,0.5-0.5,1-1,1z"/>\n     </g>\n     <g id="g3403" transform="translate(-42.426407,-0.50507627)">\n      <path id="path3405" fill="#000" d="m30.3,84.3c-0.6,0-1-0.4-1-1v-22.7c0-0.6,0.4-1,1-1s1,0.4,1,1v22.7c0,0.5-0.4,1-1,1z"/>\n     </g>\n     <g id="g3407" transform="translate(-42.426407,-0.50507627)">\n      <path id="path3409" fill="#000" d="M113.9,92.8h-99.8c-0.6,0-1-0.4-1-1s0.4-1,1-1h99.7c0.6,0,1,0.4,1,1s-0.4,1-0.9,1z"/>\n     </g>\n    </g>\n   </g>\n  </g>\n </g>\n</svg>\n';
+__p+='<div id="zone1"></div>\n<div id="zone2"></div>\n';
 }
 return __p;
 };
@@ -25315,21 +25316,79 @@ var AlterKey = require('./../behaviors/alterKey');
 var ChariotBehavior = require('./../behaviors/chariotBehavior');
 var RailBehavior = require('./../behaviors/railBehavior');
 var FormBehavior = require('./../behaviors/formBehavior');
-
 var templates = require('./../utils/templates.js');
+var Output = require('./output.js');
+var Input = require('./input.js');
 
 module.exports = Mn.View.extend({
-    // template:false,
-    // template:_.template(templates.input),
-    // template:templates['templates.js'],
-    template:templates['full_op.svg'],
+    template:templates.game,
+    // template:templates['full_op.svg'],
     className:'game',
     model:new Backbone.Model(),
+    regions: {
+        zone1: '#zone1',
+        zone2: '#zone2'
+    },
+    onRender: function() {
+        this.showChildView('zone2', new Input({model:this.model}));
+        this.showChildView('zone1', new Output({model:this.model}));
+    },
     // behaviors: [AlterKey,ChariotBehavior,RailBehavior,FormBehavior],
 
     ui:{
         game:'.game',
-        main:'#layer1'
+        // main:'#layer1'
+    },
+
+    // onAttach:function(){
+    //     console.log(templates.input);
+    // },
+});
+
+},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/backbone/backbone.js":3,"./../../bower_components/underscore/underscore.js":6,"./../behaviors/alterKey":8,"./../behaviors/chariotBehavior":9,"./../behaviors/formBehavior":10,"./../behaviors/railBehavior":12,"./../utils/templates.js":13,"./input.js":15,"./output.js":16}],15:[function(require,module,exports){
+var Backbone = require("./../../bower_components/backbone/backbone.js");
+var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
+var AlterKey = require('./../behaviors/alterKey');
+var FormBehavior = require('./../behaviors/formBehavior');
+
+var templates = require('./../utils/templates.js');
+
+module.exports = Mn.View.extend({
+    model:new Backbone.Model(),
+    template:templates.input,
+    className:'input',
+    behaviors: [AlterKey,FormBehavior],
+});
+
+},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/backbone/backbone.js":3,"./../behaviors/alterKey":8,"./../behaviors/formBehavior":10,"./../utils/templates.js":13}],16:[function(require,module,exports){
+var _ = require("./../../bower_components/underscore/underscore.js");
+var Backbone = require("./../../bower_components/backbone/backbone.js");
+var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
+var AlterKey = require('./../behaviors/alterKey');
+var ChariotBehavior = require('./../behaviors/chariotBehavior');
+var RailBehavior = require('./../behaviors/railBehavior');
+var FormBehavior = require('./../behaviors/formBehavior');
+
+var templates = require('./../utils/templates.js');
+
+
+module.exports = Mn.View.extend({
+    template:templates['full.svg'],
+    className:'output',
+    // model:new Backbone.Model(),
+    // behaviors: [ChariotBehavior],
+
+    ui:{
+        // game:'.game',
+        main:'#layer1',
+        chariot:'#chariot',
+    },
+    modelEvents: {
+        'change:x': 'xChanged'
+    },
+
+    xChanged: function(event) {
+        TweenLite.to(this.ui.chariot, 1, {x:this.model.get('x')});
     },
 
     // onAttach:function(){

@@ -1,53 +1,34 @@
-var keyFall;
-// var speedFall = 1;
-var hand;
+var _ = require('underscore');
+var Backbone = require('backbone');
+var Mn = require('backbone.marionette');
+var AlterKey = require('./../behaviors/alterKey');
+var ChariotBehavior = require('./../behaviors/chariotBehavior');
+var RailBehavior = require('./../behaviors/railBehavior');
+var FormBehavior = require('./../behaviors/formBehavior');
 
-var PlayView = Marionette.View.extend({
-    tagName: 'div',
-    template: _.template('<div id="scratch-screen"><div id="key"><img id="key-svg" src="xr/images/key.svg" alt="key"></div><div id="hand"><img id="hand-svg" src="xr/images/hand.svg" alt="hand"></div></div>'),
-    initialize:function(){
-        animHand = new AnimHand();
-        animKey = new AnimKey();
-    },
+var templates = require('./../utils/templates.js');
 
-    onAttach: function() {
-        var key = $('#key');
-        // _.bindAll(this, 'keyFallen');
-        // _.bindAll(this, 'keyUpdatedPosition');
-        animKey.start(key);
-        // keyFall = TweenLite.to(key, speedFall, {top:"50%", ease:Power2.easeIn,onUpdate:this.keyUpdatedPosition,onComplete:this.keyFallen});
+
+module.exports = Mn.View.extend({
+    template:templates['full.svg'],
+    className:'output',
+    // model:new Backbone.Model(),
+    // behaviors: [ChariotBehavior],
+
+    ui:{
+        // game:'.game',
+        main:'#layer1',
+        chariot:'#chariot',
     },
     modelEvents: {
-        'change:x': 'moveHand'
+        'change:x': 'xChanged'
     },
 
-    channelName: 'space',
-    radioEvents: {
-        'collision:keyHand': 'handleWin'
-    },
-    handleWin:function(){
-        console.log('touched!');
+    xChanged: function(event) {
+        TweenLite.to(this.ui.chariot, 1, {x:this.model.get('x')});
     },
 
-    // resetKey:function(){
-    //     var newPositionX = (Math.random()-0.5)*0.9*100;
-    //     TweenLite.to(key, 0, {top:"-50%",left:newPositionX+"%", ease:Power2.easeIn});
-    //     speedFall = speedFall - 0.3;
-    //     // console.log('vitesse : '+speedFall);
-    //     keyFall = TweenLite.to(key, speedFall, {top:"50%", ease:Power2.easeIn,onUpdate:this.keyUpdatedPosition,onComplete:this.keyFallen});
+    // onAttach:function(){
+    //     console.log(templates.input);
     // },
-
-    moveHand: function(){
-        var hand = $('#hand');
-        var x = this.model.get('x');
-        if (x === ''){
-            console.log('Pas un nombre');
-        } else {
-            var xP = x*50/240;
-            animHand.start(hand,xP);
-        }
-
-
-    },
-
 });

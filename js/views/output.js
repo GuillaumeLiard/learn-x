@@ -9,6 +9,7 @@ var FormBehavior = require('./../behaviors/formBehavior');
 
 var templates = require('./../utils/templates.js');
 
+var validBounds = 0.91;
 // var tlMove;
 // var tChariot;
 
@@ -42,7 +43,7 @@ module.exports = Mn.View.extend({
     move: function(event) {
         // console.log('a');
         if(this.model.get('canMove')){
-            TweenMax.to(this.ui.chariot, 1, {x:this.model.get('x')});
+            TweenMax.to(this.ui.chariot, 1, {x:validBounds*this.model.get('x')});
         }
         // console.log('b');
 
@@ -74,7 +75,7 @@ module.exports = Mn.View.extend({
         // TweenLite.to(this.ui.chariot, 1, {rotation:"+=360",svgOrigin:'110 100',onComplete:this.teleportDone});
     },
     teleportHalf:function(){
-        TweenMax.to(this.ui.chariot, 0, {x:this.model.get('x')});
+        TweenMax.to(this.ui.chariot, 0, {x:validBounds*this.model.get('x')});
         // this.glide(0);
         // this.model.set('teleporting',false);
     },

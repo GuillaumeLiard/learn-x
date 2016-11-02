@@ -1,2 +1,3 @@
 >En tant que joueur, je veux pouvoir pauser le jeu afin de prendre mon temps.
 En tant que dev, je veux pouvoir identifier les dépendances des fichiers explicitement afin de connaitre la topologie de l'app.
+le rail de output est centré

@@ -37,21 +37,18 @@ module.exports = Mn.Behavior.extend({
         }
             // console.log(event.key);
         if (event.key === "-") {
-            // console.log()
-            event.preventDefault();
-            if (!this.view.model.get('teleporting')){
-                this.view.model.set('teleporting',true);
-                if (this.ui.x.val() === "") {
-                    this.ui.x.val(-0);
-                } else{
+            if (this.ui.x.val() === "") {
+                // this.ui.x.val(-0);
+            } else{
+                event.preventDefault();
+                if (!this.view.model.get('teleporting')){
+                    this.view.model.set('teleporting',true);
                     this.ui.x.val(-1*this.ui.x.val());
+                    this.view.model.set("positive",!this.view.model.get("positive"));
+
                 }
-                // this.view.triggerMethod('teleport');
-                this.view.model.set("positive",!this.view.model.get("positive"));
-                this.updateX();
-            }
-        } else{
-            this.updateX();
+            }           // console.log()
         }
+        this.updateX();    
     }
 });

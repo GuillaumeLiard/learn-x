@@ -6,7 +6,7 @@ var wGame;
 
 module.exports = Mn.Behavior.extend({
     ui:{
-        up:'#g3135'
+        up:'#g3141'
     },
     events:{
         'click @ui.up':'goUp',
@@ -14,6 +14,7 @@ module.exports = Mn.Behavior.extend({
     },
 
     goUp:function(){
+        this.view.model.set("x",this.view.model.get("x")+this.view.model.get("step"),{validate:true});
         console.log('up');
     },
     wannaGoUp:function(){

@@ -10,16 +10,16 @@ module.exports = Mn.View.extend({
         chariot:'#chariot',
         // path:'#chariot g g path'
     },
-    modelEvents: {
-        'change:x': 'xChanged'
-    },
-
-    xChanged: function(event) {
-        console.log('xchan');
-        var newX = this.view.model.get('x');
-        var newLeft = 100*(0.5+(newX/widthScratch));
-        TweenLite.to(this.ui.chariot, 1, {left:newLeft+"%"});
-    },
+    // modelEvents: {
+    //     'change:x': 'xChanged'
+    // },
+    //
+    // xChanged: function(event) {
+    //     console.log('xchan');
+    //     var newX = this.view.model.get('x');
+    //     var newLeft = 100*(0.5+(newX/widthScratch));
+    //     TweenLite.to(this.ui.chariot, 1, {left:newLeft+"%"});
+    // },
     // onTeleport:function(){
     //     this.model.set('skew',this.model.get('skew')+180);
     //     // TweenLite.to(this.ui.chariot, 0.4, {rotation:360});

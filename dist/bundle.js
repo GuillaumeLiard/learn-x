@@ -25108,7 +25108,7 @@ $(document).ready(function(){
     myApp.start();
 });
 
-},{"./../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../bower_components/jquery/dist/jquery.js":5,"./views/game2":14}],8:[function(require,module,exports){
+},{"./../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../bower_components/jquery/dist/jquery.js":5,"./views/game2":16}],8:[function(require,module,exports){
 var _ = require("./../../bower_components/underscore/underscore.js");
 var $ = require("./../../bower_components/jquery/dist/jquery.js");
 var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
@@ -25177,16 +25177,16 @@ module.exports = Mn.View.extend({
         chariot:'#chariot',
         // path:'#chariot g g path'
     },
-    modelEvents: {
-        'change:x': 'xChanged'
-    },
-
-    xChanged: function(event) {
-        console.log('xchan');
-        var newX = this.view.model.get('x');
-        var newLeft = 100*(0.5+(newX/widthScratch));
-        TweenLite.to(this.ui.chariot, 1, {left:newLeft+"%"});
-    },
+    // modelEvents: {
+    //     'change:x': 'xChanged'
+    // },
+    //
+    // xChanged: function(event) {
+    //     console.log('xchan');
+    //     var newX = this.view.model.get('x');
+    //     var newLeft = 100*(0.5+(newX/widthScratch));
+    //     TweenLite.to(this.ui.chariot, 1, {left:newLeft+"%"});
+    // },
     // onTeleport:function(){
     //     this.model.set('skew',this.model.get('skew')+180);
     //     // TweenLite.to(this.ui.chariot, 0.4, {rotation:360});
@@ -25206,7 +25206,7 @@ var wGame;
 
 module.exports = Mn.Behavior.extend({
     ui:{
-        up:'#g3135'
+        up:'#g3141'
     },
     events:{
         'click @ui.up':'goUp',
@@ -25214,6 +25214,7 @@ module.exports = Mn.Behavior.extend({
     },
 
     goUp:function(){
+        this.view.model.set("x",this.view.model.get("x")+this.view.model.get("step"),{validate:true});
         console.log('up');
     },
     wannaGoUp:function(){
@@ -25263,6 +25264,28 @@ module.exports = Mn.Behavior.extend({
 });
 
 },{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/gsap/src/uncompressed/TweenMax.js":4,"./../../bower_components/jquery/dist/jquery.js":5,"./../../bower_components/underscore/underscore.js":6}],12:[function(require,module,exports){
+var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
+
+
+module.exports = Mn.Behavior.extend({
+    ui:{
+        display:'#numberDisplay'
+    },
+    modelEvents: {
+        'change:x': 'updateDisplay'
+    },
+
+    initialize:function(){
+        // this.updateDisplay();
+    },
+
+    updateDisplay:function(){
+        this.ui.display.text(this.view.model.get('x'));
+    },
+
+});
+
+},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1}],13:[function(require,module,exports){
 var Backbone = require("./../../bower_components/backbone/backbone.js");
 var MasterBehavior = require('./masterBehavior');
 
@@ -25286,7 +25309,30 @@ module.exports = MasterBehavior.extend({
     }
 });
 
-},{"./../../bower_components/backbone/backbone.js":3,"./masterBehavior":11}],13:[function(require,module,exports){
+},{"./../../bower_components/backbone/backbone.js":3,"./masterBehavior":11}],14:[function(require,module,exports){
+var Backbone = require("./../../bower_components/backbone/backbone.js");
+
+var xMin = -240;
+var xMax = 240;
+module.exports = Backbone.Model.extend({
+  initialize: function() {
+    //   this.set('x',0);
+      console.log('new Model');
+  },
+  defaults:{
+      'x':0
+  },
+  validate:function(attrs){
+      if(attrs.x>xMax){
+          return true;
+      }
+      if(attrs.x<xMin){
+          return true;
+      }
+  }
+});
+
+},{"./../../bower_components/backbone/backbone.js":3}],15:[function(require,module,exports){
 exports['game']=function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
@@ -25311,7 +25357,7 @@ return __p;
 exports['inputs.svg']=function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
-__p+='<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n<!-- Created with Inkscape (http://www.inkscape.org/) -->\n<svg id="inputs" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 152.4039 149.93127" preserveAspectRatio="xMidYMid meet" height="100%" width="100%" version="1.1" preserveAspectRatio="xMidYMid meet" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">\n <metadata id="metadata7">\n  <rdf:RDF>\n   <cc:Work rdf:about="">\n    <dc:format>image/svg+xml</dc:format>\n    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>\n    <dc:title/>\n   </cc:Work>\n  </rdf:RDF>\n </metadata>\n <g id="layer1" transform="translate(-166.46591,-877.39654)">\n  <g id="g3135" transform="translate(317.84641,932.62617)">\n   <g id="g3121" transform="matrix(0.5,0,0,0.5,-100.84641,-438.99835)">\n    <path id="path3123" style="direction:ltr;baseline-shift:baseline;block-progression:tb;text-indent:0;color:#000000;enable-background:accumulate;text-transform:none;" d="m87,1047.4,0-1,0-80,0-1-1,0-80,0-1,0,0,1,0,80,0,1,1,0,80,0,1,0zm-2-2-78,0,0-78,78,0,0,78zm-39-8c9.0769-9.6728,16.962-18.489,25-27h-14v-35h-22v35h-14c8.4026,9.0215,16.653,17.927,25,27zm0-3-20-22,11,0,0-35,18,0,0,35,11,0-20,22z" visibility="visible" overflow="visible" display="inline" fill="#000"/>\n   </g>\n   <g id="g3141" transform="matrix(-0.5,0,0,-0.5,-54.846413,478.47037)">\n    <rect id="rect3824" stroke-dasharray="none" fill-rule="evenodd" stroke-dashoffset="0" height="79.292" width="79.292" stroke="#000" stroke-miterlimit="4" y="966.75" x="6.354" stroke-width="2.7081" fill="#E00"/>\n    <path id="path3143" style="direction:ltr;baseline-shift:baseline;block-progression:tb;text-indent:0;color:#000000;enable-background:accumulate;text-transform:none;" d="m87,1047.4,0-1,0-80,0-1-1,0-80,0-1,0,0,1,0,80,0,1,1,0,80,0,1,0zm-2-2-78,0,0-78,78,0,0,78zm-39-8c9.0769-9.6728,16.962-18.489,25-27h-14v-35h-22v35h-14c8.4026,9.0215,16.653,17.927,25,27zm0-3-20-22,11,0,0-35,18,0,0,35,11,0-20,22z" visibility="visible" overflow="visible" display="inline" fill="#000"/>\n   </g>\n   <rect id="rect3170" stroke-dasharray="none" height="30.221" width="40.221" stroke="#000" stroke-miterlimit="4" y="4.6253" x="-97.957" stroke-width="0.77859" fill="none"/>\n  </g>\n  <text id="text3145" style="word-spacing:0px;letter-spacing:0px;" line-height="125%" font-family="Sans" xml:space="preserve" font-size="20px" y="915.19574" x="267.98114" font-weight="normal" font-style="normal" fill="#000000"><tspan id="tspan3147" y="915.19574" x="267.98114">+10</tspan></text>\n  <text id="text3145-3" style="word-spacing:0px;letter-spacing:0px;" line-height="125%" font-family="Sans" xml:space="preserve" font-size="20px" y="1004.0892" x="269.12372" font-weight="normal" font-style="normal" fill="#000000"><tspan id="tspan3147-6" y="1004.0892" x="269.12372">-10</tspan></text>\n  <text id="text3145-7" style="word-spacing:0px;letter-spacing:0px;writing-mode:lr-tb;text-anchor:start;text-align:start;" line-height="125%" font-family="Sans" xml:space="preserve" font-size="20px" font-stretch="normal" font-variant="normal" y="960.1424" x="220.87402" font-weight="normal" font-style="normal" fill="#000000"><tspan id="tspan3963">23</tspan></text>\n  <g id="g4044" transform="matrix(0.5125,0,0,0.38749966,191.46505,932.49967)">\n   <g id="g4107" transform="translate(-49.861325,1.2581476)">\n    <g id="g4093" transform="translate(0,-952.36218)">\n     <path id="path4095" style="direction:ltr;baseline-shift:baseline;block-progression:tb;text-indent:0;color:#000000;enable-background:accumulate;text-transform:none;" d="m22.065,962.36c-0.81567,0.01-1.4637,1.0015-1.4703,2v76c0.000073,1.0472,0.70047,1.9999,1.4703,2h55.871c0.76982-0.0001,1.4702-0.9528,1.4703-2v-76c-0.000073-1.0471-0.70047-1.9999-1.4703-2h-55.871zm1.4703,4,52.93,0,0,72-52.93,0,0-72zm10.292,34c-0.81202,0-1.4703,0.8954-1.4703,2,0,1.1045,0.65827,2,1.4703,2h32.346c0.81202,0,1.4703-0.8955,1.4703-2,0-1.1046-0.65827-2-1.4703-2h-32.346z" visibility="visible" overflow="visible" display="inline" fill="#000"/>\n    </g>\n   </g>\n  </g>\n </g>\n <rect id="rect3824-3" stroke-dasharray="none" fill-rule="evenodd" stroke-dashoffset="0" height="39.646" width="39.646" stroke="#000" stroke-miterlimit="4" y="55.761" x="113.37" stroke-width="1.354" fill="#000"/>\n</svg>\n';
+__p+='<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n<!-- Created with Inkscape (http://www.inkscape.org/) -->\n<svg id="inputs" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 152.4039 149.93127" preserveAspectRatio="xMidYMid meet" height="100%" width="100%" version="1.1" preserveAspectRatio="xMidYMid meet" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">\n    <metadata id="metadata7">\n        <rdf:RDF>\n            <cc:Work rdf:about="">\n                <dc:format>image/svg+xml</dc:format>\n                <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>\n                <dc:title/>\n            </cc:Work>\n        </rdf:RDF>\n    </metadata>\n    <g id="layer1" transform="translate(-166.46591,-877.39654)">\n        <g id="g3135" transform="translate(317.84641,932.62617)">\n            <g id="g3121" transform="matrix(0.5,0,0,0.5,-100.84641,-438.99835)">\n                <path id="path3123" style="direction:ltr;baseline-shift:baseline;block-progression:tb;text-indent:0;color:#000000;enable-background:accumulate;text-transform:none;" d="m87,1047.4,0-1,0-80,0-1-1,0-80,0-1,0,0,1,0,80,0,1,1,0,80,0,1,0zm-2-2-78,0,0-78,78,0,0,78zm-39-8c9.0769-9.6728,16.962-18.489,25-27h-14v-35h-22v35h-14c8.4026,9.0215,16.653,17.927,25,27zm0-3-20-22,11,0,0-35,18,0,0,35,11,0-20,22z" visibility="visible" overflow="visible" display="inline" fill="#000"/>\n            </g>\n            <g id="g3141" transform="matrix(-0.5,0,0,-0.5,-54.846413,478.47037)">\n                <rect id="rect3824" stroke-dasharray="none" fill-rule="evenodd" stroke-dashoffset="0" height="79.292" width="79.292" stroke="#000" stroke-miterlimit="4" y="966.75" x="6.354" stroke-width="2.7081" fill="#E00"/>\n                <path id="path3143" style="direction:ltr;baseline-shift:baseline;block-progression:tb;text-indent:0;color:#000000;enable-background:accumulate;text-transform:none;" d="m87,1047.4,0-1,0-80,0-1-1,0-80,0-1,0,0,1,0,80,0,1,1,0,80,0,1,0zm-2-2-78,0,0-78,78,0,0,78zm-39-8c9.0769-9.6728,16.962-18.489,25-27h-14v-35h-22v35h-14c8.4026,9.0215,16.653,17.927,25,27zm0-3-20-22,11,0,0-35,18,0,0,35,11,0-20,22z" visibility="visible" overflow="visible" display="inline" fill="#000"/>\n            </g>\n            <rect id="rect3170" stroke-dasharray="none" height="30.221" width="40.221" stroke="#000" stroke-miterlimit="4" y="4.6253" x="-97.957" stroke-width="0.77859" fill="none"/>\n        </g>\n        <text id="text3145" style="word-spacing:0px;letter-spacing:0px;" line-height="125%" font-family="Sans" xml:space="preserve" font-size="20px" y="915.19574" x="267.98114" font-weight="normal" font-style="normal" fill="#000000"><tspan id="tspan3147" y="915.19574" x="267.98114">+10</tspan></text>\n        <text id="text3145-3" style="word-spacing:0px;letter-spacing:0px;" line-height="125%" font-family="Sans" xml:space="preserve" font-size="20px" y="1004.0892" x="269.12372" font-weight="normal" font-style="normal" fill="#000000"><tspan id="tspan3147-6" y="1004.0892" x="269.12372">-10</tspan></text>\n        <text id="numberDisplay" style="word-spacing:0px;letter-spacing:0px;writing-mode:lr-tb;text-anchor:start;text-align:start;" line-height="125%" font-family="Sans" xml:space="preserve" font-size="20px" font-stretch="normal" font-variant="normal" y="960.1424" x="220.87402" font-weight="normal" font-style="normal" fill="#000000"><tspan id="tspan3963">0</tspan></text>\n        <g id="g4044" transform="matrix(0.5125,0,0,0.38749966,191.46505,932.49967)">\n            <g id="g4107" transform="translate(-49.861325,1.2581476)">\n                <g id="g4093" transform="translate(0,-952.36218)">\n                    <path id="path4095" style="direction:ltr;baseline-shift:baseline;block-progression:tb;text-indent:0;color:#000000;enable-background:accumulate;text-transform:none;" d="m22.065,962.36c-0.81567,0.01-1.4637,1.0015-1.4703,2v76c0.000073,1.0472,0.70047,1.9999,1.4703,2h55.871c0.76982-0.0001,1.4702-0.9528,1.4703-2v-76c-0.000073-1.0471-0.70047-1.9999-1.4703-2h-55.871zm1.4703,4,52.93,0,0,72-52.93,0,0-72zm10.292,34c-0.81202,0-1.4703,0.8954-1.4703,2,0,1.1045,0.65827,2,1.4703,2h32.346c0.81202,0,1.4703-0.8955,1.4703-2,0-1.1046-0.65827-2-1.4703-2h-32.346z" visibility="visible" overflow="visible" display="inline" fill="#000"/>\n                </g>\n            </g>\n        </g>\n    </g>\n    <rect id="rect3824-3" stroke-dasharray="none" fill-rule="evenodd" stroke-dashoffset="0" height="39.646" width="39.646" stroke="#000" stroke-miterlimit="4" y="55.761" x="113.37" stroke-width="1.354" fill="#000"/>\n</svg>\n';
 }
 return __p;
 };
@@ -25322,7 +25368,7 @@ __p+='<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n<!-- Created with 
 }
 return __p;
 };
-},{}],14:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 var _ = require("./../../bower_components/underscore/underscore.js");
 var Backbone = require("./../../bower_components/backbone/backbone.js");
 var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
@@ -25333,12 +25379,13 @@ var FormBehavior = require('./../behaviors/formBehavior');
 var templates = require('./../utils/templates.js');
 var Output = require('./output.js');
 var Input = require('./input.js');
+var GameModel = require('./../models/gameModel');
 
 module.exports = Mn.View.extend({
     template:templates.game,
     // template:templates['full_op.svg'],
     className:'game',
-    model:new Backbone.Model(),
+    model:new GameModel(),
     regions: {
         zone1: '#zone1',
         zone2: '#zone2'
@@ -25359,22 +25406,28 @@ module.exports = Mn.View.extend({
     // },
 });
 
-},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/backbone/backbone.js":3,"./../../bower_components/underscore/underscore.js":6,"./../behaviors/alterKey":8,"./../behaviors/chariotBehavior":9,"./../behaviors/formBehavior":10,"./../behaviors/railBehavior":12,"./../utils/templates.js":13,"./input.js":15,"./output.js":16}],15:[function(require,module,exports){
+},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/backbone/backbone.js":3,"./../../bower_components/underscore/underscore.js":6,"./../behaviors/alterKey":8,"./../behaviors/chariotBehavior":9,"./../behaviors/formBehavior":10,"./../behaviors/railBehavior":13,"./../models/gameModel":14,"./../utils/templates.js":15,"./input.js":17,"./output.js":18}],17:[function(require,module,exports){
 var Backbone = require("./../../bower_components/backbone/backbone.js");
 var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 var AlterKey = require('./../behaviors/alterKey');
 var FormBehavior = require('./../behaviors/formBehavior');
+var NumberDisplay = require('./../behaviors/numberDisplay');
 
 var templates = require('./../utils/templates.js');
 
 module.exports = Mn.View.extend({
-    model:new Backbone.Model(),
+    // model:new Backbone.Model(),
     template:templates['inputs.svg'],
     className:'input',
-    behaviors: [AlterKey,FormBehavior],
+    behaviors: [FormBehavior,NumberDisplay],
+
+    initialize:function(){
+        // this.model.set("x",100);
+        this.model.set("step",10);
+    },
 });
 
-},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/backbone/backbone.js":3,"./../behaviors/alterKey":8,"./../behaviors/formBehavior":10,"./../utils/templates.js":13}],16:[function(require,module,exports){
+},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/backbone/backbone.js":3,"./../behaviors/alterKey":8,"./../behaviors/formBehavior":10,"./../behaviors/numberDisplay":12,"./../utils/templates.js":15}],18:[function(require,module,exports){
 var _ = require("./../../bower_components/underscore/underscore.js");
 var $ = require("./../../bower_components/jquery/dist/jquery.js");
 var Backbone = require("./../../bower_components/backbone/backbone.js");
@@ -25439,7 +25492,7 @@ module.exports = Mn.View.extend({
 
 });
 
-},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/backbone/backbone.js":3,"./../../bower_components/jquery/dist/jquery.js":5,"./../../bower_components/underscore/underscore.js":6,"./../behaviors/alterKey":8,"./../behaviors/chariotBehavior":9,"./../behaviors/formBehavior":10,"./../behaviors/railBehavior":12,"./../utils/templates.js":13}]},{},[7])
+},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/backbone/backbone.js":3,"./../../bower_components/jquery/dist/jquery.js":5,"./../../bower_components/underscore/underscore.js":6,"./../behaviors/alterKey":8,"./../behaviors/chariotBehavior":9,"./../behaviors/formBehavior":10,"./../behaviors/railBehavior":13,"./../utils/templates.js":15}]},{},[7])
 
 
 //# sourceMappingURL=bundle.js.map

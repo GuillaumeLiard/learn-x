@@ -7,7 +7,7 @@ var templates = require('./../utils/templates.js');
 
 module.exports = Mn.View.extend({
     model:new Backbone.Model(),
-    template:templates.input,
+    template:templates['inputs.svg'],
     className:'input',
     behaviors: [AlterKey,FormBehavior],
 });

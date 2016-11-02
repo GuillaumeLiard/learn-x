@@ -30,17 +30,38 @@ html, body {
 #zone1{
 	position:relative;
     width:100%;
-    height: 80%;
+    height: 70%;
     background-color:blue;
 }
 #zone2{
 	position:relative;
     width:100%;
-    height: 20%;
+    height: 30%;
     background-color:green;
 }
 
+
+.input{
+	margin: 0 auto;
+	position:relative;
+    width:100%;
+    height: 100%;
+	overflow:hidden;
+}
+.output{
+	position:relative;
+    width:100%;
+    height: 100%;
+    background-color:red;
+}
 #compo{
+	width:100%;
+	height:100%;
+	/*margin:0 auto;*/
+
+}
+
+#inputs{
 	width:100%;
 	height:100%;
 	/*margin:0 auto;*/
@@ -71,12 +92,6 @@ html, body {
 }*/
 
 
-.output{
-	position:relative;
-    width:100%;
-    height: 100%;
-    background-color:red;
-}
 /*
 #scratch-screen{
 	position:absolute;

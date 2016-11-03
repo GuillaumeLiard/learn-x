@@ -16,4 +16,7 @@ module.exports = Mn.View.extend({
         // this.model.set("x",100);
         this.model.set("step",10);
     },
+    goUp:function(){
+        this.view.model.set("x",this.view.model.get("x")+3*this.view.model.get("step"),{validate:true});
+    },
 });

@@ -25198,39 +25198,45 @@ module.exports = Mn.View.extend({
 });
 
 },{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/backbone/backbone.js":3}],10:[function(require,module,exports){
+var _ = require("./../../bower_components/underscore/underscore.js");
+var $ = require("./../../bower_components/jquery/dist/jquery.js");
 var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
-
-
-var wForm;
-var wGame;
 
 module.exports = Mn.Behavior.extend({
     ui:{
-        up:'#g3141'
+        up:'#up',
+        down:'#down',
     },
     events:{
         'click @ui.up':'goUp',
+        'click @ui.down':'goDown',
         'mouseover @ui.up':'wannaGoUp',
     },
-
+    onAttach:function(){
+        _.bindAll(this,'processKey');
+        $(document).on('keydown',this.processKey);
+    },
+    processKey:function(event){
+        // console.log(event.which);
+        if(event.which === 38){
+            this.goUp();
+        }
+        if(event.which === 40){
+            this.goDown();
+        }
+    },
     goUp:function(){
         this.view.model.set("x",this.view.model.get("x")+this.view.model.get("step"),{validate:true});
-        console.log('up');
+    },
+    goDown:function(){
+        this.view.model.set("x",this.view.model.get("x")-this.view.model.get("step"),{validate:true});
     },
     wannaGoUp:function(){
         console.log('wannaGoUp');
     }
-
-// onAttach:function(){
-//
-//     wForm = this.ui.form.width();
-//     wGame = this.view.$el.width();
-//     var formPos = 50-((100*wForm/wGame)/2);
-//     TweenLite.fromTo(this.ui.form, 1, {scale:0.5},{scale:1,left:formPos+"%",opacity:1});
-// }
 });
 
-},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1}],11:[function(require,module,exports){
+},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/jquery/dist/jquery.js":5,"./../../bower_components/underscore/underscore.js":6}],11:[function(require,module,exports){
 var _ = require("./../../bower_components/underscore/underscore.js");
 var $ = require("./../../bower_components/jquery/dist/jquery.js");
 var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
@@ -25357,7 +25363,7 @@ return __p;
 exports['inputs.svg']=function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
-__p+='<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n<!-- Created with Inkscape (http://www.inkscape.org/) -->\n<svg id="inputs" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 152.4039 149.93127" preserveAspectRatio="xMidYMid meet" height="100%" width="100%" version="1.1" preserveAspectRatio="xMidYMid meet" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">\n    <metadata id="metadata7">\n        <rdf:RDF>\n            <cc:Work rdf:about="">\n                <dc:format>image/svg+xml</dc:format>\n                <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>\n                <dc:title/>\n            </cc:Work>\n        </rdf:RDF>\n    </metadata>\n    <g id="layer1" transform="translate(-166.46591,-877.39654)">\n        <g id="g3135" transform="translate(317.84641,932.62617)">\n            <g id="g3121" transform="matrix(0.5,0,0,0.5,-100.84641,-438.99835)">\n                <path id="path3123" style="direction:ltr;baseline-shift:baseline;block-progression:tb;text-indent:0;color:#000000;enable-background:accumulate;text-transform:none;" d="m87,1047.4,0-1,0-80,0-1-1,0-80,0-1,0,0,1,0,80,0,1,1,0,80,0,1,0zm-2-2-78,0,0-78,78,0,0,78zm-39-8c9.0769-9.6728,16.962-18.489,25-27h-14v-35h-22v35h-14c8.4026,9.0215,16.653,17.927,25,27zm0-3-20-22,11,0,0-35,18,0,0,35,11,0-20,22z" visibility="visible" overflow="visible" display="inline" fill="#000"/>\n            </g>\n            <g id="g3141" transform="matrix(-0.5,0,0,-0.5,-54.846413,478.47037)">\n                <rect id="rect3824" stroke-dasharray="none" fill-rule="evenodd" stroke-dashoffset="0" height="79.292" width="79.292" stroke="#000" stroke-miterlimit="4" y="966.75" x="6.354" stroke-width="2.7081" fill="#E00"/>\n                <path id="path3143" style="direction:ltr;baseline-shift:baseline;block-progression:tb;text-indent:0;color:#000000;enable-background:accumulate;text-transform:none;" d="m87,1047.4,0-1,0-80,0-1-1,0-80,0-1,0,0,1,0,80,0,1,1,0,80,0,1,0zm-2-2-78,0,0-78,78,0,0,78zm-39-8c9.0769-9.6728,16.962-18.489,25-27h-14v-35h-22v35h-14c8.4026,9.0215,16.653,17.927,25,27zm0-3-20-22,11,0,0-35,18,0,0,35,11,0-20,22z" visibility="visible" overflow="visible" display="inline" fill="#000"/>\n            </g>\n            <rect id="rect3170" stroke-dasharray="none" height="30.221" width="40.221" stroke="#000" stroke-miterlimit="4" y="4.6253" x="-97.957" stroke-width="0.77859" fill="none"/>\n        </g>\n        <text id="text3145" style="word-spacing:0px;letter-spacing:0px;" line-height="125%" font-family="Sans" xml:space="preserve" font-size="20px" y="915.19574" x="267.98114" font-weight="normal" font-style="normal" fill="#000000"><tspan id="tspan3147" y="915.19574" x="267.98114">+10</tspan></text>\n        <text id="text3145-3" style="word-spacing:0px;letter-spacing:0px;" line-height="125%" font-family="Sans" xml:space="preserve" font-size="20px" y="1004.0892" x="269.12372" font-weight="normal" font-style="normal" fill="#000000"><tspan id="tspan3147-6" y="1004.0892" x="269.12372">-10</tspan></text>\n        <text id="numberDisplay" style="word-spacing:0px;letter-spacing:0px;writing-mode:lr-tb;text-anchor:start;text-align:start;" line-height="125%" font-family="Sans" xml:space="preserve" font-size="20px" font-stretch="normal" font-variant="normal" y="960.1424" x="220.87402" font-weight="normal" font-style="normal" fill="#000000"><tspan id="tspan3963">0</tspan></text>\n        <g id="g4044" transform="matrix(0.5125,0,0,0.38749966,191.46505,932.49967)">\n            <g id="g4107" transform="translate(-49.861325,1.2581476)">\n                <g id="g4093" transform="translate(0,-952.36218)">\n                    <path id="path4095" style="direction:ltr;baseline-shift:baseline;block-progression:tb;text-indent:0;color:#000000;enable-background:accumulate;text-transform:none;" d="m22.065,962.36c-0.81567,0.01-1.4637,1.0015-1.4703,2v76c0.000073,1.0472,0.70047,1.9999,1.4703,2h55.871c0.76982-0.0001,1.4702-0.9528,1.4703-2v-76c-0.000073-1.0471-0.70047-1.9999-1.4703-2h-55.871zm1.4703,4,52.93,0,0,72-52.93,0,0-72zm10.292,34c-0.81202,0-1.4703,0.8954-1.4703,2,0,1.1045,0.65827,2,1.4703,2h32.346c0.81202,0,1.4703-0.8955,1.4703-2,0-1.1046-0.65827-2-1.4703-2h-32.346z" visibility="visible" overflow="visible" display="inline" fill="#000"/>\n                </g>\n            </g>\n        </g>\n    </g>\n    <rect id="rect3824-3" stroke-dasharray="none" fill-rule="evenodd" stroke-dashoffset="0" height="39.646" width="39.646" stroke="#000" stroke-miterlimit="4" y="55.761" x="113.37" stroke-width="1.354" fill="#000"/>\n</svg>\n';
+__p+='<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n<!-- Created with Inkscape (http://www.inkscape.org/) -->\n<svg id="inputs" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 152.4039 149.93127" preserveAspectRatio="xMidYMid meet" height="100%" width="100%" version="1.1" preserveAspectRatio="xMidYMid meet" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">\n <metadata id="metadata7">\n  <rdf:RDF>\n   <cc:Work rdf:about="">\n    <dc:format>image/svg+xml</dc:format>\n    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>\n    <dc:title/>\n   </cc:Work>\n  </rdf:RDF>\n </metadata>\n <g id="layer1" transform="translate(-166.46591,-877.39654)">\n  <g id="g3135" transform="translate(317.84641,932.62617)">\n   <g id="down" transform="matrix(0.5,0,0,0.5,-100.84641,-438.99835)">\n    <rect id="rect3824-3" stroke-dasharray="none" fill-rule="evenodd" stroke-dashoffset="0" transform="scale(-1,-1)" height="79.292" width="79.292" stroke="#000" stroke-miterlimit="4" y="-1046" x="-85.646" stroke-width="2.7081" fill="#0E0"/>\n    <path id="path3123" style="direction:ltr;baseline-shift:baseline;block-progression:tb;text-indent:0;color:#000000;enable-background:accumulate;text-transform:none;" d="m87,1047.4,0-1,0-80,0-1-1,0-80,0-1,0,0,1,0,80,0,1,1,0,80,0,1,0zm-2-2-78,0,0-78,78,0,0,78zm-39-8c9.0769-9.6728,16.962-18.489,25-27h-14v-35h-22v35h-14c8.4026,9.0215,16.653,17.927,25,27zm0-3-20-22,11,0,0-35,18,0,0,35,11,0-20,22z" visibility="visible" overflow="visible" display="inline" fill="#000"/>\n   </g>\n   <g id="up" transform="matrix(-0.5,0,0,-0.5,-54.846413,478.47037)">\n    <rect id="rect3824" stroke-dasharray="none" fill-rule="evenodd" stroke-dashoffset="0" height="79.292" width="79.292" stroke="#000" stroke-miterlimit="4" y="966.75" x="6.354" stroke-width="2.7081" fill="#0E0"/>\n    <path id="path3143" style="direction:ltr;baseline-shift:baseline;block-progression:tb;text-indent:0;color:#000000;enable-background:accumulate;text-transform:none;" d="m87,1047.4,0-1,0-80,0-1-1,0-80,0-1,0,0,1,0,80,0,1,1,0,80,0,1,0zm-2-2-78,0,0-78,78,0,0,78zm-39-8c9.0769-9.6728,16.962-18.489,25-27h-14v-35h-22v35h-14c8.4026,9.0215,16.653,17.927,25,27zm0-3-20-22,11,0,0-35,18,0,0,35,11,0-20,22z" visibility="visible" overflow="visible" display="inline" fill="#000"/>\n   </g>\n   <rect id="numberDisplayBox" stroke-dasharray="none" height="30.221" width="40.221" stroke="#000" stroke-miterlimit="4" y="4.6253" x="-97.957" stroke-width="0.77859" fill="#0F0"/>\n  </g>\n  <text id="stepUp" style="letter-spacing:0px;word-spacing:0px;" font-family="Sans" xml:space="preserve" font-size="20px" line-height="125%" font-style="normal" y="915.19574" x="267.98114" font-weight="normal" fill="#000000"><tspan id="tspan3147" y="915.19574" x="267.98114">+10</tspan></text>\n  <text id="stepDown" style="letter-spacing:0px;word-spacing:0px;" font-family="Sans" xml:space="preserve" font-size="20px" line-height="125%" font-style="normal" y="1004.0892" x="269.12372" font-weight="normal" fill="#000000"><tspan id="tspan3147-6" y="1004.0892" x="269.12372">-10</tspan></text>\n  <text id="numberDisplay" style="word-spacing:0px;letter-spacing:0px;writing-mode:lr-tb;text-anchor:start;text-align:start;" font-weight="normal" xml:space="preserve" font-size="20px" font-style="normal" line-height="125%" font-stretch="normal" font-variant="normal" y="960.1424" x="220.87402" font-family="Sans" fill="#000000"><tspan id="tspan3963">0</tspan></text>\n  <g id="minus" transform="matrix(0.5125,0,0,0.38749966,191.46505,932.49967)">\n   <rect id="rect3824-6" stroke-dasharray="none" fill-rule="evenodd" stroke-dashoffset="0" transform="scale(-1,-1)" height="77.395" width="56.842" stroke="#000" stroke-miterlimit="4" y="-89.953" x="-28.56" stroke-width="2.2653" fill="#0E0"/>\n   <g id="g4107" transform="translate(-49.861325,1.2581476)">\n    <g id="g4093" transform="translate(0,-952.36218)">\n     <path id="path4095" style="direction:ltr;baseline-shift:baseline;block-progression:tb;text-indent:0;color:#000000;enable-background:accumulate;text-transform:none;" d="m22.065,962.36c-0.81567,0.01-1.4637,1.0015-1.4703,2v76c0.000073,1.0472,0.70047,1.9999,1.4703,2h55.871c0.76982-0.0001,1.4702-0.9528,1.4703-2v-76c-0.000073-1.0471-0.70047-1.9999-1.4703-2h-55.871zm1.4703,4,52.93,0,0,72-52.93,0,0-72zm10.292,34c-0.81202,0-1.4703,0.8954-1.4703,2,0,1.1045,0.65827,2,1.4703,2h32.346c0.81202,0,1.4703-0.8955,1.4703-2,0-1.1046-0.65827-2-1.4703-2h-32.346z" visibility="visible" overflow="visible" display="inline" fill="#000"/>\n    </g>\n   </g>\n  </g>\n </g>\n</svg>\n';
 }
 return __p;
 };
@@ -25424,6 +25430,9 @@ module.exports = Mn.View.extend({
     initialize:function(){
         // this.model.set("x",100);
         this.model.set("step",10);
+    },
+    goUp:function(){
+        this.view.model.set("x",this.view.model.get("x")+3*this.view.model.get("step"),{validate:true});
     },
 });
 

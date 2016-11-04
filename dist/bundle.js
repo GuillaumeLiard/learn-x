@@ -25202,19 +25202,28 @@ var _ = require("./../../bower_components/underscore/underscore.js");
 var $ = require("./../../bower_components/jquery/dist/jquery.js");
 var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 
+var intervalDuration = 50;
+
 module.exports = Mn.Behavior.extend({
     ui:{
         up:'#up',
         down:'#down',
     },
     events:{
-        'click @ui.up':'goUp',
-        'click @ui.down':'goDown',
-        'mouseover @ui.up':'wannaGoUp',
+        'mousedown @ui.up':'goUpHold',
+        'mousedown @ui.down':'goDownHold',
+        // 'mouseover @ui.up':'wannaGoUp',
     },
     onAttach:function(){
+        this.view.model.set('interval',null);
         _.bindAll(this,'processKey');
+        _.bindAll(this,'clearHold');
+        _.bindAll(this,'goUp');
+        _.bindAll(this,'goUpHold');
+        _.bindAll(this,'goDown');
+        _.bindAll(this,'goDownHold');
         $(document).on('keydown',this.processKey);
+        $(document).on('mouseup',this.clearHold);
     },
     processKey:function(event){
         // console.log(event.which);
@@ -25225,6 +25234,21 @@ module.exports = Mn.Behavior.extend({
             this.goDown();
         }
     },
+    goUpHold:function(){
+        this.view.model.set('interval',setInterval(this.goUp, intervalDuration));
+    },
+    goDownHold:function(){
+        this.view.model.set('interval',setInterval(this.goDown, intervalDuration));
+    },
+
+    clearHold:function(){
+        console.log('clearHold');
+        if(this.view.model.get('interval')) {
+          clearInterval(this.view.model.get('interval'));
+          this.view.model.set('interval',null);
+        }
+    },
+
     goUp:function(){
         this.view.model.set("x",this.view.model.get("x")+this.view.model.get("step"),{validate:true});
     },
@@ -25431,9 +25455,9 @@ module.exports = Mn.View.extend({
         // this.model.set("x",100);
         this.model.set("step",10);
     },
-    goUp:function(){
-        this.view.model.set("x",this.view.model.get("x")+3*this.view.model.get("step"),{validate:true});
-    },
+    // goUp:function(){
+    //     this.view.model.set("x",this.view.model.get("x")+3*this.view.model.get("step"),{validate:true});
+    // },
 });
 
 },{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/backbone/backbone.js":3,"./../behaviors/alterKey":8,"./../behaviors/formBehavior":10,"./../behaviors/numberDisplay":12,"./../utils/templates.js":15}],18:[function(require,module,exports){

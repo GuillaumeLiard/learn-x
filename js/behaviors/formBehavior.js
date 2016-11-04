@@ -2,19 +2,28 @@ var _ = require('underscore');
 var $ = require('jquery');
 var Mn = require('backbone.marionette');
 
+var intervalDuration = 50;
+
 module.exports = Mn.Behavior.extend({
     ui:{
         up:'#up',
         down:'#down',
     },
     events:{
-        'click @ui.up':'goUp',
-        'click @ui.down':'goDown',
-        'mouseover @ui.up':'wannaGoUp',
+        'mousedown @ui.up':'goUpHold',
+        'mousedown @ui.down':'goDownHold',
+        // 'mouseover @ui.up':'wannaGoUp',
     },
     onAttach:function(){
+        this.view.model.set('interval',null);
         _.bindAll(this,'processKey');
+        _.bindAll(this,'clearHold');
+        _.bindAll(this,'goUp');
+        _.bindAll(this,'goUpHold');
+        _.bindAll(this,'goDown');
+        _.bindAll(this,'goDownHold');
         $(document).on('keydown',this.processKey);
+        $(document).on('mouseup',this.clearHold);
     },
     processKey:function(event){
         // console.log(event.which);
@@ -25,6 +34,21 @@ module.exports = Mn.Behavior.extend({
             this.goDown();
         }
     },
+    goUpHold:function(){
+        this.view.model.set('interval',setInterval(this.goUp, intervalDuration));
+    },
+    goDownHold:function(){
+        this.view.model.set('interval',setInterval(this.goDown, intervalDuration));
+    },
+
+    clearHold:function(){
+        console.log('clearHold');
+        if(this.view.model.get('interval')) {
+          clearInterval(this.view.model.get('interval'));
+          this.view.model.set('interval',null);
+        }
+    },
+
     goUp:function(){
         this.view.model.set("x",this.view.model.get("x")+this.view.model.get("step"),{validate:true});
     },

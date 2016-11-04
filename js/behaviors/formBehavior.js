@@ -44,7 +44,7 @@ module.exports = Mn.Behavior.extend({
     },
 
     clearHold:function(){
-        console.log(this.view.model.get('interval'));
+        // console.log(this.view.model.get('interval'));
         if(this.view.model.get('interval')) {
           clearInterval(this.view.model.get('interval'));
           this.view.model.set('interval',null);

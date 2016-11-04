@@ -12,6 +12,8 @@ module.exports = Mn.Behavior.extend({
     events:{
         'mousedown @ui.up':'goUpHold',
         'mousedown @ui.down':'goDownHold',
+        'mouseleave @ui.up':'clearHold',
+        'mouseleave @ui.down':'clearHold',
         // 'mouseover @ui.up':'wannaGoUp',
     },
     onAttach:function(){
@@ -42,7 +44,7 @@ module.exports = Mn.Behavior.extend({
     },
 
     clearHold:function(){
-        console.log('clearHold');
+        console.log(this.view.model.get('interval'));
         if(this.view.model.get('interval')) {
           clearInterval(this.view.model.get('interval'));
           this.view.model.set('interval',null);

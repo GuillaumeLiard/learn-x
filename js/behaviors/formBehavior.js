@@ -37,18 +37,20 @@ module.exports = Mn.Behavior.extend({
         }
     },
     goUpHold:function(){
+        this.clearHold();
         this.view.model.set('interval',setInterval(this.goUp, intervalDuration));
     },
     goDownHold:function(){
+        this.clearHold();
         this.view.model.set('interval',setInterval(this.goDown, intervalDuration));
     },
 
     clearHold:function(){
         // console.log(this.view.model.get('interval'));
-        if(this.view.model.get('interval')) {
+        // if(this.view.model.get('interval')) {
           clearInterval(this.view.model.get('interval'));
           this.view.model.set('interval',null);
-        }
+        // }
     },
 
     goUp:function(){

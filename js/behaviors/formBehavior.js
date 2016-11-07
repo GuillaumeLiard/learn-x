@@ -14,52 +14,34 @@ module.exports = Mn.Behavior.extend({
         'mousedown @ui.down':'goDownHold',
         'mouseleave @ui.up':'clearHold',
         'mouseleave @ui.down':'clearHold',
-        // 'mouseover @ui.up':'wannaGoUp',
     },
     onAttach:function(){
         this.view.model.set('interval',null);
         _.bindAll(this,'processKey');
         _.bindAll(this,'clearHold');
-        _.bindAll(this,'goUp');
         _.bindAll(this,'goUpHold');
-        _.bindAll(this,'goDown');
         _.bindAll(this,'goDownHold');
         $(document).on('keydown',this.processKey);
         $(document).on('mouseup',this.clearHold);
     },
     processKey:function(event){
-        // console.log(event.which);
         if(event.which === 38){
-            this.goUp();
+            this.view.goUp();
         }
         if(event.which === 40){
-            this.goDown();
+            this.view.goDown();
         }
     },
     goUpHold:function(){
         this.clearHold();
-        this.view.model.set('interval',setInterval(this.goUp, intervalDuration));
+        this.view.model.set('interval',setInterval(this.view.goUp, intervalDuration));
     },
     goDownHold:function(){
         this.clearHold();
-        this.view.model.set('interval',setInterval(this.goDown, intervalDuration));
+        this.view.model.set('interval',setInterval(this.view.goDown, intervalDuration));
     },
-
     clearHold:function(){
-        // console.log(this.view.model.get('interval'));
-        // if(this.view.model.get('interval')) {
           clearInterval(this.view.model.get('interval'));
           this.view.model.set('interval',null);
-        // }
-    },
-
-    goUp:function(){
-        this.view.model.set("x",this.view.model.get("x")+this.view.model.get("step"),{validate:true});
-    },
-    goDown:function(){
-        this.view.model.set("x",this.view.model.get("x")-this.view.model.get("step"),{validate:true});
-    },
-    wannaGoUp:function(){
-        console.log('wannaGoUp');
     }
 });

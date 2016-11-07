@@ -8,11 +8,6 @@ module.exports = Mn.Behavior.extend({
     modelEvents: {
         'change:x': 'updateDisplay'
     },
-
-    initialize:function(){
-        // this.updateDisplay();
-    },
-
     updateDisplay:function(){
         this.ui.display.text(this.view.model.get('x'));
     },

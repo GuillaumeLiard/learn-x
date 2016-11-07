@@ -1,7 +1,6 @@
 var _ = require('underscore');
 var Backbone = require('backbone');
 var Mn = require('backbone.marionette');
-var AlterKey = require('./../behaviors/alterKey');
 var FormBehavior = require('./../behaviors/formBehavior');
 var NumberDisplay = require('./../behaviors/numberDisplay');
 

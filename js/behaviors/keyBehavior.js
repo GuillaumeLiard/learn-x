@@ -16,16 +16,18 @@ module.exports = Mn.Behavior.extend({
     },
     initialize:function(){
         _.bindAll(this,'keyCheckChariot');
+        _.bindAll(this,'keyTouchRail');
     },
     startFalling:function(){
         TweenLite.to(key, this.view.model.get('speedKey'), {y:70,onUpdate:this.keyCheckChariot,onComplete:this.keyTouchRail});
     },
     keyTouchRail:function(){
+        this.view.model.set('keyTouchRail',true,{validate:true});
         // console.log('fdsdfds');
     },
     keyCheckChariot:function(){
         if(Draggable.hitTest(this.ui.key, this.ui.chariot)){
-            console.log('key hit chariot');
+            this.view.model.set('keyTouchChariot',true,{validate:true});
         }
     }
 

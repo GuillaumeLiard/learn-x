@@ -11,7 +11,7 @@ module.exports = Backbone.Model.extend({
       'life':3,
       'x':0,
       'step':10,
-      'speedKey':0.5,
+      'speedKey':0.1,
   },
   validate:function(attrs){
       if(attrs.x>xMax){
@@ -21,6 +21,9 @@ module.exports = Backbone.Model.extend({
           return true;
       }
       if(attrs.keyTouchRail && attrs.keyTouchChariot){
+          return true;
+      }
+      if(attrs.life<0){
           return true;
       }
   }

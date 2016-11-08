@@ -9,7 +9,6 @@ module.exports = Mn.Behavior.extend({
         'change:life': 'updateLife'
     },
     updateLife:function(){
-        console.log(this.view.model.get('life'));
         this.ui.life.text('x'+this.view.model.get('life'));
     },
 

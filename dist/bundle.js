@@ -32236,6 +32236,7 @@ module.exports = Mn.Behavior.extend({
 });
 
 },{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/jquery/dist/jquery.js":8,"./../../bower_components/underscore/underscore.js":9}],13:[function(require,module,exports){
+var _ = require("./../../bower_components/underscore/underscore.js");
 var Backbone = require("./../../bower_components/backbone/backbone.js");
 var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 require("./../../bower_components/gsap/src/uncompressed/TweenMax.js");
@@ -32264,6 +32265,7 @@ module.exports = Mn.Behavior.extend({
         output:'#layerOutputs',
     },
     initialize:function(){
+        _.bindAll(this,'loseLife');
         bad = new TimelineMax();
         gameOver = new TimelineMax();
     },
@@ -32275,8 +32277,7 @@ module.exports = Mn.Behavior.extend({
         .to(this.ui.key, 0.3, {scale:0,opacity:0,transformOrigin:'50% 100%'},0.3)
         .fromTo(this.ui.lifeIcon, 0.3, {y:"+=-2"}, {y:"+=2", ease:RoughEase.ease.config({strength:8, points:20, template:Linear.easeNone, randomize:false})},0)
         .to(this.ui.lifeIconPath, 0.3, {fill:"red"},0)
-        .call(this.loseLife,null,this,"=0")
-        .to(this.ui.lifeIconPath, 0.3, {fill:"#dcfafc"});
+        .to(this.ui.lifeIconPath, 0.3, {fill:"#dcfafc",onComplete:this.loseLife});
         // bad.stop();
         bad.pause();
 
@@ -32331,7 +32332,7 @@ module.exports = Mn.Behavior.extend({
 
 });
 
-},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/backbone/backbone.js":3,"./../../bower_components/gsap/src/uncompressed/TweenMax.js":5}],14:[function(require,module,exports){
+},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/backbone/backbone.js":3,"./../../bower_components/gsap/src/uncompressed/TweenMax.js":5,"./../../bower_components/underscore/underscore.js":9}],14:[function(require,module,exports){
 var _ = require("./../../bower_components/underscore/underscore.js");
 var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 require("./../../bower_components/gsap/src/uncompressed/TweenMax.js");

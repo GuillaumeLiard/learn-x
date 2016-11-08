@@ -1,3 +1,4 @@
+var _ = require('underscore');
 var Backbone = require('backbone');
 var Mn = require('backbone.marionette');
 require('gsap');
@@ -26,6 +27,7 @@ module.exports = Mn.Behavior.extend({
         output:'#layerOutputs',
     },
     initialize:function(){
+        _.bindAll(this,'loseLife');
         bad = new TimelineMax();
         gameOver = new TimelineMax();
     },
@@ -37,8 +39,7 @@ module.exports = Mn.Behavior.extend({
         .to(this.ui.key, 0.3, {scale:0,opacity:0,transformOrigin:'50% 100%'},0.3)
         .fromTo(this.ui.lifeIcon, 0.3, {y:"+=-2"}, {y:"+=2", ease:RoughEase.ease.config({strength:8, points:20, template:Linear.easeNone, randomize:false})},0)
         .to(this.ui.lifeIconPath, 0.3, {fill:"red"},0)
-        .call(this.loseLife,null,this,"=0")
-        .to(this.ui.lifeIconPath, 0.3, {fill:"#dcfafc"});
+        .to(this.ui.lifeIconPath, 0.3, {fill:"#dcfafc",onComplete:this.loseLife});
         // bad.stop();
         bad.pause();
 

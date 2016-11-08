@@ -8,17 +8,25 @@ var validBounds = 0.91;
 module.exports = Mn.Behavior.extend({
     channelName: 'game',
     radioEvents: {
-        'start': 'startFalling',
+        'start': 'init',
     },
     ui:{
         key:'#key',
         chariot:'#chariot',
     },
+    modelEvents: {
+        'change:keyStartFalling': 'keyTweenFall',
+    },
     initialize:function(){
         _.bindAll(this,'keyCheckChariot');
         _.bindAll(this,'keyTouchRail');
     },
-    startFalling:function(){
+    init:function(){
+        this.view.model.set('keyTouchRail',false);
+        this.view.model.set('keyTouchChariot',false);
+        this.view.model.set('keyStartFalling',true);
+    },
+    keyTweenFall:function(){
         TweenLite.to(key, this.view.model.get('speedKey'), {y:70,onUpdate:this.keyCheckChariot,onComplete:this.keyTouchRail});
     },
     keyTouchRail:function(){

@@ -8,9 +8,10 @@ module.exports = Backbone.Model.extend({
   //     console.log('new Model');
   // },
   defaults:{
+      'life':3,
       'x':0,
       'step':10,
-      'speedKey':5
+      'speedKey':0.5,
   },
   validate:function(attrs){
       if(attrs.x>xMax){

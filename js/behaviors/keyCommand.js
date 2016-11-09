@@ -30,10 +30,10 @@ module.exports = Mn.Behavior.extend({
         this.view.model.set('keyTouchRail',false);
         this.view.model.set('keyTouchChariot',false);
         var startX = (Math.random()-0.5)*widthBounds*validBounds+offsetKey;
-        TweenLite.to(key, 0, {x:startX,y:-112,scale:0.38,opacity:1,transformOrigin:'50% 100%',onComplete:this.keyTweenFall});
+        TweenLite.to(this.ui.key, 0, {x:startX,y:-112,scale:0.38,opacity:1,transformOrigin:'50% 100%',onComplete:this.keyTweenFall});
     },
     keyTweenFall:function(){
-        TweenLite.to(key, this.view.model.get('speedKey'), {y:70,onUpdate:this.keyCheckChariot,onComplete:this.keyTouchRail});
+        TweenLite.to(this.ui.key, this.view.model.get('speedKey'), {y:70,onUpdate:this.keyCheckChariot,onComplete:this.keyTouchRail});
     },
     keyTouchRail:function(){
         this.view.model.set('keyTouchRail',true,{validate:true});

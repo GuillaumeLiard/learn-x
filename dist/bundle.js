@@ -32270,19 +32270,17 @@ module.exports = Mn.Behavior.extend({
         gameOver = new TimelineMax();
     },
     onAttach:function(){
-        bad.addLabel('bad')
-        .fromTo(this.ui.rail, 0.3, {y:"+=-2"}, {y:"+=2", ease:RoughEase.ease.config({strength:8, points:20, template:Linear.easeNone, randomize:false})})
+        bad.fromTo(this.ui.rail, 0.3, {y:"+=-2"}, {y:"+=2", ease:RoughEase.ease.config({strength:8, points:20, template:Linear.easeNone, randomize:false})})
         .to(this.ui.railPath, 0.3, {fill:"red"},0)
         .to(this.ui.railPath, 0.3, {fill:"#dcfafc"})
         .to(this.ui.key, 0.3, {scale:0,opacity:0,transformOrigin:'50% 100%'},0.3)
         .fromTo(this.ui.lifeIcon, 0.3, {y:"+=-2"}, {y:"+=2", ease:RoughEase.ease.config({strength:8, points:20, template:Linear.easeNone, randomize:false})},0)
         .to(this.ui.lifeIconPath, 0.3, {fill:"red"},0)
         .to(this.ui.lifeIconPath, 0.3, {fill:"#dcfafc",onComplete:this.loseLife});
-        // bad.stop();
-        bad.pause();
+        bad.stop();
+        // bad.pause();
 
-        gameOver.addLabel('gameOver')
-            .to(this.ui.life,1,{y:"+100",scale:2})
+        gameOver.to(this.ui.life,1,{y:"+100",scale:2})
             .to(this.ui.lifePath,1,{fill:"red"},0)
             .to(this.ui.lifeSpan,1,{fill:"red"},0)
             .to(this.ui.key, 0.3, {opacity:0})
@@ -32290,22 +32288,17 @@ module.exports = Mn.Behavior.extend({
             .to(this.ui.rail, 0.3, {opacity:0})
             .to(this.ui.life,1,{opacity:0})
             .to(this.ui.score,1,{scale:3,x:-240,y:120});
-        gameOver.pause();
+        gameOver.stop();
     },
 
     handleBad:function(){
         if(this.view.model.get('keyTouchRail')){
-            console.log('b');
-            // bad.restart();
-            bad.play('bad');
-            console.log('c');
+            bad.restart();
         }
     },
     loseLife:function(){
-        console.log('a');
         this.view.model.set('life',this.view.model.get('life')-1,{validate:true});
         if(this.view.model.get('life')===0){
-            console.log('game over fdsfdg');
             this.gameOver();
         }else{
             game.trigger('key:launch');
@@ -32319,14 +32312,8 @@ module.exports = Mn.Behavior.extend({
         }
     },
     gameOver:function(){
-        gameOver.play('gameOver');
-        // gameOver.restart();
-
-
-        // gameOver.to(this.ui.scoreIcon, 0.3, {opacity:1});
-        // gameOver.stop();
-        // game.trigger('inputs:hide');
-        console.log('game over g');
+        gameOver.restart();
+        game.trigger('inputs:hide');
     },
 
 
@@ -32365,10 +32352,10 @@ module.exports = Mn.Behavior.extend({
         this.view.model.set('keyTouchRail',false);
         this.view.model.set('keyTouchChariot',false);
         var startX = (Math.random()-0.5)*widthBounds*validBounds+offsetKey;
-        TweenLite.to(key, 0, {x:startX,y:-112,scale:0.38,opacity:1,transformOrigin:'50% 100%',onComplete:this.keyTweenFall});
+        TweenLite.to(this.ui.key, 0, {x:startX,y:-112,scale:0.38,opacity:1,transformOrigin:'50% 100%',onComplete:this.keyTweenFall});
     },
     keyTweenFall:function(){
-        TweenLite.to(key, this.view.model.get('speedKey'), {y:70,onUpdate:this.keyCheckChariot,onComplete:this.keyTouchRail});
+        TweenLite.to(this.ui.key, this.view.model.get('speedKey'), {y:70,onUpdate:this.keyCheckChariot,onComplete:this.keyTouchRail});
     },
     keyTouchRail:function(){
         this.view.model.set('keyTouchRail',true,{validate:true});
@@ -32418,19 +32405,43 @@ module.exports = Mn.Behavior.extend({
 
 },{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1}],17:[function(require,module,exports){
 var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
+require("./../../bower_components/gsap/src/uncompressed/TweenMax.js");
 
-
+var tl;
 module.exports = Mn.Behavior.extend({
-    channel:'game',
+    channelName:'game',
     radioEvents:{
         'inputs:hide':'hide'
     },
+    ui:{
+        'inputs':'#layerInputs'
+    },
+    initialize:function(){
+        console.log('a');
+        tl = new TimelineMax();
+    },
+    onAttach:function(){
+        console.log('b');
+        tl.addLabel("show")
+        .from(this.ui.inputs,1,{opacity:0})
+        .addLabel("hide")
+        .to(this.ui.inputs,1,{opacity:0})
+        .addLabel("end");
+        tl.pause();
+        this.show();
+    },
+    show:function(){
+        console.log('show');
+        tl.tweenFromTo("show","hide");
+
+    },
     hide:function(){
-        console.log('inputs hide');
+        console.log('hide');
+        tl.play("hide");
     }
 });
 
-},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1}],18:[function(require,module,exports){
+},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/gsap/src/uncompressed/TweenMax.js":5}],18:[function(require,module,exports){
 var Backbone = require("./../../bower_components/backbone/backbone.js");
 
 var xMin = -240;

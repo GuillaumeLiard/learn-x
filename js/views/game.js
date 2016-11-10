@@ -22,6 +22,7 @@ module.exports = Mn.View.extend({
         this.showChildView('zone1', new Output({model:this.model}));
     },
     onAttach: function() {
+        // this.initGame();
         setTimeout(this.initGame,0);
     },
     initGame: function() {

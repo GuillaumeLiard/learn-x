@@ -18,6 +18,6 @@ module.exports = Mn.Behavior.extend({
         return this.intro;
     },
     buildIntro:function(){
-        this.intro.from(this.ui.inputs,2,{opacity:0,rotation:360,transformOrigin:'50% 50%'});
+        this.intro.from(this.ui.inputs,3,{opacity:0,rotation:360,transformOrigin:'50% 50%'});
     },
 });

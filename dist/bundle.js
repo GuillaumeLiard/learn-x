@@ -32184,14 +32184,26 @@ module.exports = Mn.Behavior.extend({
     // masterTimeline:new TimelineMax(),
     master:new TimelineMax({paused:true}),
     buildMasterTimeline:function(){
-        this.master.addLabel("intro");
-        this.master.add(this.timelines.request('input:intro'),"intro+=0.5");
-        this.master.add(this.timelines.request('output:intro'),"intro+=0");
+
+        this.master
+            .addLabel("intro")
+            .add(this.timelines.request('input:intro'))
+            .add(this.timelines.request('output:intro'))
+            .add(this.introEnd)
+            .addLabel("intro");
+
+
     },
     startIntro:function(){
-        // this.master.timeScale(0.1);
-        this.master.play("intro");
+        // console.log('b');
+        // // this.master.timeScale(0.1);
+        this.master.paused(false);
+        // console.log(this.master.endTime());
+        // // this.master.tweenFromTo("intro","intro:end");
     },
+    introEnd:function(){
+        console.log('introEnd');
+    }
 });
 
 },{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/backbone/backbone.js":3,"./../../../bower_components/gsap/src/uncompressed/TweenMax.js":5}],12:[function(require,module,exports){
@@ -32232,7 +32244,7 @@ module.exports = Mn.Behavior.extend({
         return this.intro;
     },
     buildIntro:function(){
-        this.intro.from(this.ui.inputs,2,{opacity:0,rotation:360,transformOrigin:'50% 50%'});
+        this.intro.from(this.ui.inputs,3,{opacity:0,rotation:360,transformOrigin:'50% 50%'});
     },
 });
 
@@ -32590,6 +32602,7 @@ module.exports = Mn.View.extend({
         this.showChildView('zone1', new Output({model:this.model}));
     },
     onAttach: function() {
+        // this.initGame();
         setTimeout(this.initGame,0);
     },
     initGame: function() {

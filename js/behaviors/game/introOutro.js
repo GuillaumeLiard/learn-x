@@ -12,12 +12,24 @@ module.exports = Mn.Behavior.extend({
     // masterTimeline:new TimelineMax(),
     master:new TimelineMax({paused:true}),
     buildMasterTimeline:function(){
-        this.master.addLabel("intro");
-        this.master.add(this.timelines.request('input:intro'),"intro+=0.5");
-        this.master.add(this.timelines.request('output:intro'),"intro+=0");
+
+        this.master
+            .addLabel("intro")
+            .add(this.timelines.request('input:intro'))
+            .add(this.timelines.request('output:intro'))
+            .add(this.introEnd)
+            .addLabel("intro");
+
+
     },
     startIntro:function(){
-        // this.master.timeScale(0.1);
-        this.master.play("intro");
+        // console.log('b');
+        // // this.master.timeScale(0.1);
+        this.master.paused(false);
+        // console.log(this.master.endTime());
+        // // this.master.tweenFromTo("intro","intro:end");
     },
+    introEnd:function(){
+        console.log('introEnd');
+    }
 });

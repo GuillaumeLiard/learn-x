@@ -13,7 +13,8 @@ module.exports = Mn.Behavior.extend({
     master:new TimelineMax({paused:true}),
     buildMasterTimeline:function(){
         this.master.addLabel("intro");
-        this.master.add(this.timelines.request('input:intro'));
+        this.master.add(this.timelines.request('input:intro'),"intro+=0.5");
+        this.master.add(this.timelines.request('output:intro'),"intro+=0");
     },
     startIntro:function(){
         // this.master.timeScale(0.1);

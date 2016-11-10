@@ -16,17 +16,15 @@ module.exports = Mn.Behavior.extend({
         this.master
             .addLabel("intro")
             .add(this.timelines.request('input:intro'))
-            .add(this.timelines.request('output:intro'))
+            .add(this.timelines.request('output:intro'),"=-1.5")
             .add(this.introEnd)
-            .addLabel("intro");
+            .addLabel("ready");
 
 
     },
     startIntro:function(){
-        // console.log('b');
-        // // this.master.timeScale(0.1);
-        this.master.paused(false);
-        // console.log(this.master.endTime());
+        this.master.timeScale(1.2);
+        this.master.play("intro");
         // // this.master.tweenFromTo("intro","intro:end");
     },
     introEnd:function(){

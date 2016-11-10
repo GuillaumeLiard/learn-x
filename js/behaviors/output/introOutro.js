@@ -29,6 +29,8 @@ module.exports = Mn.Behavior.extend({
         return this.intro;
     },
     buildIntro:function(){
-        this.intro.from(this.ui.outputs,2,{opacity:0,rotation:360,transformOrigin:'50% 50%'});
+        this.intro
+            .from(this.ui.outputs,1,{opacity:0,x:-1000})
+            .from(this.ui.chariot,1,{opacity:0,y:-200,ease:Bounce.easeOut});
     },
 });

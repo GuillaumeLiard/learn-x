@@ -32188,17 +32188,15 @@ module.exports = Mn.Behavior.extend({
         this.master
             .addLabel("intro")
             .add(this.timelines.request('input:intro'))
-            .add(this.timelines.request('output:intro'))
+            .add(this.timelines.request('output:intro'),"=-1.5")
             .add(this.introEnd)
-            .addLabel("intro");
+            .addLabel("ready");
 
 
     },
     startIntro:function(){
-        // console.log('b');
-        // // this.master.timeScale(0.1);
-        this.master.paused(false);
-        // console.log(this.master.endTime());
+        this.master.timeScale(1.2);
+        this.master.play("intro");
         // // this.master.tweenFromTo("intro","intro:end");
     },
     introEnd:function(){
@@ -32233,7 +32231,9 @@ module.exports = Mn.Behavior.extend({
         'input:intro':'getIntro',
     },
     ui:{
-        'inputs':'#layerInputs'
+        'inputs':'#layerInputs',
+        'items':'.item',
+        'texts':'text',
     },
     intro:new TimelineMax({paused:true}),
     onAttach:function(){
@@ -32244,7 +32244,10 @@ module.exports = Mn.Behavior.extend({
         return this.intro;
     },
     buildIntro:function(){
-        this.intro.from(this.ui.inputs,3,{opacity:0,rotation:360,transformOrigin:'50% 50%'});
+        // this.intro.from(this.ui.inputs,1,{x:-400})
+        console.log(this.ui.items);
+            this.intro.staggerFrom(this.ui.items, 2, {rotation:90, opacity:0, ease:Elastic.easeOut, },0.5);
+            this.intro.staggerFrom(this.ui.texts, 2, {x:30, opacity:0, ease:Power4.easeOut},0.5,"-=3");
     },
 });
 
@@ -32438,7 +32441,9 @@ module.exports = Mn.Behavior.extend({
         return this.intro;
     },
     buildIntro:function(){
-        this.intro.from(this.ui.outputs,2,{opacity:0,rotation:360,transformOrigin:'50% 50%'});
+        this.intro
+            .from(this.ui.outputs,1,{opacity:0,x:-1000})
+            .from(this.ui.chariot,1,{opacity:0,y:-200,ease:Bounce.easeOut});
     },
 });
 
@@ -32566,7 +32571,7 @@ return __p;
 exports['inputs.svg']=function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
-__p+='<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n<!-- Created with Inkscape (http://www.inkscape.org/) -->\n<svg id="inputs" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 152.4039 149.93" height="100%" width="100%" version="1.1" preserveAspectRatio="xMidYMid meet" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">\n <metadata id="metadata7">\n  <rdf:RDF>\n   <cc:Work rdf:about="">\n    <dc:format>image/svg+xml</dc:format>\n    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>\n    <dc:title/>\n   </cc:Work>\n  </rdf:RDF>\n </metadata>\n <g id="layerInputs" fill="#FFF" transform="translate(-166.46591,-877.39781)">\n  <rect id="bgInputs" fill-rule="evenodd" height="149.93" width="152.4" y="877.4" x="166.47" fill="#080e1f"/>\n  <g id="g3135" transform="translate(320.51427,932.62617)">\n   <g id="down" transform="matrix(0.5,0,0,0.5,-100.84641,-438.99835)">\n    <rect id="rect3824-3" stroke-dasharray="none" fill-rule="evenodd" stroke-dashoffset="0" transform="scale(-1,-1)" height="79.292" width="79.292" stroke="#000" stroke-miterlimit="4" y="-1046" x="-85.646" stroke-width="2.7081" fill="#dcfafc"/>\n    <path id="path3123" style="direction:ltr;baseline-shift:baseline;block-progression:tb;text-indent:0;color:#000000;enable-background:accumulate;text-transform:none;" d="m87,1047.4,0-1,0-80,0-1-1,0-80,0-1,0,0,1,0,80,0,1,1,0,80,0,1,0zm-2-2-78,0,0-78,78,0,0,78zm-39-8c9.0769-9.6728,16.962-18.489,25-27h-14v-35h-22v35h-14c8.4026,9.0215,16.653,17.927,25,27zm0-3-20-22,11,0,0-35,18,0,0,35,11,0-20,22z" visibility="visible" overflow="visible" display="inline" fill="#000"/>\n   </g>\n   <g id="up" transform="matrix(-0.5,0,0,-0.5,-54.846413,478.47037)">\n    <rect id="rect3824" stroke-dasharray="none" fill-rule="evenodd" stroke-dashoffset="0" height="79.292" width="79.292" stroke="#000" stroke-miterlimit="4" y="966.75" x="6.354" stroke-width="2.7081" fill="#dcfafc"/>\n    <path id="path3143" style="direction:ltr;baseline-shift:baseline;block-progression:tb;text-indent:0;color:#000000;enable-background:accumulate;text-transform:none;" d="m87,1047.4,0-1,0-80,0-1-1,0-80,0-1,0,0,1,0,80,0,1,1,0,80,0,1,0zm-2-2-78,0,0-78,78,0,0,78zm-39-8c9.0769-9.6728,16.962-18.489,25-27h-14v-35h-22v35h-14c8.4026,9.0215,16.653,17.927,25,27zm0-3-20-22,11,0,0-35,18,0,0,35,11,0-20,22z" visibility="visible" overflow="visible" display="inline" fill="#000"/>\n   </g>\n   <rect id="numberDisplayBox" stroke-dasharray="none" height="31.299" width="48.53" stroke="#000" stroke-miterlimit="4" y="3.5015" x="-102.11" stroke-width="0.87036" fill="#dcfafc"/>\n  </g>\n  <text id="stepUp" style="letter-spacing:0px;word-spacing:0px;" font-family="Sans" xml:space="preserve" font-size="20px" line-height="125%" font-style="normal" y="915.19574" x="267.98114" font-weight="normal" fill="#dcfafc"><tspan id="tspan3147" y="915.19574" x="267.98114" fill="#dcfafc">+10</tspan></text>\n  <text id="stepDown" style="letter-spacing:0px;word-spacing:0px;" font-family="Sans" xml:space="preserve" font-size="20px" line-height="125%" font-style="normal" y="1004.0892" x="269.12372" font-weight="normal" fill="#dcfafc"><tspan id="tspan3147-6" y="1004.0892" x="269.12372" fill="#dcfafc">-10</tspan></text>\n  <text id="numberDisplay" style="writing-mode:lr-tb;letter-spacing:0px;text-anchor:start;word-spacing:0px;text-align:start;" line-height="125%" font-family="Sans" xml:space="preserve" font-size="20px" font-stretch="normal" font-variant="normal" y="959.05737" x="220.13368" font-weight="normal" font-style="normal" fill="#000000"><tspan id="tspan3963">0</tspan></text>\n </g>\n</svg>\n';
+__p+='<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n<!-- Created with Inkscape (http://www.inkscape.org/) -->\n<svg id="inputs" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 152.4039 149.93" height="100%" width="100%" version="1.1" preserveAspectRatio="xMidYMid meet" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">\n <metadata id="metadata7">\n  <rdf:RDF>\n   <cc:Work rdf:about="">\n    <dc:format>image/svg+xml</dc:format>\n    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>\n    <dc:title/>\n   </cc:Work>\n  </rdf:RDF>\n </metadata>\n <g id="layerInputs" fill="#FFF" transform="translate(-166.46591,-877.39781)">\n  <rect id="bgInputs" fill-rule="evenodd" height="149.93" width="152.4" y="877.4" x="166.47" fill="#080e1f"/>\n  <g id="g3135" transform="translate(320.51427,932.62617)">\n   <g class="item" id="down" transform="matrix(0.5,0,0,0.5,-100.84641,-438.99835)">\n    <rect id="rect3824-3" stroke-dasharray="none" fill-rule="evenodd" stroke-dashoffset="0" transform="scale(-1,-1)" height="79.292" width="79.292" stroke="#000" stroke-miterlimit="4" y="-1046" x="-85.646" stroke-width="2.7081" fill="#dcfafc"/>\n    <path id="path3123" style="direction:ltr;baseline-shift:baseline;block-progression:tb;text-indent:0;color:#000000;enable-background:accumulate;text-transform:none;" d="m87,1047.4,0-1,0-80,0-1-1,0-80,0-1,0,0,1,0,80,0,1,1,0,80,0,1,0zm-2-2-78,0,0-78,78,0,0,78zm-39-8c9.0769-9.6728,16.962-18.489,25-27h-14v-35h-22v35h-14c8.4026,9.0215,16.653,17.927,25,27zm0-3-20-22,11,0,0-35,18,0,0,35,11,0-20,22z" visibility="visible" overflow="visible" display="inline" fill="#000"/>\n   </g>\n   <g class="item" id="up" transform="matrix(-0.5,0,0,-0.5,-54.846413,478.47037)">\n    <rect id="rect3824" stroke-dasharray="none" fill-rule="evenodd" stroke-dashoffset="0" height="79.292" width="79.292" stroke="#000" stroke-miterlimit="4" y="966.75" x="6.354" stroke-width="2.7081" fill="#dcfafc"/>\n    <path id="path3143" style="direction:ltr;baseline-shift:baseline;block-progression:tb;text-indent:0;color:#000000;enable-background:accumulate;text-transform:none;" d="m87,1047.4,0-1,0-80,0-1-1,0-80,0-1,0,0,1,0,80,0,1,1,0,80,0,1,0zm-2-2-78,0,0-78,78,0,0,78zm-39-8c9.0769-9.6728,16.962-18.489,25-27h-14v-35h-22v35h-14c8.4026,9.0215,16.653,17.927,25,27zm0-3-20-22,11,0,0-35,18,0,0,35,11,0-20,22z" visibility="visible" overflow="visible" display="inline" fill="#000"/>\n   </g>\n   <rect class="item" id="numberDisplayBox" stroke-dasharray="none" height="31.299" width="48.53" stroke="#000" stroke-miterlimit="4" y="3.5015" x="-102.11" stroke-width="0.87036" fill="#dcfafc"/>\n  </g>\n  <text id="stepDown" style="letter-spacing:0px;word-spacing:0px;" font-family="Sans" xml:space="preserve" font-size="20px" line-height="125%" font-style="normal" y="1004.0892" x="269.12372" font-weight="normal" fill="#dcfafc"><tspan id="tspan3147-6" y="1004.0892" x="269.12372" fill="#dcfafc">-10</tspan></text>\n  <text id="stepUp" style="letter-spacing:0px;word-spacing:0px;" font-family="Sans" xml:space="preserve" font-size="20px" line-height="125%" font-style="normal" y="915.19574" x="267.98114" font-weight="normal" fill="#dcfafc"><tspan id="tspan3147" y="915.19574" x="267.98114" fill="#dcfafc">+10</tspan></text>\n  <text id="numberDisplay" style="writing-mode:lr-tb;letter-spacing:0px;text-anchor:start;word-spacing:0px;text-align:start;" line-height="125%" font-family="Sans" xml:space="preserve" font-size="20px" font-stretch="normal" font-variant="normal" y="959.05737" x="220.13368" font-weight="normal" font-style="normal" fill="#000000"><tspan id="tspan3963">0</tspan></text>\n </g>\n</svg>\n';
 }
 return __p;
 };

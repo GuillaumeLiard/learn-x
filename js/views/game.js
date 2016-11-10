@@ -1,9 +1,10 @@
 var Backbone = require('backbone');
 var Mn = require('backbone.marionette');
 var templates = require('./../utils/templates.js');
+var GameModel = require('./../models/gameModel');
+var IntroOutro = require('./../behaviors/game/introOutro');
 var Output = require('./output.js');
 var Input = require('./input.js');
-var GameModel = require('./../models/gameModel');
 
 var game = Backbone.Radio.channel('game');
 
@@ -11,6 +12,7 @@ module.exports = Mn.View.extend({
     template:templates.game,
     className:'game',
     model:new GameModel(),
+    behaviors:[IntroOutro],
     regions: {
         zone1: '#zone1',
         zone2: '#zone2'
@@ -20,6 +22,10 @@ module.exports = Mn.View.extend({
         this.showChildView('zone1', new Output({model:this.model}));
     },
     onAttach: function() {
-        game.trigger('start');
+        setTimeout(this.initGame,0);
+    },
+    initGame: function() {
+        game.trigger('init');
+        game.trigger('intro');
     },
 });

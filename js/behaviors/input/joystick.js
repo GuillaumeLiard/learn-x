@@ -21,27 +21,35 @@ module.exports = Mn.Behavior.extend({
         _.bindAll(this,'clearHold');
         _.bindAll(this,'goUpHold');
         _.bindAll(this,'goDownHold');
+        _.bindAll(this,'goUp');
+        _.bindAll(this,'goDown');
         $(document).on('keydown',this.processKey);
         $(document).on('mouseup',this.clearHold);
     },
     processKey:function(event){
         if(event.which === 38){
-            this.view.goUp();
+            this.goUp();
         }
         if(event.which === 40){
-            this.view.goDown();
+            this.goDown();
         }
     },
     goUpHold:function(){
         this.clearHold();
-        this.view.model.set('interval',setInterval(this.view.goUp, intervalDuration));
+        this.view.model.set('interval',setInterval(this.goUp, intervalDuration));
     },
     goDownHold:function(){
         this.clearHold();
-        this.view.model.set('interval',setInterval(this.view.goDown, intervalDuration));
+        this.view.model.set('interval',setInterval(this.goDown, intervalDuration));
     },
     clearHold:function(){
           clearInterval(this.view.model.get('interval'));
           this.view.model.set('interval',null);
-    }
+    },
+    goUp:function(){
+        this.view.model.set("x",this.view.model.get("x")+this.view.model.get("step"),{validate:true});
+    },
+    goDown:function(){
+        this.view.model.set("x",this.view.model.get("x")-this.view.model.get("step"),{validate:true});
+    },
 });

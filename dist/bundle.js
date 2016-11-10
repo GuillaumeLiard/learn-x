@@ -32169,27 +32169,76 @@ $(document).ready(function(){
     myApp.start();
 });
 
-},{"./../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../bower_components/jquery/dist/jquery.js":8,"./views/game":20}],11:[function(require,module,exports){
-var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
-require("./../../bower_components/gsap/src/uncompressed/TweenMax.js");
-var validBounds = 0.91;
+},{"./../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../bower_components/jquery/dist/jquery.js":8,"./views/game":21}],11:[function(require,module,exports){
+var Backbone = require("./../../../bower_components/backbone/backbone.js");
+var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
+require("./../../../bower_components/gsap/src/uncompressed/TweenMax.js");
 
 module.exports = Mn.Behavior.extend({
-    ui:{
-        chariot:'#chariot',
+    timelines:Backbone.Radio.channel('timelines'),
+    channelName:'game',
+    radioEvents:{
+        'init':'buildMasterTimeline',
+        'intro':'startIntro'
     },
-    modelEvents: {
-        'change:x': 'move',
+    // masterTimeline:new TimelineMax(),
+    master:new TimelineMax({paused:true}),
+    buildMasterTimeline:function(){
+        this.master.addLabel("intro");
+        this.master.add(this.timelines.request('input:intro'));
     },
-    move: function(event) {
-        TweenMax.to(this.ui.chariot, 1, {x:validBounds*this.view.model.get('x')});
+    startIntro:function(){
+        // this.master.timeScale(0.1);
+        this.master.play("intro");
     },
 });
 
-},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/gsap/src/uncompressed/TweenMax.js":5}],12:[function(require,module,exports){
-var _ = require("./../../bower_components/underscore/underscore.js");
-var $ = require("./../../bower_components/jquery/dist/jquery.js");
-var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
+},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/backbone/backbone.js":3,"./../../../bower_components/gsap/src/uncompressed/TweenMax.js":5}],12:[function(require,module,exports){
+var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
+
+
+module.exports = Mn.Behavior.extend({
+    ui:{
+        display:'#numberDisplay'
+    },
+    modelEvents: {
+        'change:x': 'updateDisplay'
+    },
+    updateDisplay:function(){
+        this.ui.display.text(this.view.model.get('x'));
+    },
+
+});
+
+},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1}],13:[function(require,module,exports){
+var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
+require("./../../../bower_components/gsap/src/uncompressed/TweenMax.js");
+
+module.exports = Mn.Behavior.extend({
+    channelName:'timelines',
+    radioRequests:{
+        'input:intro':'getIntro',
+    },
+    ui:{
+        'inputs':'#layerInputs'
+    },
+    intro:new TimelineMax({paused:true}),
+    onAttach:function(){
+        this.buildIntro();
+    },
+    getIntro:function(){
+        this.intro.paused(false);
+        return this.intro;
+    },
+    buildIntro:function(){
+        this.intro.from(this.ui.inputs,2,{opacity:0,rotation:360,transformOrigin:'50% 50%'});
+    },
+});
+
+},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/gsap/src/uncompressed/TweenMax.js":5}],14:[function(require,module,exports){
+var _ = require("./../../../bower_components/underscore/underscore.js");
+var $ = require("./../../../bower_components/jquery/dist/jquery.js");
+var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 
 var intervalDuration = 50;
 
@@ -32210,36 +32259,61 @@ module.exports = Mn.Behavior.extend({
         _.bindAll(this,'clearHold');
         _.bindAll(this,'goUpHold');
         _.bindAll(this,'goDownHold');
+        _.bindAll(this,'goUp');
+        _.bindAll(this,'goDown');
         $(document).on('keydown',this.processKey);
         $(document).on('mouseup',this.clearHold);
     },
     processKey:function(event){
         if(event.which === 38){
-            this.view.goUp();
+            this.goUp();
         }
         if(event.which === 40){
-            this.view.goDown();
+            this.goDown();
         }
     },
     goUpHold:function(){
         this.clearHold();
-        this.view.model.set('interval',setInterval(this.view.goUp, intervalDuration));
+        this.view.model.set('interval',setInterval(this.goUp, intervalDuration));
     },
     goDownHold:function(){
         this.clearHold();
-        this.view.model.set('interval',setInterval(this.view.goDown, intervalDuration));
+        this.view.model.set('interval',setInterval(this.goDown, intervalDuration));
     },
     clearHold:function(){
           clearInterval(this.view.model.get('interval'));
           this.view.model.set('interval',null);
-    }
+    },
+    goUp:function(){
+        this.view.model.set("x",this.view.model.get("x")+this.view.model.get("step"),{validate:true});
+    },
+    goDown:function(){
+        this.view.model.set("x",this.view.model.get("x")-this.view.model.get("step"),{validate:true});
+    },
 });
 
-},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/jquery/dist/jquery.js":8,"./../../bower_components/underscore/underscore.js":9}],13:[function(require,module,exports){
-var _ = require("./../../bower_components/underscore/underscore.js");
-var Backbone = require("./../../bower_components/backbone/backbone.js");
-var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
-require("./../../bower_components/gsap/src/uncompressed/TweenMax.js");
+},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/jquery/dist/jquery.js":8,"./../../../bower_components/underscore/underscore.js":9}],15:[function(require,module,exports){
+var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
+require("./../../../bower_components/gsap/src/uncompressed/TweenMax.js");
+var validBounds = 0.91;
+
+module.exports = Mn.Behavior.extend({
+    ui:{
+        chariot:'#chariot',
+    },
+    modelEvents: {
+        'change:x': 'move',
+    },
+    move: function(event) {
+        TweenMax.to(this.ui.chariot, 1, {x:validBounds*this.view.model.get('x')});
+    },
+});
+
+},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/gsap/src/uncompressed/TweenMax.js":5}],16:[function(require,module,exports){
+var _ = require("./../../../bower_components/underscore/underscore.js");
+var Backbone = require("./../../../bower_components/backbone/backbone.js");
+var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
+require("./../../../bower_components/gsap/src/uncompressed/TweenMax.js");
 
 var game = Backbone.Radio.channel('game');
 var bad = null;
@@ -32319,12 +32393,12 @@ module.exports = Mn.Behavior.extend({
 
 });
 
-},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/backbone/backbone.js":3,"./../../bower_components/gsap/src/uncompressed/TweenMax.js":5,"./../../bower_components/underscore/underscore.js":9}],14:[function(require,module,exports){
-var _ = require("./../../bower_components/underscore/underscore.js");
-var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
-require("./../../bower_components/gsap/src/uncompressed/TweenMax.js");
+},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/backbone/backbone.js":3,"./../../../bower_components/gsap/src/uncompressed/TweenMax.js":5,"./../../../bower_components/underscore/underscore.js":9}],17:[function(require,module,exports){
+var _ = require("./../../../bower_components/underscore/underscore.js");
+var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
+require("./../../../bower_components/gsap/src/uncompressed/TweenMax.js");
 // Can't seem to load it in another way:
-var Draggable = require('./../../bower_components/gsap/src/uncompressed/utils/Draggable.js');
+var Draggable = require('./../../../bower_components/gsap/src/uncompressed/utils/Draggable.js');
 var validBounds = 0.91;
 var widthBounds = 480;
 var offsetKey = 58;
@@ -32369,8 +32443,8 @@ module.exports = Mn.Behavior.extend({
 
 });
 
-},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/gsap/src/uncompressed/TweenMax.js":5,"./../../bower_components/gsap/src/uncompressed/utils/Draggable.js":7,"./../../bower_components/underscore/underscore.js":9}],15:[function(require,module,exports){
-var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
+},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/gsap/src/uncompressed/TweenMax.js":5,"./../../../bower_components/gsap/src/uncompressed/utils/Draggable.js":7,"./../../../bower_components/underscore/underscore.js":9}],18:[function(require,module,exports){
+var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 
 
 module.exports = Mn.Behavior.extend({
@@ -32386,62 +32460,7 @@ module.exports = Mn.Behavior.extend({
 
 });
 
-},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1}],16:[function(require,module,exports){
-var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
-
-
-module.exports = Mn.Behavior.extend({
-    ui:{
-        display:'#numberDisplay'
-    },
-    modelEvents: {
-        'change:x': 'updateDisplay'
-    },
-    updateDisplay:function(){
-        this.ui.display.text(this.view.model.get('x'));
-    },
-
-});
-
-},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1}],17:[function(require,module,exports){
-var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
-require("./../../bower_components/gsap/src/uncompressed/TweenMax.js");
-
-var tl;
-module.exports = Mn.Behavior.extend({
-    channelName:'game',
-    radioEvents:{
-        'inputs:hide':'hide'
-    },
-    ui:{
-        'inputs':'#layerInputs'
-    },
-    initialize:function(){
-        console.log('a');
-        tl = new TimelineMax();
-    },
-    onAttach:function(){
-        console.log('b');
-        tl.addLabel("show")
-        .from(this.ui.inputs,1,{opacity:0})
-        .addLabel("hide")
-        .to(this.ui.inputs,1,{opacity:0})
-        .addLabel("end");
-        tl.pause();
-        this.show();
-    },
-    show:function(){
-        console.log('show');
-        tl.tweenFromTo("show","hide");
-
-    },
-    hide:function(){
-        console.log('hide');
-        tl.play("hide");
-    }
-});
-
-},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/gsap/src/uncompressed/TweenMax.js":5}],18:[function(require,module,exports){
+},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1}],19:[function(require,module,exports){
 var Backbone = require("./../../bower_components/backbone/backbone.js");
 
 var xMin = -240;
@@ -32473,7 +32492,7 @@ module.exports = Backbone.Model.extend({
   }
 });
 
-},{"./../../bower_components/backbone/backbone.js":3}],19:[function(require,module,exports){
+},{"./../../bower_components/backbone/backbone.js":3}],20:[function(require,module,exports){
 exports['game']=function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
@@ -32509,13 +32528,14 @@ __p+='<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n<!-- Created with 
 }
 return __p;
 };
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 var Backbone = require("./../../bower_components/backbone/backbone.js");
 var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 var templates = require('./../utils/templates.js');
+var GameModel = require('./../models/gameModel');
+var IntroOutro = require('./../behaviors/game/introOutro');
 var Output = require('./output.js');
 var Input = require('./input.js');
-var GameModel = require('./../models/gameModel');
 
 var game = Backbone.Radio.channel('game');
 
@@ -32523,6 +32543,7 @@ module.exports = Mn.View.extend({
     template:templates.game,
     className:'game',
     model:new GameModel(),
+    behaviors:[IntroOutro],
     regions: {
         zone1: '#zone1',
         zone2: '#zone2'
@@ -32532,56 +32553,42 @@ module.exports = Mn.View.extend({
         this.showChildView('zone1', new Output({model:this.model}));
     },
     onAttach: function() {
-        game.trigger('start');
+        setTimeout(this.initGame,0);
+    },
+    initGame: function() {
+        game.trigger('init');
+        game.trigger('intro');
     },
 });
 
-},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/backbone/backbone.js":3,"./../models/gameModel":18,"./../utils/templates.js":19,"./input.js":21,"./output.js":22}],21:[function(require,module,exports){
-var _ = require("./../../bower_components/underscore/underscore.js");
-var Backbone = require("./../../bower_components/backbone/backbone.js");
+},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/backbone/backbone.js":3,"./../behaviors/game/introOutro":11,"./../models/gameModel":19,"./../utils/templates.js":20,"./input.js":22,"./output.js":23}],22:[function(require,module,exports){
 var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
-var FormBehavior = require('./../behaviors/formBehavior');
-var NumberDisplay = require('./../behaviors/numberDisplay');
-var Presentation = require('./../behaviors/presentation');
-
 var templates = require('./../utils/templates.js');
+var IntroOutro = require('./../behaviors/input/introOutro');
+var Joystick = require('./../behaviors/input/joystick');
+var CoordinateDisplay = require('./../behaviors/input/coordinateDisplay');
 
 module.exports = Mn.View.extend({
-    // model:new Backbone.Model(),
     template:templates['inputs.svg'],
     className:'input',
-    behaviors: [FormBehavior,NumberDisplay,Presentation],
-    initialize:function(){
-        _.bindAll(this,'goUp');
-        _.bindAll(this,'goDown');
-    },
-    goUp:function(){
-        this.model.set("x",this.model.get("x")+this.model.get("step"),{validate:true});
-    },
-    goDown:function(){
-        this.model.set("x",this.model.get("x")-this.model.get("step"),{validate:true});
-    },
+    behaviors: [IntroOutro,Joystick,CoordinateDisplay],
 });
 
-},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/backbone/backbone.js":3,"./../../bower_components/underscore/underscore.js":9,"./../behaviors/formBehavior":12,"./../behaviors/numberDisplay":16,"./../behaviors/presentation":17,"./../utils/templates.js":19}],22:[function(require,module,exports){
-var _ = require("./../../bower_components/underscore/underscore.js");
-var $ = require("./../../bower_components/jquery/dist/jquery.js");
-var Backbone = require("./../../bower_components/backbone/backbone.js");
+},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../behaviors/input/coordinateDisplay":12,"./../behaviors/input/introOutro":13,"./../behaviors/input/joystick":14,"./../utils/templates.js":20}],23:[function(require,module,exports){
 var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 var templates = require('./../utils/templates.js');
-var Chariot = require('./../behaviors/chariotBehavior');
-var KeyCommand = require('./../behaviors/keyCommand');
-var Game = require('./../behaviors/gameBehavior');
-var LifeDisplay = require('./../behaviors/lifeDisplay');
+var Chariot = require('./../behaviors/output/chariot');
+var Key = require('./../behaviors/output/key');
+var Life = require('./../behaviors/output/life');
+var GoodBad = require('./../behaviors/output/goodBad');
 
 module.exports = Mn.View.extend({
     template:templates['outputs.svg'],
     className:'output',
-    behaviors: [Chariot,KeyCommand,Game,LifeDisplay],
-
+    behaviors: [Chariot,Key,Life,GoodBad],
 });
 
-},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/backbone/backbone.js":3,"./../../bower_components/jquery/dist/jquery.js":8,"./../../bower_components/underscore/underscore.js":9,"./../behaviors/chariotBehavior":11,"./../behaviors/gameBehavior":13,"./../behaviors/keyCommand":14,"./../behaviors/lifeDisplay":15,"./../utils/templates.js":19}]},{},[10])
+},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../behaviors/output/chariot":15,"./../behaviors/output/goodBad":16,"./../behaviors/output/key":17,"./../behaviors/output/life":18,"./../utils/templates.js":20}]},{},[10])
 
 
 //# sourceMappingURL=bundle.js.map

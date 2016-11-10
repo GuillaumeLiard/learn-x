@@ -2,7 +2,7 @@ var _ = require('underscore');
 var Mn = require('backbone.marionette');
 require('gsap');
 // Can't seem to load it in another way:
-var Draggable = require('./../../bower_components/gsap/src/uncompressed/utils/Draggable.js');
+var Draggable = require('./../../../bower_components/gsap/src/uncompressed/utils/Draggable.js');
 var validBounds = 0.91;
 var widthBounds = 480;
 var offsetKey = 58;

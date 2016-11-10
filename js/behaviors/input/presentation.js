@@ -10,27 +10,32 @@ module.exports = Mn.Behavior.extend({
     ui:{
         'inputs':'#layerInputs'
     },
+    tl2:new TimelineMax(),
+
     initialize:function(){
-        console.log('a');
-        tl = new TimelineMax();
+        // console.log('a');
+        // this.tl2 =
+        console.log(this.tl2);
     },
     onAttach:function(){
         console.log('b');
-        tl.addLabel("show")
+        console.log(this.ui.inputs);
+        console.log('bc');
+        this.tl2.addLabel("show")
         .from(this.ui.inputs,1,{opacity:0})
         .addLabel("hide")
         .to(this.ui.inputs,1,{opacity:0})
         .addLabel("end");
-        tl.pause();
+        this.tl2.pause();
         this.show();
     },
     show:function(){
-        console.log('show');
-        tl.tweenFromTo("show","hide");
+        // console.log('show');
+        this.tl2.tweenFromTo("show","hide");
 
     },
     hide:function(){
-        console.log('hide');
-        tl.play("hide");
+        // console.log('hide');
+        this.tl2.play("hide");
     }
 });

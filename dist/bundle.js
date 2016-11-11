@@ -32462,6 +32462,7 @@ module.exports = Mn.Behavior.extend({
     handleGood:function(){
         if(this.view.model.get('keyTouchChariot')){
             game.trigger('key:stop:fall');
+            this.good.invalidate();
             this.good.play('begin');
         }
     },

@@ -15,6 +15,9 @@ module.exports = Mn.Behavior.extend({
     onIntro:function(){
         this.startIntro();
     },
+    onOutro:function(){
+        this.startOutro();
+    },
     buildMasterTimeline:function(){
         // console.log('abcd');
         this.master
@@ -22,12 +25,19 @@ module.exports = Mn.Behavior.extend({
             .add(this.timelines.request('input:intro'))
             .add(this.timelines.request('output:intro'),"=-1.5")
             .add(this.introEnd)
-            .addLabel("ready");
+            .addLabel("ready")
+            .addPause("ready+=0.1")
+            .addLabel("outro")
+            .add(this.timelines.request('output:outro'))
+            .add(this.timelines.request('input:outro'),"=-2");
+        // this.master.timeScale(1.2);
     },
     startIntro:function(){
-        this.master.timeScale(1.2);
-        this.master.play("ready");
-        // // this.master.tweenFromTo("intro","intro:end");
+        this.master.play("intro");
+    },
+    startOutro:function(){
+
+        this.master.play("outro");
     },
     introEnd:function(){
         this.view.triggerMethod('start');

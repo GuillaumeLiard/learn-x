@@ -37,7 +37,6 @@ module.exports = Mn.Behavior.extend({
     },
     keyTouchRail:function(){
         this.view.model.set('keyTouchRail',true,{validate:true});
-        // console.log('fdsdfds');
     },
     keyCheckChariot:function(){
         if(Draggable.hitTest(this.ui.key, this.ui.chariot)){

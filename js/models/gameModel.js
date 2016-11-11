@@ -12,6 +12,7 @@ module.exports = Backbone.Model.extend({
       'x':0,
       'step':10,
       'speedKey':1,
+      'gameOver':false
   },
   validate:function(attrs){
       if(attrs.x>xMax){

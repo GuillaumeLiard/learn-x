@@ -13,11 +13,13 @@ module.exports = Mn.Behavior.extend({
     radioEvents: {
         'start': 'init',
         'key:launch': 'init',
+        'key:stop:fall': 'keyStopFall',
     },
     ui:{
         key:'#key',
         chariot:'#chariot',
     },
+    keyFall:null,
     // modelEvents: {
     //     'change:keyStartFalling': 'keyTweenFall',
     // },
@@ -30,17 +32,23 @@ module.exports = Mn.Behavior.extend({
         this.view.model.set('keyTouchRail',false);
         this.view.model.set('keyTouchChariot',false);
         var startX = (Math.random()-0.5)*widthBounds*validBounds+offsetKey;
-        TweenLite.to(this.ui.key, 0, {x:startX,y:-112,scale:0.38,opacity:1,transformOrigin:'50% 100%',onComplete:this.keyTweenFall});
+        // var startX = (0)*widthBounds*validBounds+offsetKey;
+        TweenLite.to(this.ui.key, 0, {x:startX,y:-112,scale:0.38,rotation:0,fill:"#dcfafc",opacity:1,transformOrigin:'50% 100%',onComplete:this.keyTweenFall});
     },
     keyTweenFall:function(){
-        TweenLite.to(this.ui.key, this.view.model.get('speedKey'), {y:70,onUpdate:this.keyCheckChariot,onComplete:this.keyTouchRail});
+        this.keyFall = TweenLite.to(this.ui.key, this.view.model.get('speedKey'), {y:70,onUpdate:this.keyCheckChariot,onComplete:this.keyTouchRail});
+    },
+    keyStopFall:function(){
+        // this.keyFall.kill();
+        // this.keyFall = null;
     },
     keyTouchRail:function(){
         this.view.model.set('keyTouchRail',true,{validate:true});
     },
     keyCheckChariot:function(){
         if(Draggable.hitTest(this.ui.key, this.ui.chariot)){
-            // this.view.model.set('keyTouchChariot',true,{validate:true});
+            this.keyFall.kill();
+            this.view.model.set('keyTouchChariot',true,{validate:true});
         }
     }
 

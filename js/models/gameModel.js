@@ -8,10 +8,11 @@ module.exports = Backbone.Model.extend({
   //     console.log('new Model');
   // },
   defaults:{
-      'life':5,
+      'life':3,
+      'score':0,
       'x':0,
       'step':20,
-      'speedKey':1,
+      'speedKey':3,
       'gameOver':false
   },
   validate:function(attrs){
@@ -21,9 +22,9 @@ module.exports = Backbone.Model.extend({
       if(attrs.x<xMin){
           return true;
       }
-      if(attrs.keyTouchRail && attrs.keyTouchChariot){
-          return true;
-      }
+    //   if(attrs.keyTouchRail && attrs.keyTouchChariot){
+    //       return true;
+    //   }
       if(attrs.life<0){
           return true;
       }

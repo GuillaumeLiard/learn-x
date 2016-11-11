@@ -8,6 +8,7 @@ var game = Backbone.Radio.channel('game');
 module.exports = Mn.Behavior.extend({
     modelEvents:{
         "change:life":'handleLife',
+        "change:score":'handleScore',
         "change:gameOver":'handleGameOver'
     },
     handleLife:function(){
@@ -16,6 +17,9 @@ module.exports = Mn.Behavior.extend({
         }else{
             game.trigger('key:launch');
         }
+    },
+    handleScore:function(){
+        game.trigger('key:launch');
     },
     handleGameOver:function(){
         this.view.triggerMethod('outro');

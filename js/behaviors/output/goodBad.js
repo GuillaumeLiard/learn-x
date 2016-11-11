@@ -14,6 +14,7 @@ module.exports = Mn.Behavior.extend({
     },
     ui:{
         key:'#key',
+        keyPath:'#key path',
         chariot:'#chariot',
         rail:'#rail',
         railPath:'#rail g path',
@@ -28,6 +29,7 @@ module.exports = Mn.Behavior.extend({
     },
     initialize:function(){
         _.bindAll(this,'loseLife');
+        _.bindAll(this,'gainScore');
     },
     onAttach:function(){
         this.buildBadTimeline();
@@ -46,7 +48,10 @@ module.exports = Mn.Behavior.extend({
     },
     buildGoodTimeline:function(){
         this.good
-        .addLabel('begin');
+        .addLabel('begin')
+        .to(this.ui.keyPath, 0.3, {fill:"green"},"+=2")
+        .to(this.ui.key, 0.9, {x:245,y:-177 ,scale:0.27,rotation:-30,ease:SlowMo.ease.config( 0.5, 0.9, false),onComplete:this.gainScore},"=-0.3");
+        // this.good.timeScale(0.20);
     },
     handleBad:function(){
         if(this.view.model.get('keyTouchRail')){
@@ -55,11 +60,15 @@ module.exports = Mn.Behavior.extend({
     },
     handleGood:function(){
         if(this.view.model.get('keyTouchChariot')){
-            console.log('good');
+            game.trigger('key:stop:fall');
+            this.good.play('begin');
         }
     },
     loseLife:function(){
         this.view.model.set('life',this.view.model.get('life')-1,{validate:true});
+    },
+    gainScore:function(){
+        this.view.model.set('score',this.view.model.get('score')+1,{validate:true});
     },
 
 

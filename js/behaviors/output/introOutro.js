@@ -37,6 +37,7 @@ module.exports = Mn.Behavior.extend({
     },
     buildIntro:function(){
         this.intro
+            .to(this.ui.key,0,{opacity:0})
             .from(this.ui.outputs,1,{opacity:0,x:-1000})
             .from(this.ui.chariot,1,{opacity:0,y:-200,ease:Bounce.easeOut});
     },

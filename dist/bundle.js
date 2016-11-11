@@ -32169,7 +32169,7 @@ $(document).ready(function(){
     myApp.start();
 });
 
-},{"./../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../bower_components/jquery/dist/jquery.js":8,"./views/game":24}],11:[function(require,module,exports){
+},{"./../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../bower_components/jquery/dist/jquery.js":8,"./views/game":25}],11:[function(require,module,exports){
 var _ = require("./../../../bower_components/underscore/underscore.js");
 var Backbone = require("./../../../bower_components/backbone/backbone.js");
 var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
@@ -32202,7 +32202,7 @@ module.exports = Mn.Behavior.extend({
             .addLabel("outro")
             .add(this.timelines.request('output:outro'),"=0.5")
             .add(this.timelines.request('input:outro'),"=-2");
-        // this.master.timeScale(1.2);
+        this.master.timeScale(20);
     },
     startIntro:function(){
         this.master.play("intro");
@@ -32227,6 +32227,7 @@ var game = Backbone.Radio.channel('game');
 module.exports = Mn.Behavior.extend({
     modelEvents:{
         "change:life":'handleLife',
+        "change:score":'handleScore',
         "change:gameOver":'handleGameOver'
     },
     handleLife:function(){
@@ -32235,6 +32236,9 @@ module.exports = Mn.Behavior.extend({
         }else{
             game.trigger('key:launch');
         }
+    },
+    handleScore:function(){
+        game.trigger('key:launch');
     },
     handleGameOver:function(){
         this.view.triggerMethod('outro');
@@ -32411,6 +32415,7 @@ module.exports = Mn.Behavior.extend({
     },
     ui:{
         key:'#key',
+        keyPath:'#key path',
         chariot:'#chariot',
         rail:'#rail',
         railPath:'#rail g path',
@@ -32425,6 +32430,7 @@ module.exports = Mn.Behavior.extend({
     },
     initialize:function(){
         _.bindAll(this,'loseLife');
+        _.bindAll(this,'gainScore');
     },
     onAttach:function(){
         this.buildBadTimeline();
@@ -32443,7 +32449,10 @@ module.exports = Mn.Behavior.extend({
     },
     buildGoodTimeline:function(){
         this.good
-        .addLabel('begin');
+        .addLabel('begin')
+        .to(this.ui.keyPath, 0.3, {fill:"green"},"+=2")
+        .to(this.ui.key, 0.9, {x:245,y:-177 ,scale:0.27,rotation:-30,ease:SlowMo.ease.config( 0.5, 0.9, false),onComplete:this.gainScore},"=-0.3");
+        // this.good.timeScale(0.20);
     },
     handleBad:function(){
         if(this.view.model.get('keyTouchRail')){
@@ -32452,11 +32461,15 @@ module.exports = Mn.Behavior.extend({
     },
     handleGood:function(){
         if(this.view.model.get('keyTouchChariot')){
-            console.log('good');
+            game.trigger('key:stop:fall');
+            this.good.play('begin');
         }
     },
     loseLife:function(){
         this.view.model.set('life',this.view.model.get('life')-1,{validate:true});
+    },
+    gainScore:function(){
+        this.view.model.set('score',this.view.model.get('score')+1,{validate:true});
     },
 
 
@@ -32502,6 +32515,7 @@ module.exports = Mn.Behavior.extend({
     },
     buildIntro:function(){
         this.intro
+            .to(this.ui.key,0,{opacity:0})
             .from(this.ui.outputs,1,{opacity:0,x:-1000})
             .from(this.ui.chariot,1,{opacity:0,y:-200,ease:Bounce.easeOut});
     },
@@ -32534,11 +32548,13 @@ module.exports = Mn.Behavior.extend({
     radioEvents: {
         'start': 'init',
         'key:launch': 'init',
+        'key:stop:fall': 'keyStopFall',
     },
     ui:{
         key:'#key',
         chariot:'#chariot',
     },
+    keyFall:null,
     // modelEvents: {
     //     'change:keyStartFalling': 'keyTweenFall',
     // },
@@ -32551,17 +32567,23 @@ module.exports = Mn.Behavior.extend({
         this.view.model.set('keyTouchRail',false);
         this.view.model.set('keyTouchChariot',false);
         var startX = (Math.random()-0.5)*widthBounds*validBounds+offsetKey;
-        TweenLite.to(this.ui.key, 0, {x:startX,y:-112,scale:0.38,opacity:1,transformOrigin:'50% 100%',onComplete:this.keyTweenFall});
+        // var startX = (0)*widthBounds*validBounds+offsetKey;
+        TweenLite.to(this.ui.key, 0, {x:startX,y:-112,scale:0.38,rotation:0,fill:"#dcfafc",opacity:1,transformOrigin:'50% 100%',onComplete:this.keyTweenFall});
     },
     keyTweenFall:function(){
-        TweenLite.to(this.ui.key, this.view.model.get('speedKey'), {y:70,onUpdate:this.keyCheckChariot,onComplete:this.keyTouchRail});
+        this.keyFall = TweenLite.to(this.ui.key, this.view.model.get('speedKey'), {y:70,onUpdate:this.keyCheckChariot,onComplete:this.keyTouchRail});
+    },
+    keyStopFall:function(){
+        // this.keyFall.kill();
+        // this.keyFall = null;
     },
     keyTouchRail:function(){
         this.view.model.set('keyTouchRail',true,{validate:true});
     },
     keyCheckChariot:function(){
         if(Draggable.hitTest(this.ui.key, this.ui.chariot)){
-            // this.view.model.set('keyTouchChariot',true,{validate:true});
+            this.keyFall.kill();
+            this.view.model.set('keyTouchChariot',true,{validate:true});
         }
     }
 
@@ -32588,6 +32610,26 @@ module.exports = Mn.Behavior.extend({
 });
 
 },{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1}],22:[function(require,module,exports){
+var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
+
+
+module.exports = Mn.Behavior.extend({
+    ui:{
+        score:'#score-value-span'
+    },
+    modelEvents: {
+        'change:score': 'updateScore'
+    },
+    onAttach:function(){
+        this.updateScore();
+    },
+    updateScore:function(){
+        this.ui.score.text('x'+this.view.model.get('score'));
+    },
+
+});
+
+},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1}],23:[function(require,module,exports){
 var Backbone = require("./../../bower_components/backbone/backbone.js");
 
 var xMin = -240;
@@ -32598,10 +32640,11 @@ module.exports = Backbone.Model.extend({
   //     console.log('new Model');
   // },
   defaults:{
-      'life':5,
+      'life':3,
+      'score':0,
       'x':0,
       'step':20,
-      'speedKey':1,
+      'speedKey':3,
       'gameOver':false
   },
   validate:function(attrs){
@@ -32611,16 +32654,16 @@ module.exports = Backbone.Model.extend({
       if(attrs.x<xMin){
           return true;
       }
-      if(attrs.keyTouchRail && attrs.keyTouchChariot){
-          return true;
-      }
+    //   if(attrs.keyTouchRail && attrs.keyTouchChariot){
+    //       return true;
+    //   }
       if(attrs.life<0){
           return true;
       }
   }
 });
 
-},{"./../../bower_components/backbone/backbone.js":3}],23:[function(require,module,exports){
+},{"./../../bower_components/backbone/backbone.js":3}],24:[function(require,module,exports){
 exports['game']=function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
@@ -32656,7 +32699,7 @@ __p+='<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n<!-- Created with 
 }
 return __p;
 };
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 var _ = require("./../../bower_components/underscore/underscore.js");
 var Backbone = require("./../../bower_components/backbone/backbone.js");
 var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
@@ -32696,7 +32739,7 @@ module.exports = Mn.View.extend({
     },
 });
 
-},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/backbone/backbone.js":3,"./../../bower_components/underscore/underscore.js":9,"./../behaviors/game/introOutro":11,"./../behaviors/game/mecha":12,"./../models/gameModel":22,"./../utils/templates.js":23,"./input.js":25,"./output.js":26}],25:[function(require,module,exports){
+},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/backbone/backbone.js":3,"./../../bower_components/underscore/underscore.js":9,"./../behaviors/game/introOutro":11,"./../behaviors/game/mecha":12,"./../models/gameModel":23,"./../utils/templates.js":24,"./input.js":26,"./output.js":27}],26:[function(require,module,exports){
 var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 var templates = require('./../utils/templates.js');
 var IntroOutro = require('./../behaviors/input/introOutro');
@@ -32710,22 +32753,23 @@ module.exports = Mn.View.extend({
     behaviors: [IntroOutro,Joystick,CoordinateDisplay,Step],
 });
 
-},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../behaviors/input/coordinateDisplay":13,"./../behaviors/input/introOutro":14,"./../behaviors/input/joystick":15,"./../behaviors/input/step":16,"./../utils/templates.js":23}],26:[function(require,module,exports){
+},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../behaviors/input/coordinateDisplay":13,"./../behaviors/input/introOutro":14,"./../behaviors/input/joystick":15,"./../behaviors/input/step":16,"./../utils/templates.js":24}],27:[function(require,module,exports){
 var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 var templates = require('./../utils/templates.js');
 var IntroOutro = require('./../behaviors/output/introOutro');
 var Chariot = require('./../behaviors/output/chariot');
 var Key = require('./../behaviors/output/key');
 var Life = require('./../behaviors/output/life');
+var Score = require('./../behaviors/output/score');
 var GoodBad = require('./../behaviors/output/goodBad');
 
 module.exports = Mn.View.extend({
     template:templates['outputs.svg'],
     className:'output',
-    behaviors: [IntroOutro,Chariot,Key,Life,GoodBad],
+    behaviors: [IntroOutro,Chariot,Key,Life,Score,GoodBad],
 });
 
-},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../behaviors/output/chariot":17,"./../behaviors/output/goodBad":18,"./../behaviors/output/introOutro":19,"./../behaviors/output/key":20,"./../behaviors/output/life":21,"./../utils/templates.js":23}]},{},[10])
+},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../behaviors/output/chariot":17,"./../behaviors/output/goodBad":18,"./../behaviors/output/introOutro":19,"./../behaviors/output/key":20,"./../behaviors/output/life":21,"./../behaviors/output/score":22,"./../utils/templates.js":24}]},{},[10])
 
 
 //# sourceMappingURL=bundle.js.map

@@ -11,8 +11,9 @@ module.exports = Backbone.Model.extend({
       'life':3,
       'score':0,
       'x':0,
-      'step':20,
-      'speedKey':3,
+      'step':5,
+      'speedKey':2,
+      'speedAppearingKey':0.5,
       'gameOver':false
   },
   validate:function(attrs){

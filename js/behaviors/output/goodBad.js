@@ -49,8 +49,9 @@ module.exports = Mn.Behavior.extend({
     buildGoodTimeline:function(){
         this.good
         .addLabel('begin')
-        .to(this.ui.keyPath, 0.3, {fill:"green"},"+=2")
-        .to(this.ui.key, 0.9, {x:245,y:-177 ,scale:0.27,rotation:-30,ease:SlowMo.ease.config( 0.5, 0.9, false),onComplete:this.gainScore},"=-0.3");
+        .to(this.ui.keyPath, 0.3, {fill:"green"},"+=0.2")
+        .to(this.ui.key, 0.9, {x:245,y:-177 ,scale:0.27,rotation:-30-360,ease:SlowMo.ease.config( 0.5, 0.9, false),onComplete:this.gainScore},"=-0.3")
+        .to(this.ui.keyPath, 0.3, {fill:"#dcfafc"});
         // this.good.timeScale(0.20);
     },
     handleBad:function(){

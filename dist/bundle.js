@@ -32307,9 +32307,10 @@ var _ = require("./../../../bower_components/underscore/underscore.js");
 var $ = require("./../../../bower_components/jquery/dist/jquery.js");
 var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 
-var intervalDuration = 50;
 
 module.exports = Mn.Behavior.extend({
+    intervalDuration:31,
+    interval:null,
     ui:{
         up:'#up',
         down:'#down',
@@ -32332,20 +32333,22 @@ module.exports = Mn.Behavior.extend({
         $(document).on('mouseup',this.clearHold);
     },
     processKey:function(event){
-        if(event.which === 38){
-            this.goUp();
-        }
-        if(event.which === 40){
-            this.goDown();
+        if (this.view.model.get('interval')){}else{
+            if(event.which === 38){
+                this.goUp();
+            }
+            if(event.which === 40){
+                this.goDown();
+            }
         }
     },
     goUpHold:function(){
         this.clearHold();
-        this.view.model.set('interval',setInterval(this.goUp, intervalDuration));
+        this.view.model.set('interval',setInterval(this.goUp, this.intervalDuration));
     },
     goDownHold:function(){
         this.clearHold();
-        this.view.model.set('interval',setInterval(this.goDown, intervalDuration));
+        this.view.model.set('interval',setInterval(this.goDown, this.intervalDuration));
     },
     clearHold:function(){
           clearInterval(this.view.model.get('interval'));
@@ -32450,8 +32453,9 @@ module.exports = Mn.Behavior.extend({
     buildGoodTimeline:function(){
         this.good
         .addLabel('begin')
-        .to(this.ui.keyPath, 0.3, {fill:"green"},"+=2")
-        .to(this.ui.key, 0.9, {x:245,y:-177 ,scale:0.27,rotation:-30,ease:SlowMo.ease.config( 0.5, 0.9, false),onComplete:this.gainScore},"=-0.3");
+        .to(this.ui.keyPath, 0.3, {fill:"green"},"+=0.2")
+        .to(this.ui.key, 0.9, {x:245,y:-177 ,scale:0.27,rotation:-30-360,ease:SlowMo.ease.config( 0.5, 0.9, false),onComplete:this.gainScore},"=-0.3")
+        .to(this.ui.keyPath, 0.3, {fill:"#dcfafc"});
         // this.good.timeScale(0.20);
     },
     handleBad:function(){
@@ -32569,10 +32573,11 @@ module.exports = Mn.Behavior.extend({
         this.view.model.set('keyTouchChariot',false);
         var startX = (Math.random()-0.5)*widthBounds*validBounds+offsetKey;
         // var startX = (0)*widthBounds*validBounds+offsetKey;
-        TweenLite.to(this.ui.key, 0, {x:startX,y:-112,scale:0.38,rotation:0,fill:"#dcfafc",opacity:1,transformOrigin:'50% 100%',onComplete:this.keyTweenFall});
+        TweenLite.to(this.ui.key, 0, {x:startX,y:-112,scale:0,rotation:-360,fill:"#dcfafc",transformOrigin:'50% 100%'});
+        TweenLite.to(this.ui.key, this.view.model.get('speedAppearingKey'), {opacity:1,rotation:0,scale:0.38,transformOrigin:'50% 100%', onComplete:this.keyTweenFall});
     },
     keyTweenFall:function(){
-        this.keyFall = TweenLite.to(this.ui.key, this.view.model.get('speedKey'), {y:70,onUpdate:this.keyCheckChariot,onComplete:this.keyTouchRail});
+        this.keyFall = TweenLite.to(this.ui.key, this.view.model.get('speedKey'), {y:65,onUpdate:this.keyCheckChariot,onComplete:this.keyTouchRail});
     },
     keyStopFall:function(){
         // this.keyFall.kill();
@@ -32644,8 +32649,9 @@ module.exports = Backbone.Model.extend({
       'life':3,
       'score':0,
       'x':0,
-      'step':20,
-      'speedKey':3,
+      'step':5,
+      'speedKey':2,
+      'speedAppearingKey':0.5,
       'gameOver':false
   },
   validate:function(attrs){

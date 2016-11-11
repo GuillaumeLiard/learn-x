@@ -2,9 +2,10 @@ var _ = require('underscore');
 var $ = require('jquery');
 var Mn = require('backbone.marionette');
 
-var intervalDuration = 50;
 
 module.exports = Mn.Behavior.extend({
+    intervalDuration:31,
+    interval:null,
     ui:{
         up:'#up',
         down:'#down',
@@ -27,20 +28,22 @@ module.exports = Mn.Behavior.extend({
         $(document).on('mouseup',this.clearHold);
     },
     processKey:function(event){
-        if(event.which === 38){
-            this.goUp();
-        }
-        if(event.which === 40){
-            this.goDown();
+        if (this.view.model.get('interval')){}else{
+            if(event.which === 38){
+                this.goUp();
+            }
+            if(event.which === 40){
+                this.goDown();
+            }
         }
     },
     goUpHold:function(){
         this.clearHold();
-        this.view.model.set('interval',setInterval(this.goUp, intervalDuration));
+        this.view.model.set('interval',setInterval(this.goUp, this.intervalDuration));
     },
     goDownHold:function(){
         this.clearHold();
-        this.view.model.set('interval',setInterval(this.goDown, intervalDuration));
+        this.view.model.set('interval',setInterval(this.goDown, this.intervalDuration));
     },
     clearHold:function(){
           clearInterval(this.view.model.get('interval'));

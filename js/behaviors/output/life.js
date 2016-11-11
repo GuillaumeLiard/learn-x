@@ -8,6 +8,9 @@ module.exports = Mn.Behavior.extend({
     modelEvents: {
         'change:life': 'updateLife'
     },
+    onAttach:function(){
+        this.updateLife();
+    },
     updateLife:function(){
         this.ui.life.text('x'+this.view.model.get('life'));
     },

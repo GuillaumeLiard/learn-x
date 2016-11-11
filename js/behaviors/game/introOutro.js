@@ -28,7 +28,7 @@ module.exports = Mn.Behavior.extend({
             .addLabel("ready")
             .addPause("ready+=0.1")
             .addLabel("outro")
-            .add(this.timelines.request('output:outro'))
+            .add(this.timelines.request('output:outro'),"=0.5")
             .add(this.timelines.request('input:outro'),"=-2");
         // this.master.timeScale(1.2);
     },

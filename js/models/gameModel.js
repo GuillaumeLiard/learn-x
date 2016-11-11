@@ -8,9 +8,9 @@ module.exports = Backbone.Model.extend({
   //     console.log('new Model');
   // },
   defaults:{
-      'life':2,
+      'life':5,
       'x':0,
-      'step':10,
+      'step':20,
       'speedKey':1,
       'gameOver':false
   },

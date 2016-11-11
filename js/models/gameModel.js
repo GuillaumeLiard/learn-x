@@ -23,8 +23,8 @@ module.exports = Backbone.Model.extend({
       if(attrs.keyTouchRail && attrs.keyTouchChariot){
           return true;
       }
-    //   if(attrs.life<0){
-    //       return true;
-    //   }
+      if(attrs.life<0){
+          return true;
+      }
   }
 });

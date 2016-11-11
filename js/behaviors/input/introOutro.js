@@ -20,9 +20,7 @@ module.exports = Mn.Behavior.extend({
         return this.intro;
     },
     buildIntro:function(){
-        // this.intro.from(this.ui.inputs,1,{x:-400})
-        console.log(this.ui.items);
-            this.intro.staggerFrom(this.ui.items, 2, {rotation:90, opacity:0, ease:Elastic.easeOut, },0.5);
-            this.intro.staggerFrom(this.ui.texts, 2, {x:30, opacity:0, ease:Power4.easeOut},0.5,"-=3");
+        this.intro.staggerFrom(this.ui.items, 2, {rotation:90, opacity:0, ease:Elastic.easeOut, },0.5);
+        this.intro.staggerFrom(this.ui.texts, 2, {x:30, opacity:0, ease:Power4.easeOut},0.5,"-=3");
     },
 });

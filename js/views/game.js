@@ -1,3 +1,4 @@
+var _ = require('underscore');
 var Backbone = require('backbone');
 var Mn = require('backbone.marionette');
 var templates = require('./../utils/templates.js');
@@ -22,11 +23,15 @@ module.exports = Mn.View.extend({
         this.showChildView('zone1', new Output({model:this.model}));
     },
     onAttach: function() {
-        // this.initGame();
+        _.bindAll(this,'initGame');
         setTimeout(this.initGame,0);
     },
     initGame: function() {
-        game.trigger('init');
-        game.trigger('intro');
+        this.triggerMethod('init');
+        this.triggerMethod('intro');
+    },
+    onStart: function() {
+        game.trigger('start');
+        // console.log('introEnd 3');
     },
 });

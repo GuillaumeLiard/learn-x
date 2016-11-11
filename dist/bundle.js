@@ -32170,41 +32170,43 @@ $(document).ready(function(){
 });
 
 },{"./../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../bower_components/jquery/dist/jquery.js":8,"./views/game":22}],11:[function(require,module,exports){
+var _ = require("./../../../bower_components/underscore/underscore.js");
 var Backbone = require("./../../../bower_components/backbone/backbone.js");
 var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 require("./../../../bower_components/gsap/src/uncompressed/TweenMax.js");
 
 module.exports = Mn.Behavior.extend({
     timelines:Backbone.Radio.channel('timelines'),
-    channelName:'game',
-    radioEvents:{
-        'init':'buildMasterTimeline',
-        'intro':'startIntro'
-    },
-    // masterTimeline:new TimelineMax(),
     master:new TimelineMax({paused:true}),
+    initialize:function(){
+        _.bindAll(this,'introEnd');
+    },
+    onInit:function(){
+        this.buildMasterTimeline();
+    },
+    onIntro:function(){
+        this.startIntro();
+    },
     buildMasterTimeline:function(){
-
+        // console.log('abcd');
         this.master
             .addLabel("intro")
             .add(this.timelines.request('input:intro'))
             .add(this.timelines.request('output:intro'),"=-1.5")
             .add(this.introEnd)
             .addLabel("ready");
-
-
     },
     startIntro:function(){
         this.master.timeScale(1.2);
-        this.master.play("intro");
+        this.master.play("ready");
         // // this.master.tweenFromTo("intro","intro:end");
     },
     introEnd:function(){
-        console.log('introEnd');
+        this.view.triggerMethod('start');
     }
 });
 
-},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/backbone/backbone.js":3,"./../../../bower_components/gsap/src/uncompressed/TweenMax.js":5}],12:[function(require,module,exports){
+},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/backbone/backbone.js":3,"./../../../bower_components/gsap/src/uncompressed/TweenMax.js":5,"./../../../bower_components/underscore/underscore.js":9}],12:[function(require,module,exports){
 var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 
 
@@ -32244,10 +32246,8 @@ module.exports = Mn.Behavior.extend({
         return this.intro;
     },
     buildIntro:function(){
-        // this.intro.from(this.ui.inputs,1,{x:-400})
-        console.log(this.ui.items);
-            this.intro.staggerFrom(this.ui.items, 2, {rotation:90, opacity:0, ease:Elastic.easeOut, },0.5);
-            this.intro.staggerFrom(this.ui.texts, 2, {x:30, opacity:0, ease:Power4.easeOut},0.5,"-=3");
+        this.intro.staggerFrom(this.ui.items, 2, {rotation:90, opacity:0, ease:Elastic.easeOut, },0.5);
+        this.intro.staggerFrom(this.ui.texts, 2, {x:30, opacity:0, ease:Power4.easeOut},0.5,"-=3");
     },
 });
 
@@ -32540,9 +32540,9 @@ module.exports = Backbone.Model.extend({
       if(attrs.keyTouchRail && attrs.keyTouchChariot){
           return true;
       }
-    //   if(attrs.life<0){
-    //       return true;
-    //   }
+      if(attrs.life<0){
+          return true;
+      }
   }
 });
 
@@ -32583,6 +32583,7 @@ __p+='<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n<!-- Created with 
 return __p;
 };
 },{}],22:[function(require,module,exports){
+var _ = require("./../../bower_components/underscore/underscore.js");
 var Backbone = require("./../../bower_components/backbone/backbone.js");
 var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 var templates = require('./../utils/templates.js');
@@ -32607,16 +32608,20 @@ module.exports = Mn.View.extend({
         this.showChildView('zone1', new Output({model:this.model}));
     },
     onAttach: function() {
-        // this.initGame();
+        _.bindAll(this,'initGame');
         setTimeout(this.initGame,0);
     },
     initGame: function() {
-        game.trigger('init');
-        game.trigger('intro');
+        this.triggerMethod('init');
+        this.triggerMethod('intro');
+    },
+    onStart: function() {
+        game.trigger('start');
+        // console.log('introEnd 3');
     },
 });
 
-},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/backbone/backbone.js":3,"./../behaviors/game/introOutro":11,"./../models/gameModel":20,"./../utils/templates.js":21,"./input.js":23,"./output.js":24}],23:[function(require,module,exports){
+},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/backbone/backbone.js":3,"./../../bower_components/underscore/underscore.js":9,"./../behaviors/game/introOutro":11,"./../models/gameModel":20,"./../utils/templates.js":21,"./input.js":23,"./output.js":24}],23:[function(require,module,exports){
 var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 var templates = require('./../utils/templates.js');
 var IntroOutro = require('./../behaviors/input/introOutro');

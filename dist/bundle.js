@@ -32169,7 +32169,7 @@ $(document).ready(function(){
     myApp.start();
 });
 
-},{"./../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../bower_components/jquery/dist/jquery.js":8,"./views/game":25}],11:[function(require,module,exports){
+},{"./../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../bower_components/jquery/dist/jquery.js":8,"./views/game":26}],11:[function(require,module,exports){
 var _ = require("./../../../bower_components/underscore/underscore.js");
 var Backbone = require("./../../../bower_components/backbone/backbone.js");
 var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
@@ -32385,6 +32385,63 @@ module.exports = Mn.Behavior.extend({
 });
 
 },{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1}],17:[function(require,module,exports){
+var _ = require("./../../../bower_components/underscore/underscore.js");
+var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
+
+
+module.exports = Mn.Behavior.extend({
+    escalator:new TimelineMax({paused:true,repeat:-1}),
+
+    channelName: 'game',
+    radioEvents: {
+        'start': 'init',
+    },
+    ui:{
+        bonus:'#bonus-1',
+        bonusValue:'#bonus-span-1',
+    },
+    modelEvents: {
+        'change:bonus': 'updateBonus',
+    },
+    initialize:function(){
+        _.bindAll(this,'generateBonusValue');
+    },
+    onAttach:function(){
+        this.buildEscalatorTimeline();
+    },
+    buildEscalatorTimeline:function(){
+        var oscilatorScale = new TimelineMax({paused:false,repeat:-1});
+        var move = new TimelineMax({paused:false,repeat:-1});
+
+        oscilatorScale.to(this.ui.bonus, 0.5,{skewX:"+=10"})
+            .to(this.ui.bonus, 0.5,{skewX:"-=10"});
+
+        move.to(this.ui.bonus, 0,{x:-240,opacity:0,onComplete:this.generateBonusValue})
+            .to(this.ui.bonus, 0.5,{opacity:1})
+            .to(this.ui.bonus, this.view.model.get('speedBonus'),{x:240})
+            .to(this.ui.bonus, 0.5,{opacity:0});
+
+        this.escalator.add([oscilatorScale,move]);
+    },
+    init:function(){
+        this.escalator.play('begin');
+    },
+    generateBonusValue:function(){
+        this.view.model.set('availableBonuses',_.shuffle(this.view.model.get('availableBonuses')));
+        this.view.model.set('bonus',this.view.model.get('availableBonuses')[0]);
+    },
+    updateBonus:function(){
+        var prepend = '';
+        var bonus = this.view.model.get('bonus');
+        if (bonus > 0){
+            prepend = '+';
+        }
+        this.ui.bonusValue.text(prepend+bonus);
+    },
+
+});
+
+},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/underscore/underscore.js":9}],18:[function(require,module,exports){
 var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 require("./../../../bower_components/gsap/src/uncompressed/TweenMax.js");
 var validBounds = 0.91;
@@ -32401,7 +32458,7 @@ module.exports = Mn.Behavior.extend({
     },
 });
 
-},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/gsap/src/uncompressed/TweenMax.js":5}],18:[function(require,module,exports){
+},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/gsap/src/uncompressed/TweenMax.js":5}],19:[function(require,module,exports){
 var _ = require("./../../../bower_components/underscore/underscore.js");
 var Backbone = require("./../../../bower_components/backbone/backbone.js");
 var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
@@ -32486,7 +32543,7 @@ module.exports = Mn.Behavior.extend({
 
 });
 
-},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/backbone/backbone.js":3,"./../../../bower_components/gsap/src/uncompressed/TweenMax.js":5,"./../../../bower_components/underscore/underscore.js":9}],19:[function(require,module,exports){
+},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/backbone/backbone.js":3,"./../../../bower_components/gsap/src/uncompressed/TweenMax.js":5,"./../../../bower_components/underscore/underscore.js":9}],20:[function(require,module,exports){
 var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 require("./../../../bower_components/gsap/src/uncompressed/TweenMax.js");
 
@@ -32543,7 +32600,7 @@ module.exports = Mn.Behavior.extend({
     },
 });
 
-},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/gsap/src/uncompressed/TweenMax.js":5}],20:[function(require,module,exports){
+},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/gsap/src/uncompressed/TweenMax.js":5}],21:[function(require,module,exports){
 var _ = require("./../../../bower_components/underscore/underscore.js");
 var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 require("./../../../bower_components/gsap/src/uncompressed/TweenMax.js");
@@ -32601,7 +32658,7 @@ module.exports = Mn.Behavior.extend({
 
 });
 
-},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/gsap/src/uncompressed/TweenMax.js":5,"./../../../bower_components/gsap/src/uncompressed/utils/Draggable.js":7,"./../../../bower_components/underscore/underscore.js":9}],21:[function(require,module,exports){
+},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/gsap/src/uncompressed/TweenMax.js":5,"./../../../bower_components/gsap/src/uncompressed/utils/Draggable.js":7,"./../../../bower_components/underscore/underscore.js":9}],22:[function(require,module,exports){
 var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 
 
@@ -32621,7 +32678,7 @@ module.exports = Mn.Behavior.extend({
 
 });
 
-},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1}],22:[function(require,module,exports){
+},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1}],23:[function(require,module,exports){
 var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 
 
@@ -32641,7 +32698,7 @@ module.exports = Mn.Behavior.extend({
 
 });
 
-},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1}],23:[function(require,module,exports){
+},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1}],24:[function(require,module,exports){
 var Backbone = require("./../../bower_components/backbone/backbone.js");
 
 var xMin = -240;
@@ -32658,7 +32715,10 @@ module.exports = Backbone.Model.extend({
         'step':50,
         'speedKey':2,
         'speedAppearingKey':0.5,
-        'gameOver':false
+        'gameOver':false,
+        'speedBonus':1,
+        'bonus':100,
+        'availableBonuses':[-200,-100,100,200]
     },
     set:function (key, val, options) {
         var newVal = this.keepBetweenBounds(key, val);
@@ -32685,7 +32745,7 @@ module.exports = Backbone.Model.extend({
     }
 });
 
-},{"./../../bower_components/backbone/backbone.js":3}],24:[function(require,module,exports){
+},{"./../../bower_components/backbone/backbone.js":3}],25:[function(require,module,exports){
 exports['game']=function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
@@ -32717,11 +32777,11 @@ return __p;
 exports['outputs.svg']=function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
-__p+='<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n<!-- Created with Inkscape (http://www.inkscape.org/) -->\n<svg id="compo" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" height="100%" width="100%" version="1.1" preserveAspectRatio="xMidYMax meet" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">\n <metadata id="metadata7">\n  <rdf:RDF>\n   <cc:Work rdf:about="">\n    <dc:format>image/svg+xml</dc:format>\n    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>\n    <dc:title/>\n   </cc:Work>\n  </rdf:RDF>\n </metadata>\n <g id="layerOutputs" transform="translate(0,-652.36218)">\n  <rect id="bgOutputs" height="296.05" width="476.05" y="654.34" x="1.9743" fill="#080e1f"/>\n  <g id="g3252" transform="translate(139.17662,819.89404)">\n   <g id="bonuses" font-size="20px" font-family="Sans" transform="translate(-5.2357249,23.470402)" font-weight="normal" font-style="normal" fill="#000000">\n    <text id="bonus-1" style="letter-spacing:0px;word-spacing:0px;" line-height="125%" y="-10.251587" x="94.291519" xml:space="preserve"><tspan id="bonus-span-1" y="-10.251587" x="94.291519" fill="#dcfafc">+100</tspan></text>\n    <text id="bonus-2" style="letter-spacing:0px;word-spacing:0px;" line-height="125%" y="-10.251587" x="-120.25212" xml:space="preserve"><tspan id="bonus-span-2" y="-10.251587" x="-120.25212" fill="#dcfafc">+200</tspan></text>\n    <text id="bonus-3" style="letter-spacing:0px;word-spacing:0px;" line-height="125%" y="-10.251587" x="-12.9803" xml:space="preserve"><tspan id="bonus-span-3" y="-10.251587" x="-12.9803" fill="#dcfafc">-200</tspan></text>\n    <text id="bonus-4" style="letter-spacing:0px;word-spacing:0px;" line-height="125%" y="-10.251587" x="201.56334" xml:space="preserve"><tspan id="bonus-span-4" y="-10.251587" x="201.56334" fill="#dcfafc">-100</tspan></text>\n    <text id="bonus-5" style="letter-spacing:0px;word-spacing:0px;" line-height="125%" y="-10.251587" x="308.83517" xml:space="preserve"><tspan id="bonus-span-5" y="-10.251587" x="308.83517" fill="#dcfafc">x(-1)</tspan></text>\n   </g>\n   <g id="key" fill="#dcfafc" transform="matrix(0.41345981,0,0,0.37990032,177.20059,-112.4827)">\n    <path id="path6" d="m49.174,14.246c-2.529,0-4.586-2.057-4.586-4.585,0-2.529,2.057-4.586,4.586-4.586s4.586,2.058,4.586,4.586-2.058,4.585-4.586,4.585zm0-7.172c-1.426,0-2.586,1.16-2.586,2.586s1.16,2.585,2.586,2.585,2.586-1.16,2.586-2.585c0-1.426-1.161-2.586-2.586-2.586z"/>\n    <path id="path8" d="m64.5,86.197c0.55,0,1-0.44,1-1v-4.14c0-0.56-0.45-1-1-1h-11.45v-3.71h1.08c0.55,0,1-0.44,1-1v-5.18c0-0.55-0.45-1-1-1h-1.08v-40.03c6.21-1.71,10.79-7.4,10.79-14.15,0-8.09-6.58-14.67-14.67-14.67-8.08,0-14.67,6.58-14.67,14.67,0,6.77,4.61,12.48,10.85,14.16v40.02h-1.07c-0.56,0-1,0.45-1,1v5.18c0,0.56,0.44,1,1,1h1.07v22.34c0,0.55,0.45,1,1,1h5.7c0.55,0,1-0.45,1-1v-2.63h11.45c0.55,0,1-0.45,1-1v-4.15c0-0.55-0.45-1-1-1h-3.15v-3.71h3.15zm-28-71.21c0-6.99,5.69-12.67,12.67-12.67,6.99,0,12.67,5.68,12.67,12.67s-5.68,12.67-12.67,12.67c-6.98,0-12.67-5.68-12.67-12.67zm14.55,14.54v39.64h-3.7v-39.63c0.6,0.08,1.2,0.12,1.82,0.12,0.64,0,1.27-0.04,1.88-0.13zm0,68.16h-3.7v-21.34h3.7v21.34zm-5.77-23.34v-3.18h7.85v3.18h-7.85zm15.07,17.56h3.15v2.15h-10.45v-12h10.45v2.14h-3.15c-0.55,0-1,0.45-1,1v5.71c0,0.55,0.45,1,1,1z"/>\n   </g>\n   <g id="rail" transform="matrix(10.102235,0,0,2.7677669,-141.12515,39.471711)">\n    <g id="g3238" fill="#dcfafc">\n     <path id="path3240" d="M46.1,25.1h-44.4c-0.5,0-1-0.399-1-1s0.4-1,1-1h44.5c0.5,0,1,0.4,1,1s-0.5,1-1.1,1z" fill="#dcfafc"/>\n    </g>\n   </g>\n   <g id="chariot" transform="translate(4.9243425,0)">\n    <g id="g1234" transform="translate(28.868384,-137.79648)" fill="#dcfafc">\n     <g id="g3361" transform="matrix(0.48299279,0,0,0.46834076,56.610567,182.17033)" fill="#dcfafc">\n      <g id="g3363">\n       <path id="path3365" d="m83.074,53.495h-123c-1.1,0-2-0.9-2-2v-17.5c0-1.1,0.9-2,2-2h123c1.1,0,2,0.9,2,2v17.5c0,1.1-0.9,2-2,2zm-121-4h119v-13.5h-119v13.5z" fill="#dcfafc"/>\n      </g>\n      <g id="g3367" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3369" d="m93.7,127.5c-7.2,0-13-5.8-13-13,0-2,0.5-4,1.4-5.8,2.2-4.4,6.7-7.2,11.7-7.2s9.4,2.8,11.7,7.2c0.9,1.8,1.4,3.8,1.4,5.8-0.2,7.2-6,13-13.2,13zm0-22c-3.4,0-6.5,1.9-8.1,5-0.6,1.3-1,2.6-1,4,0,5,4.1,9,9,9,5,0,9-4,9-9,0-1.4-0.3-2.8-1-4-1.4-3.1-4.5-5-7.9-5z" fill="#dcfafc"/>\n      </g>\n      <g id="g3371" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3373" d="m93.7,120.5c-3.3,0-6-2.7-6-6,0-0.9,0.2-1.8,0.6-2.7,1-2.1,3.1-3.3,5.4-3.3s4.4,1.3,5.4,3.3c0.4,0.8,0.6,1.7,0.6,2.7,0,3.3-2.7,6-6,6zm0-10c-1.5,0-2.9,0.9-3.6,2.2-0.3,0.6-0.4,1.2-0.4,1.8,0,2.2,1.8,4,4,4s4-1.8,4-4c0-0.6-0.1-1.2-0.4-1.8-0.7-1.4-2.1-2.2-3.6-2.2z" fill="#dcfafc"/>\n      </g>\n      <g id="g3375" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3377" d="m34.3,127.5c-7.2,0-13-5.8-13-13,0-2,0.5-4,1.4-5.8,2.2-4.4,6.7-7.2,11.7-7.2s9.4,2.8,11.7,7.2c0.9,1.8,1.4,3.8,1.4,5.8-0.1,7.2-6,13-13.2,13zm0-22c-3.4,0-6.5,1.9-8.1,5-0.6,1.3-1,2.6-1,4,0,5,4.1,9,9,9s9-4,9-9c0-1.4-0.3-2.8-1-4-1.3-3.1-4.4-5-7.9-5z" fill="#dcfafc"/>\n      </g>\n      <g id="g3379" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3381" d="m34.3,120.5c-3.3,0-6-2.7-6-6,0-0.9,0.2-1.8,0.6-2.7,1-2.1,3.1-3.3,5.4-3.3s4.4,1.3,5.4,3.3c0.4,0.8,0.6,1.8,0.6,2.7,0.1,3.3-2.6,6-6,6zm0-10c-1.5,0-2.9,0.9-3.6,2.2-0.3,0.6-0.4,1.2-0.4,1.8,0,2.2,1.8,4,4,4s4-1.8,4-4c0-0.6-0.1-1.2-0.4-1.8-0.7-1.4-2-2.2-3.6-2.2z" fill="#dcfafc"/>\n      </g>\n      <g id="g3387" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3389" d="m111.3,111.6h-7.7c-0.8,0-1.4-0.4-1.8-1.1-1.5-3.1-4.6-5-8.1-5-3.4,0-6.5,1.9-8.1,5-0.3,0.7-1,1.1-1.8,1.1h-39.6c-0.8,0-1.4-0.4-1.8-1.1-1.5-3.1-4.6-5-8.1-5s-6.5,1.9-8.1,5c-0.3,0.7-1,1.1-1.8,1.1h-7.7c-1,0-1.8-0.7-2-1.7l-8.3-57.6c-0.1-0.6,0.1-1.2,0.5-1.6s0.9-0.7,1.5-0.7h111.3c0.6,0,1.1,0.3,1.5,0.7s0.5,1,0.5,1.6l-8.4,57.5c-0.2,1-1,1.8-2,1.8zm-6.6-4h4.8l7.8-53.5h-106.6l7.8,53.5h4.8c2.4-3.8,6.5-6.1,11-6.1s8.7,2.3,11,6.1h37.3c2.4-3.8,6.5-6.1,11-6.1,4.6,0,8.7,2.3,11.1,6.1z" fill="#dcfafc"/>\n      </g>\n      <g id="g3391" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3393" d="m97.7,84.3c-0.6,0-1-0.4-1-1v-22.7c0-0.6,0.4-1,1-1s1,0.4,1,1v22.7c0,0.5-0.5,1-1,1z" fill="#dcfafc"/>\n      </g>\n      <g id="g3395" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3397" d="m75.2,84.3c-0.6,0-1-0.4-1-1v-22.7c0-0.6,0.4-1,1-1s1,0.4,1,1v22.7c0,0.5-0.4,1-1,1z" fill="#dcfafc"/>\n      </g>\n      <g id="g3399" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3401" d="m52.8,84.3c-0.6,0-1-0.4-1-1v-22.7c0-0.6,0.4-1,1-1s1,0.4,1,1v22.7c0,0.5-0.5,1-1,1z" fill="#dcfafc"/>\n      </g>\n      <g id="g3403" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3405" d="m30.3,84.3c-0.6,0-1-0.4-1-1v-22.7c0-0.6,0.4-1,1-1s1,0.4,1,1v22.7c0,0.5-0.4,1-1,1z" fill="#dcfafc"/>\n      </g>\n      <g id="g3407" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3409" d="M113.9,92.8h-99.8c-0.6,0-1-0.4-1-1s0.4-1,1-1h99.7c0.6,0,1,0.4,1,1s-0.4,1-0.9,1z" fill="#dcfafc"/>\n      </g>\n     </g>\n    </g>\n   </g>\n   <g id="score" fill="#dcfafc">\n    <g id="score-icon" transform="matrix(0.25061563,-0.13758201,0.12641482,0.23027379,259.91169,-154.90306)">\n     <path id="path6-6" d="m49.174,14.246c-2.529,0-4.586-2.057-4.586-4.585,0-2.529,2.057-4.586,4.586-4.586s4.586,2.058,4.586,4.586-2.058,4.585-4.586,4.585zm0-7.172c-1.426,0-2.586,1.16-2.586,2.586s1.16,2.585,2.586,2.585,2.586-1.16,2.586-2.585c0-1.426-1.161-2.586-2.586-2.586z"/>\n     <path id="path8-7" d="m64.5,86.197c0.55,0,1-0.44,1-1v-4.14c0-0.56-0.45-1-1-1h-11.45v-3.71h1.08c0.55,0,1-0.44,1-1v-5.18c0-0.55-0.45-1-1-1h-1.08v-40.03c6.21-1.71,10.79-7.4,10.79-14.15,0-8.09-6.58-14.67-14.67-14.67-8.08,0-14.67,6.58-14.67,14.67,0,6.77,4.61,12.48,10.85,14.16v40.02h-1.07c-0.56,0-1,0.45-1,1v5.18c0,0.56,0.44,1,1,1h1.07v22.34c0,0.55,0.45,1,1,1h5.7c0.55,0,1-0.45,1-1v-2.63h11.45c0.55,0,1-0.45,1-1v-4.15c0-0.55-0.45-1-1-1h-3.15v-3.71h3.15zm-28-71.21c0-6.99,5.69-12.67,12.67-12.67,6.99,0,12.67,5.68,12.67,12.67s-5.68,12.67-12.67,12.67c-6.98,0-12.67-5.68-12.67-12.67zm14.55,14.54v39.64h-3.7v-39.63c0.6,0.08,1.2,0.12,1.82,0.12,0.64,0,1.27-0.04,1.88-0.13zm0,68.16h-3.7v-21.34h3.7v21.34zm-5.77-23.34v-3.18h7.85v3.18h-7.85zm15.07,17.56h3.15v2.15h-10.45v-12h10.45v2.14h-3.15c-0.55,0-1,0.45-1,1v5.71c0,0.55,0.45,1,1,1z"/>\n    </g>\n    <text id="score-value" style="word-spacing:0px;letter-spacing:0px;" font-family="Sans" xml:space="preserve" font-size="20px" line-height="125%" y="-143.26068" font-style="normal" x="289.53915" font-weight="normal"><tspan id="score-value-span" y="-143.26068" x="289.53915" fill="#dcfafc">x0</tspan></text>\n   </g>\n   <g id="life">\n    <g id="life-icon" fill="#dcfafc" transform="translate(-21.356326,-155.79564)">\n     <g id="g3272" transform="matrix(0.49845044,0,0,0.49845044,-121.10352,-19.345717)">\n      <path id="path3274" fill="#dcfafc" d="m50.001,68.908c-0.127,0-0.252-0.031-0.365-0.094-0.915-0.512-22.395-12.631-22.395-24.619,0-7.593,5.09-13.104,12.104-13.104,3.89,0,8.203,2.599,10.656,5.261,2.451-2.662,6.765-5.261,10.655-5.261,7.014,0,12.104,5.511,12.104,13.104,0,11.988-21.479,24.107-22.394,24.619-0.113,0.063-0.24,0.094-0.365,0.094zm-10.656-36.316c-6.145,0-10.604,4.88-10.604,11.604,0,10.311,18.414,21.441,21.26,23.098,2.845-1.659,21.259-12.794,21.259-23.099,0-6.724-4.459-11.604-10.604-11.604-3.754,0-7.99,2.771-10.069,5.378-0.285,0.356-0.888,0.356-1.173,0-2.08-2.606-6.315-5.377-10.069-5.377z"/>\n     </g>\n     <g id="g3276" transform="matrix(0.49845044,0,0,0.49845044,-121.10352,-19.345717)">\n      <path id="path3278" fill="#dcfafc" d="m32.038,41.814c-0.104,0-0.21-0.021-0.311-0.067-0.377-0.172-0.543-0.617-0.371-0.994,1.449-3.18,4.045-5.337,7.311-6.076,0.405-0.093,0.806,0.162,0.896,0.566,0.092,0.404-0.162,0.806-0.566,0.897-2.797,0.633-5.025,2.492-6.275,5.235-0.127,0.276-0.399,0.439-0.684,0.439z"/>\n     </g>\n    </g>\n    <text id="life-value" style="word-spacing:0px;letter-spacing:0px;" font-family="Sans" xml:space="preserve" font-size="20px" line-height="125%" y="-143.26068" font-style="normal" x="-103.16403" font-weight="normal" fill="#000000"><tspan id="life-value-span" y="-143.26068" x="-103.16403" fill="#dcfafc">x3</tspan></text>\n   </g>\n  </g>\n </g>\n</svg>\n';
+__p+='<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n<!-- Created with Inkscape (http://www.inkscape.org/) -->\n<svg id="compo" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" height="100%" width="100%" version="1.1" preserveAspectRatio="xMidYMax meet" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">\n <metadata id="metadata7">\n  <rdf:RDF>\n   <cc:Work rdf:about="">\n    <dc:format>image/svg+xml</dc:format>\n    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>\n    <dc:title/>\n   </cc:Work>\n  </rdf:RDF>\n </metadata>\n <g id="layerOutputs" transform="translate(0,-652.36218)">\n  <rect id="bgOutputs" height="296.05" width="476.05" y="654.34" x="1.9743" fill="#080e1f"/>\n  <g id="g3252" transform="translate(139.17662,819.89404)">\n   <g id="bonuses" font-size="20px" font-family="Sans" transform="translate(-5.2357249,23.470402)" font-weight="normal" font-style="normal" fill="#000000">\n    <text id="bonus-1" style="letter-spacing:0px;word-spacing:0px;" line-height="125%" y="-10.251587" x="94.291519" xml:space="preserve"><tspan id="bonus-span-1" y="-10.251587" x="94.291519" fill="#dcfafc">+100</tspan></text>\n   </g>\n   <g id="key" fill="#dcfafc" transform="matrix(0.41345981,0,0,0.37990032,177.20059,-112.4827)">\n    <path id="path6" d="m49.174,14.246c-2.529,0-4.586-2.057-4.586-4.585,0-2.529,2.057-4.586,4.586-4.586s4.586,2.058,4.586,4.586-2.058,4.585-4.586,4.585zm0-7.172c-1.426,0-2.586,1.16-2.586,2.586s1.16,2.585,2.586,2.585,2.586-1.16,2.586-2.585c0-1.426-1.161-2.586-2.586-2.586z"/>\n    <path id="path8" d="m64.5,86.197c0.55,0,1-0.44,1-1v-4.14c0-0.56-0.45-1-1-1h-11.45v-3.71h1.08c0.55,0,1-0.44,1-1v-5.18c0-0.55-0.45-1-1-1h-1.08v-40.03c6.21-1.71,10.79-7.4,10.79-14.15,0-8.09-6.58-14.67-14.67-14.67-8.08,0-14.67,6.58-14.67,14.67,0,6.77,4.61,12.48,10.85,14.16v40.02h-1.07c-0.56,0-1,0.45-1,1v5.18c0,0.56,0.44,1,1,1h1.07v22.34c0,0.55,0.45,1,1,1h5.7c0.55,0,1-0.45,1-1v-2.63h11.45c0.55,0,1-0.45,1-1v-4.15c0-0.55-0.45-1-1-1h-3.15v-3.71h3.15zm-28-71.21c0-6.99,5.69-12.67,12.67-12.67,6.99,0,12.67,5.68,12.67,12.67s-5.68,12.67-12.67,12.67c-6.98,0-12.67-5.68-12.67-12.67zm14.55,14.54v39.64h-3.7v-39.63c0.6,0.08,1.2,0.12,1.82,0.12,0.64,0,1.27-0.04,1.88-0.13zm0,68.16h-3.7v-21.34h3.7v21.34zm-5.77-23.34v-3.18h7.85v3.18h-7.85zm15.07,17.56h3.15v2.15h-10.45v-12h10.45v2.14h-3.15c-0.55,0-1,0.45-1,1v5.71c0,0.55,0.45,1,1,1z"/>\n   </g>\n   <g id="rail" transform="matrix(10.102235,0,0,2.7677669,-141.12515,39.471711)">\n    <g id="g3238" fill="#dcfafc">\n     <path id="path3240" d="M46.1,25.1h-44.4c-0.5,0-1-0.399-1-1s0.4-1,1-1h44.5c0.5,0,1,0.4,1,1s-0.5,1-1.1,1z" fill="#dcfafc"/>\n    </g>\n   </g>\n   <g id="chariot" transform="translate(4.9243425,0)">\n    <g id="g1234" transform="translate(28.868384,-137.79648)" fill="#dcfafc">\n     <g id="g3361" transform="matrix(0.48299279,0,0,0.46834076,56.610567,182.17033)" fill="#dcfafc">\n      <g id="g3363">\n       <path id="path3365" d="m83.074,53.495h-123c-1.1,0-2-0.9-2-2v-17.5c0-1.1,0.9-2,2-2h123c1.1,0,2,0.9,2,2v17.5c0,1.1-0.9,2-2,2zm-121-4h119v-13.5h-119v13.5z" fill="#dcfafc"/>\n      </g>\n      <g id="g3367" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3369" d="m93.7,127.5c-7.2,0-13-5.8-13-13,0-2,0.5-4,1.4-5.8,2.2-4.4,6.7-7.2,11.7-7.2s9.4,2.8,11.7,7.2c0.9,1.8,1.4,3.8,1.4,5.8-0.2,7.2-6,13-13.2,13zm0-22c-3.4,0-6.5,1.9-8.1,5-0.6,1.3-1,2.6-1,4,0,5,4.1,9,9,9,5,0,9-4,9-9,0-1.4-0.3-2.8-1-4-1.4-3.1-4.5-5-7.9-5z" fill="#dcfafc"/>\n      </g>\n      <g id="g3371" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3373" d="m93.7,120.5c-3.3,0-6-2.7-6-6,0-0.9,0.2-1.8,0.6-2.7,1-2.1,3.1-3.3,5.4-3.3s4.4,1.3,5.4,3.3c0.4,0.8,0.6,1.7,0.6,2.7,0,3.3-2.7,6-6,6zm0-10c-1.5,0-2.9,0.9-3.6,2.2-0.3,0.6-0.4,1.2-0.4,1.8,0,2.2,1.8,4,4,4s4-1.8,4-4c0-0.6-0.1-1.2-0.4-1.8-0.7-1.4-2.1-2.2-3.6-2.2z" fill="#dcfafc"/>\n      </g>\n      <g id="g3375" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3377" d="m34.3,127.5c-7.2,0-13-5.8-13-13,0-2,0.5-4,1.4-5.8,2.2-4.4,6.7-7.2,11.7-7.2s9.4,2.8,11.7,7.2c0.9,1.8,1.4,3.8,1.4,5.8-0.1,7.2-6,13-13.2,13zm0-22c-3.4,0-6.5,1.9-8.1,5-0.6,1.3-1,2.6-1,4,0,5,4.1,9,9,9s9-4,9-9c0-1.4-0.3-2.8-1-4-1.3-3.1-4.4-5-7.9-5z" fill="#dcfafc"/>\n      </g>\n      <g id="g3379" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3381" d="m34.3,120.5c-3.3,0-6-2.7-6-6,0-0.9,0.2-1.8,0.6-2.7,1-2.1,3.1-3.3,5.4-3.3s4.4,1.3,5.4,3.3c0.4,0.8,0.6,1.8,0.6,2.7,0.1,3.3-2.6,6-6,6zm0-10c-1.5,0-2.9,0.9-3.6,2.2-0.3,0.6-0.4,1.2-0.4,1.8,0,2.2,1.8,4,4,4s4-1.8,4-4c0-0.6-0.1-1.2-0.4-1.8-0.7-1.4-2-2.2-3.6-2.2z" fill="#dcfafc"/>\n      </g>\n      <g id="g3387" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3389" d="m111.3,111.6h-7.7c-0.8,0-1.4-0.4-1.8-1.1-1.5-3.1-4.6-5-8.1-5-3.4,0-6.5,1.9-8.1,5-0.3,0.7-1,1.1-1.8,1.1h-39.6c-0.8,0-1.4-0.4-1.8-1.1-1.5-3.1-4.6-5-8.1-5s-6.5,1.9-8.1,5c-0.3,0.7-1,1.1-1.8,1.1h-7.7c-1,0-1.8-0.7-2-1.7l-8.3-57.6c-0.1-0.6,0.1-1.2,0.5-1.6s0.9-0.7,1.5-0.7h111.3c0.6,0,1.1,0.3,1.5,0.7s0.5,1,0.5,1.6l-8.4,57.5c-0.2,1-1,1.8-2,1.8zm-6.6-4h4.8l7.8-53.5h-106.6l7.8,53.5h4.8c2.4-3.8,6.5-6.1,11-6.1s8.7,2.3,11,6.1h37.3c2.4-3.8,6.5-6.1,11-6.1,4.6,0,8.7,2.3,11.1,6.1z" fill="#dcfafc"/>\n      </g>\n      <g id="g3391" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3393" d="m97.7,84.3c-0.6,0-1-0.4-1-1v-22.7c0-0.6,0.4-1,1-1s1,0.4,1,1v22.7c0,0.5-0.5,1-1,1z" fill="#dcfafc"/>\n      </g>\n      <g id="g3395" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3397" d="m75.2,84.3c-0.6,0-1-0.4-1-1v-22.7c0-0.6,0.4-1,1-1s1,0.4,1,1v22.7c0,0.5-0.4,1-1,1z" fill="#dcfafc"/>\n      </g>\n      <g id="g3399" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3401" d="m52.8,84.3c-0.6,0-1-0.4-1-1v-22.7c0-0.6,0.4-1,1-1s1,0.4,1,1v22.7c0,0.5-0.5,1-1,1z" fill="#dcfafc"/>\n      </g>\n      <g id="g3403" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3405" d="m30.3,84.3c-0.6,0-1-0.4-1-1v-22.7c0-0.6,0.4-1,1-1s1,0.4,1,1v22.7c0,0.5-0.4,1-1,1z" fill="#dcfafc"/>\n      </g>\n      <g id="g3407" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3409" d="M113.9,92.8h-99.8c-0.6,0-1-0.4-1-1s0.4-1,1-1h99.7c0.6,0,1,0.4,1,1s-0.4,1-0.9,1z" fill="#dcfafc"/>\n      </g>\n     </g>\n    </g>\n   </g>\n   <g id="score" fill="#dcfafc">\n    <g id="score-icon" transform="matrix(0.25061563,-0.13758201,0.12641482,0.23027379,259.91169,-154.90306)">\n     <path id="path6-6" d="m49.174,14.246c-2.529,0-4.586-2.057-4.586-4.585,0-2.529,2.057-4.586,4.586-4.586s4.586,2.058,4.586,4.586-2.058,4.585-4.586,4.585zm0-7.172c-1.426,0-2.586,1.16-2.586,2.586s1.16,2.585,2.586,2.585,2.586-1.16,2.586-2.585c0-1.426-1.161-2.586-2.586-2.586z"/>\n     <path id="path8-7" d="m64.5,86.197c0.55,0,1-0.44,1-1v-4.14c0-0.56-0.45-1-1-1h-11.45v-3.71h1.08c0.55,0,1-0.44,1-1v-5.18c0-0.55-0.45-1-1-1h-1.08v-40.03c6.21-1.71,10.79-7.4,10.79-14.15,0-8.09-6.58-14.67-14.67-14.67-8.08,0-14.67,6.58-14.67,14.67,0,6.77,4.61,12.48,10.85,14.16v40.02h-1.07c-0.56,0-1,0.45-1,1v5.18c0,0.56,0.44,1,1,1h1.07v22.34c0,0.55,0.45,1,1,1h5.7c0.55,0,1-0.45,1-1v-2.63h11.45c0.55,0,1-0.45,1-1v-4.15c0-0.55-0.45-1-1-1h-3.15v-3.71h3.15zm-28-71.21c0-6.99,5.69-12.67,12.67-12.67,6.99,0,12.67,5.68,12.67,12.67s-5.68,12.67-12.67,12.67c-6.98,0-12.67-5.68-12.67-12.67zm14.55,14.54v39.64h-3.7v-39.63c0.6,0.08,1.2,0.12,1.82,0.12,0.64,0,1.27-0.04,1.88-0.13zm0,68.16h-3.7v-21.34h3.7v21.34zm-5.77-23.34v-3.18h7.85v3.18h-7.85zm15.07,17.56h3.15v2.15h-10.45v-12h10.45v2.14h-3.15c-0.55,0-1,0.45-1,1v5.71c0,0.55,0.45,1,1,1z"/>\n    </g>\n    <text id="score-value" style="word-spacing:0px;letter-spacing:0px;" font-family="Sans" xml:space="preserve" font-size="20px" line-height="125%" y="-143.26068" font-style="normal" x="289.53915" font-weight="normal"><tspan id="score-value-span" y="-143.26068" x="289.53915" fill="#dcfafc">x0</tspan></text>\n   </g>\n   <g id="life">\n    <g id="life-icon" fill="#dcfafc" transform="translate(-21.356326,-155.79564)">\n     <g id="g3272" transform="matrix(0.49845044,0,0,0.49845044,-121.10352,-19.345717)">\n      <path id="path3274" fill="#dcfafc" d="m50.001,68.908c-0.127,0-0.252-0.031-0.365-0.094-0.915-0.512-22.395-12.631-22.395-24.619,0-7.593,5.09-13.104,12.104-13.104,3.89,0,8.203,2.599,10.656,5.261,2.451-2.662,6.765-5.261,10.655-5.261,7.014,0,12.104,5.511,12.104,13.104,0,11.988-21.479,24.107-22.394,24.619-0.113,0.063-0.24,0.094-0.365,0.094zm-10.656-36.316c-6.145,0-10.604,4.88-10.604,11.604,0,10.311,18.414,21.441,21.26,23.098,2.845-1.659,21.259-12.794,21.259-23.099,0-6.724-4.459-11.604-10.604-11.604-3.754,0-7.99,2.771-10.069,5.378-0.285,0.356-0.888,0.356-1.173,0-2.08-2.606-6.315-5.377-10.069-5.377z"/>\n     </g>\n     <g id="g3276" transform="matrix(0.49845044,0,0,0.49845044,-121.10352,-19.345717)">\n      <path id="path3278" fill="#dcfafc" d="m32.038,41.814c-0.104,0-0.21-0.021-0.311-0.067-0.377-0.172-0.543-0.617-0.371-0.994,1.449-3.18,4.045-5.337,7.311-6.076,0.405-0.093,0.806,0.162,0.896,0.566,0.092,0.404-0.162,0.806-0.566,0.897-2.797,0.633-5.025,2.492-6.275,5.235-0.127,0.276-0.399,0.439-0.684,0.439z"/>\n     </g>\n    </g>\n    <text id="life-value" style="word-spacing:0px;letter-spacing:0px;" font-family="Sans" xml:space="preserve" font-size="20px" line-height="125%" y="-143.26068" font-style="normal" x="-103.16403" font-weight="normal" fill="#000000"><tspan id="life-value-span" y="-143.26068" x="-103.16403" fill="#dcfafc">x3</tspan></text>\n   </g>\n  </g>\n </g>\n</svg>\n';
 }
 return __p;
 };
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 var _ = require("./../../bower_components/underscore/underscore.js");
 var Backbone = require("./../../bower_components/backbone/backbone.js");
 var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
@@ -32761,7 +32821,7 @@ module.exports = Mn.View.extend({
     },
 });
 
-},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/backbone/backbone.js":3,"./../../bower_components/underscore/underscore.js":9,"./../behaviors/game/introOutro":11,"./../behaviors/game/mecha":12,"./../models/gameModel":23,"./../utils/templates.js":24,"./input.js":26,"./output.js":27}],26:[function(require,module,exports){
+},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/backbone/backbone.js":3,"./../../bower_components/underscore/underscore.js":9,"./../behaviors/game/introOutro":11,"./../behaviors/game/mecha":12,"./../models/gameModel":24,"./../utils/templates.js":25,"./input.js":27,"./output.js":28}],27:[function(require,module,exports){
 var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 var templates = require('./../utils/templates.js');
 var IntroOutro = require('./../behaviors/input/introOutro');
@@ -32775,7 +32835,7 @@ module.exports = Mn.View.extend({
     behaviors: [IntroOutro,Joystick,CoordinateDisplay,Step],
 });
 
-},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../behaviors/input/coordinateDisplay":13,"./../behaviors/input/introOutro":14,"./../behaviors/input/joystick":15,"./../behaviors/input/step":16,"./../utils/templates.js":24}],27:[function(require,module,exports){
+},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../behaviors/input/coordinateDisplay":13,"./../behaviors/input/introOutro":14,"./../behaviors/input/joystick":15,"./../behaviors/input/step":16,"./../utils/templates.js":25}],28:[function(require,module,exports){
 var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 var templates = require('./../utils/templates.js');
 var IntroOutro = require('./../behaviors/output/introOutro');
@@ -32784,14 +32844,15 @@ var Key = require('./../behaviors/output/key');
 var Life = require('./../behaviors/output/life');
 var Score = require('./../behaviors/output/score');
 var GoodBad = require('./../behaviors/output/goodBad');
+var Bonus = require('./../behaviors/output/bonus');
 
 module.exports = Mn.View.extend({
     template:templates['outputs.svg'],
     className:'output',
-    behaviors: [IntroOutro,Chariot,Key,Life,Score,GoodBad],
+    behaviors: [IntroOutro,Chariot,Key,Life,Score,GoodBad,Bonus],
 });
 
-},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../behaviors/output/chariot":17,"./../behaviors/output/goodBad":18,"./../behaviors/output/introOutro":19,"./../behaviors/output/key":20,"./../behaviors/output/life":21,"./../behaviors/output/score":22,"./../utils/templates.js":24}]},{},[10])
+},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../behaviors/output/bonus":17,"./../behaviors/output/chariot":18,"./../behaviors/output/goodBad":19,"./../behaviors/output/introOutro":20,"./../behaviors/output/key":21,"./../behaviors/output/life":22,"./../behaviors/output/score":23,"./../utils/templates.js":25}]},{},[10])
 
 
 //# sourceMappingURL=bundle.js.map

@@ -15,10 +15,6 @@
   <g id="g3252" transform="translate(139.17662,819.89404)">
    <g id="bonuses" font-size="20px" font-family="Sans" transform="translate(-5.2357249,23.470402)" font-weight="normal" font-style="normal" fill="#000000">
     <text id="bonus-1" style="letter-spacing:0px;word-spacing:0px;" line-height="125%" y="-10.251587" x="94.291519" xml:space="preserve"><tspan id="bonus-span-1" y="-10.251587" x="94.291519" fill="#dcfafc">+100</tspan></text>
-    <text id="bonus-2" style="letter-spacing:0px;word-spacing:0px;" line-height="125%" y="-10.251587" x="-120.25212" xml:space="preserve"><tspan id="bonus-span-2" y="-10.251587" x="-120.25212" fill="#dcfafc">+200</tspan></text>
-    <text id="bonus-3" style="letter-spacing:0px;word-spacing:0px;" line-height="125%" y="-10.251587" x="-12.9803" xml:space="preserve"><tspan id="bonus-span-3" y="-10.251587" x="-12.9803" fill="#dcfafc">-200</tspan></text>
-    <text id="bonus-4" style="letter-spacing:0px;word-spacing:0px;" line-height="125%" y="-10.251587" x="201.56334" xml:space="preserve"><tspan id="bonus-span-4" y="-10.251587" x="201.56334" fill="#dcfafc">-100</tspan></text>
-    <text id="bonus-5" style="letter-spacing:0px;word-spacing:0px;" line-height="125%" y="-10.251587" x="308.83517" xml:space="preserve"><tspan id="bonus-span-5" y="-10.251587" x="308.83517" fill="#dcfafc">x(-1)</tspan></text>
    </g>
    <g id="key" fill="#dcfafc" transform="matrix(0.41345981,0,0,0.37990032,177.20059,-112.4827)">
     <path id="path6" d="m49.174,14.246c-2.529,0-4.586-2.057-4.586-4.585,0-2.529,2.057-4.586,4.586-4.586s4.586,2.058,4.586,4.586-2.058,4.585-4.586,4.585zm0-7.172c-1.426,0-2.586,1.16-2.586,2.586s1.16,2.585,2.586,2.585,2.586-1.16,2.586-2.585c0-1.426-1.161-2.586-2.586-2.586z"/>

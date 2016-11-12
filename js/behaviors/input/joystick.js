@@ -50,9 +50,9 @@ module.exports = Mn.Behavior.extend({
           this.view.model.set('interval',null);
     },
     goUp:function(){
-        this.view.model.set("x",this.view.model.get("x")+this.view.model.get("step"),{validate:true});
+        this.view.model.set("x",this.view.model.get("x")+this.view.model.get("step"));
     },
     goDown:function(){
-        this.view.model.set("x",this.view.model.get("x")-this.view.model.get("step"),{validate:true});
+        this.view.model.set("x",this.view.model.get("x")-this.view.model.get("step"));
     },
 });

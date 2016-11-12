@@ -49,9 +49,15 @@ module.exports = Mn.Behavior.extend({
     buildGoodTimeline:function(){
         this.good
         .addLabel('begin')
-        .to(this.ui.keyPath, 0.3, {fill:"green"},"+=0.2")
-        .to(this.ui.key, 0.9, {x:245,y:-177 ,scale:0.27,rotation:-30-360,ease:SlowMo.ease.config( 0.5, 0.9, false),onComplete:this.gainScore},"=-0.3")
-        .to(this.ui.keyPath, 0.3, {fill:"#dcfafc"});
+        .to(this.ui.keyPath, 0.3, {fill:"green"},"begin")
+
+        // .to(this.ui.key, 0.9, {x:245,y:-177 ,scale:0.27,rotation:-30-360,ease:SlowMo.ease.config( 0.5, 0.9, false)},"=-0.3")
+        .to(this.ui.key, 0.9, {y:'-=30',ease:Back.easeOut.config( 4)},"begin")
+        .to(this.ui.key, 0.9, {skewY:1080,ease:Power2.easeOut},"begin")
+        .to(this.ui.key, 0.3, {opacity:0,ease:Power2.easeOut},"begin+=0.3")
+        .to(this.ui.keyPath, 0.3, {fill:"#dcfafc"})
+        .to(this.ui.scoreIcon, 0.3, {scale:"+=0.05",fill:"green",ease:Bounce.easeOut},"begin+=0.6")
+        .to(this.ui.scoreIcon, 0.1, {scale:"-=0.05",fill:"#dcfafc",ease:Bounce.easeOut,onComplete:this.gainScore},"begin+=1.3");
         // this.good.timeScale(0.20);
     },
     handleBad:function(){

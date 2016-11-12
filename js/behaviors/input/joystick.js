@@ -29,11 +29,15 @@ module.exports = Mn.Behavior.extend({
     },
     processKey:function(event){
         if (this.view.model.get('interval')){}else{
+            console.log(event.which);
             if(event.which === 38){
                 this.goUp();
             }
             if(event.which === 40){
                 this.goDown();
+            }
+            if(event.which === 32){
+                this.jump();
             }
         }
     },
@@ -54,5 +58,11 @@ module.exports = Mn.Behavior.extend({
     },
     goDown:function(){
         this.view.model.set("x",this.view.model.get("x")-this.view.model.get("step"));
+    },
+    jump:function(){
+        if(!this.view.model.get("isJumping")){
+            this.view.model.set("isJumping",true);
+        }
+
     },
 });

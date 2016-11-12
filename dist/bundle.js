@@ -32334,11 +32334,15 @@ module.exports = Mn.Behavior.extend({
     },
     processKey:function(event){
         if (this.view.model.get('interval')){}else{
+            console.log(event.which);
             if(event.which === 38){
                 this.goUp();
             }
             if(event.which === 40){
                 this.goDown();
+            }
+            if(event.which === 32){
+                this.jump();
             }
         }
     },
@@ -32359,6 +32363,12 @@ module.exports = Mn.Behavior.extend({
     },
     goDown:function(){
         this.view.model.set("x",this.view.model.get("x")-this.view.model.get("step"));
+    },
+    jump:function(){
+        if(!this.view.model.get("isJumping")){
+            this.view.model.set("isJumping",true);
+        }
+
     },
 });
 
@@ -32442,6 +32452,7 @@ module.exports = Mn.Behavior.extend({
 });
 
 },{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/underscore/underscore.js":9}],18:[function(require,module,exports){
+var _ = require("./../../../bower_components/underscore/underscore.js");
 var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 require("./../../../bower_components/gsap/src/uncompressed/TweenMax.js");
 var validBounds = 0.91;
@@ -32452,13 +32463,29 @@ module.exports = Mn.Behavior.extend({
     },
     modelEvents: {
         'change:x': 'move',
+        'change:isJumping': 'handleJump',
+    },
+    initialize:function(){
+        _.bindAll(this,'handleEndJump');
     },
     move: function(event) {
         TweenMax.to(this.ui.chariot, 1, {x:validBounds*this.view.model.get('x')});
     },
+    handleJump: function(event) {
+        if(this.view.model.get("isJumping")){
+            this.handleStartJump();
+        }
+    },
+    handleStartJump: function(event) {
+        TweenMax.to(this.ui.chariot, 0.5, {y:"-=70",ease:Power4.easeOut});
+        TweenMax.to(this.ui.chariot, 0.5, {y:"+=70",ease:Power4.easeIn,delay:0.5,onComplete:this.handleEndJump});
+    },
+    handleEndJump: function(event) {
+        this.view.model.set("isJumping",false);
+    },
 });
 
-},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/gsap/src/uncompressed/TweenMax.js":5}],19:[function(require,module,exports){
+},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/gsap/src/uncompressed/TweenMax.js":5,"./../../../bower_components/underscore/underscore.js":9}],19:[function(require,module,exports){
 var _ = require("./../../../bower_components/underscore/underscore.js");
 var Backbone = require("./../../../bower_components/backbone/backbone.js");
 var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
@@ -32715,10 +32742,11 @@ module.exports = Backbone.Model.extend({
         'step':50,
         'speedKey':2,
         'speedAppearingKey':0.5,
-        'gameOver':false,
         'speedBonus':1,
         'bonus':100,
-        'availableBonuses':[-200,-100,100,200]
+        'availableBonuses':[-200,-100,100,200],
+        'gameOver':false,
+        'isJumping':false
     },
     set:function (key, val, options) {
         var newVal = this.keepBetweenBounds(key, val);

@@ -14,10 +14,11 @@ module.exports = Backbone.Model.extend({
         'step':50,
         'speedKey':2,
         'speedAppearingKey':0.5,
-        'gameOver':false,
         'speedBonus':1,
         'bonus':100,
-        'availableBonuses':[-200,-100,100,200]
+        'availableBonuses':[-200,-100,100,200],
+        'gameOver':false,
+        'isJumping':false
     },
     set:function (key, val, options) {
         var newVal = this.keepBetweenBounds(key, val);

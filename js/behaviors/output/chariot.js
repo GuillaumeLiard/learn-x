@@ -23,8 +23,9 @@ module.exports = Mn.Behavior.extend({
         }
     },
     handleStartJump: function(event) {
-        TweenMax.to(this.ui.chariot, 0.5, {y:"-=70",ease:Power4.easeOut});
-        TweenMax.to(this.ui.chariot, 0.5, {y:"+=70",ease:Power4.easeIn,delay:0.5,onComplete:this.handleEndJump});
+        TweenMax.to(this.ui.chariot, 0.5, {y:-90,ease:Power4.easeOut});
+        TweenMax.to(this.ui.chariot, 0.5, {y:0,ease:Power4.easeIn,delay:0.20,onComplete:this.handleEndJump});
+        // TweenMax.to(this.ui.chariot, 0.5, {y:0,ease:Power4.easeIn,delay:0.1,onComplete:this.handleEndJump}).invalidate();
     },
     handleEndJump: function(event) {
         this.view.model.set("isJumping",false);

@@ -32334,7 +32334,7 @@ module.exports = Mn.Behavior.extend({
     },
     processKey:function(event){
         if (this.view.model.get('interval')){}else{
-            console.log(event.which);
+            // console.log(event.which);
             if(event.which === 38){
                 this.goUp();
             }
@@ -32477,8 +32477,9 @@ module.exports = Mn.Behavior.extend({
         }
     },
     handleStartJump: function(event) {
-        TweenMax.to(this.ui.chariot, 0.5, {y:"-=70",ease:Power4.easeOut});
-        TweenMax.to(this.ui.chariot, 0.5, {y:"+=70",ease:Power4.easeIn,delay:0.5,onComplete:this.handleEndJump});
+        TweenMax.to(this.ui.chariot, 0.5, {y:-90,ease:Power4.easeOut});
+        TweenMax.to(this.ui.chariot, 0.5, {y:0,ease:Power4.easeIn,delay:0.20,onComplete:this.handleEndJump});
+        // TweenMax.to(this.ui.chariot, 0.5, {y:0,ease:Power4.easeIn,delay:0.1,onComplete:this.handleEndJump}).invalidate();
     },
     handleEndJump: function(event) {
         this.view.model.set("isJumping",false);
@@ -32571,6 +32572,7 @@ module.exports = Mn.Behavior.extend({
 });
 
 },{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/backbone/backbone.js":3,"./../../../bower_components/gsap/src/uncompressed/TweenMax.js":5,"./../../../bower_components/underscore/underscore.js":9}],20:[function(require,module,exports){
+var _ = require("./../../../bower_components/underscore/underscore.js");
 var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 require("./../../../bower_components/gsap/src/uncompressed/TweenMax.js");
 
@@ -32596,6 +32598,9 @@ module.exports = Mn.Behavior.extend({
     },
     intro:new TimelineMax({paused:true}),
     outro:new TimelineMax({paused:true}),
+    initialize:function(){
+        _.bindAll(this,'onTheGround');
+    },
     onAttach:function(){
         this.buildIntro();
         this.buildOutro();
@@ -32612,7 +32617,7 @@ module.exports = Mn.Behavior.extend({
         this.intro
             .to(this.ui.key,0,{opacity:0})
             .from(this.ui.outputs,1,{opacity:0,x:-1000})
-            .from(this.ui.chariot,1,{opacity:0,y:-200,ease:Bounce.easeOut});
+            .from(this.ui.chariot,1,{opacity:0,y:-200,ease:Bounce.easeOut,onComplete:this.onTheGround});
     },
     buildOutro:function(){
         this.outro
@@ -32625,9 +32630,12 @@ module.exports = Mn.Behavior.extend({
             .to(this.ui.rail, 0.3, {opacity:0})
             .to(this.ui.score,1,{scale:3,x:-270,y:120});
     },
+    onTheGround:function(){
+        this.view.model.set("isJumping",false);
+    }
 });
 
-},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/gsap/src/uncompressed/TweenMax.js":5}],21:[function(require,module,exports){
+},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/gsap/src/uncompressed/TweenMax.js":5,"./../../../bower_components/underscore/underscore.js":9}],21:[function(require,module,exports){
 var _ = require("./../../../bower_components/underscore/underscore.js");
 var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 require("./../../../bower_components/gsap/src/uncompressed/TweenMax.js");
@@ -32746,7 +32754,7 @@ module.exports = Backbone.Model.extend({
         'bonus':100,
         'availableBonuses':[-200,-100,100,200],
         'gameOver':false,
-        'isJumping':false
+        'isJumping':true
     },
     set:function (key, val, options) {
         var newVal = this.keepBetweenBounds(key, val);

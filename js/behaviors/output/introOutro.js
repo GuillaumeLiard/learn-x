@@ -1,3 +1,4 @@
+var _ = require('underscore');
 var Mn = require('backbone.marionette');
 require('gsap');
 
@@ -23,6 +24,9 @@ module.exports = Mn.Behavior.extend({
     },
     intro:new TimelineMax({paused:true}),
     outro:new TimelineMax({paused:true}),
+    initialize:function(){
+        _.bindAll(this,'onTheGround');
+    },
     onAttach:function(){
         this.buildIntro();
         this.buildOutro();
@@ -39,7 +43,7 @@ module.exports = Mn.Behavior.extend({
         this.intro
             .to(this.ui.key,0,{opacity:0})
             .from(this.ui.outputs,1,{opacity:0,x:-1000})
-            .from(this.ui.chariot,1,{opacity:0,y:-200,ease:Bounce.easeOut});
+            .from(this.ui.chariot,1,{opacity:0,y:-200,ease:Bounce.easeOut,onComplete:this.onTheGround});
     },
     buildOutro:function(){
         this.outro
@@ -52,4 +56,7 @@ module.exports = Mn.Behavior.extend({
             .to(this.ui.rail, 0.3, {opacity:0})
             .to(this.ui.score,1,{scale:3,x:-270,y:120});
     },
+    onTheGround:function(){
+        this.view.model.set("isJumping",false);
+    }
 });

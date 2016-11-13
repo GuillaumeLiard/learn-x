@@ -29,7 +29,7 @@ module.exports = Mn.Behavior.extend({
     },
     processKey:function(event){
         if (this.view.model.get('interval')){}else{
-            console.log(event.which);
+            // console.log(event.which);
             if(event.which === 38){
                 this.goUp();
             }

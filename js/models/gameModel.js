@@ -18,7 +18,7 @@ module.exports = Backbone.Model.extend({
         'bonus':100,
         'availableBonuses':[-200,-100,100,200],
         'gameOver':false,
-        'isJumping':false
+        'isJumping':true
     },
     set:function (key, val, options) {
         var newVal = this.keepBetweenBounds(key, val);

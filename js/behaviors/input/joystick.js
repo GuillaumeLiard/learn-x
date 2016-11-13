@@ -1,6 +1,8 @@
 var _ = require('underscore');
 var $ = require('jquery');
 var Mn = require('backbone.marionette');
+var Keyboard = require('keyboardjs');
+// var Keyboard = require('./../../../bower_components/keyboardjs/dist/keyboard.js');
 
 
 module.exports = Mn.Behavior.extend({
@@ -18,40 +20,41 @@ module.exports = Mn.Behavior.extend({
     },
     onAttach:function(){
         this.view.model.set('interval',null);
-        _.bindAll(this,'processKey');
+        _.bindAll(this,'goUpHoldKeyboard');
+        _.bindAll(this,'goDownHoldKeyboard');
         _.bindAll(this,'clearHold');
         _.bindAll(this,'goUpHold');
         _.bindAll(this,'goDownHold');
         _.bindAll(this,'goUp');
         _.bindAll(this,'goDown');
-        $(document).on('keydown',this.processKey);
+        _.bindAll(this,'jump');        
+        this.setKeyBinding();
         $(document).on('mouseup',this.clearHold);
     },
-    processKey:function(event){
-        if (this.view.model.get('interval')){}else{
-            // console.log(event.which);
-            if(event.which === 38){
-                this.goUp();
-            }
-            if(event.which === 40){
-                this.goDown();
-            }
-            if(event.which === 32){
-                this.jump();
-            }
-        }
+    setKeyBinding:function(){
+        Keyboard.bind('up', this.goUpHoldKeyboard,this.clearHold);
+        Keyboard.bind('down', this.goDownHoldKeyboard,this.clearHold);
+        Keyboard.bind('space', this.jump);
     },
-    goUpHold:function(){
+    goUpHoldKeyboard:function(e){
+        e.preventRepeat();
+        this.goUpHold();
+    },
+    goDownHoldKeyboard:function(e){
+        e.preventRepeat();
+        this.goDownHold();
+    },
+    goUpHold:function(e){
         this.clearHold();
         this.view.model.set('interval',setInterval(this.goUp, this.intervalDuration));
     },
-    goDownHold:function(){
+    goDownHold:function(e){
         this.clearHold();
         this.view.model.set('interval',setInterval(this.goDown, this.intervalDuration));
     },
-    clearHold:function(){
-          clearInterval(this.view.model.get('interval'));
-          this.view.model.set('interval',null);
+    clearHold:function(e){
+        clearInterval(this.view.model.get('interval'));
+        this.view.model.set('interval',null);
     },
     goUp:function(){
         this.view.model.set("x",this.view.model.get("x")+this.view.model.get("step"));

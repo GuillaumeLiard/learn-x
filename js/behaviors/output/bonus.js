@@ -35,15 +35,21 @@ module.exports = Mn.Behavior.extend({
         oscilatorScale.to(this.ui.bonus, 0.5,{skewX:"+=10"})
             .to(this.ui.bonus, 0.5,{skewX:"-=10"});
 
-        move.to(this.ui.bonus, 0,{x:-240,opacity:0,onComplete:this.generateBonusValue})
+        move.addLabel('toTheRight')
+            .to(this.ui.bonus, 0,{x:-240,opacity:0,onComplete:this.generateBonusValue})
             .to(this.ui.bonus, 0.5,{opacity:1})
             .to(this.ui.bonus, this.view.model.get('speedBonus'),{x:240,onUpdate:this.checkTouchChariot})
+            .to(this.ui.bonus, 0.5,{opacity:0})
+            .addLabel('toTheLeft')
+            .to(this.ui.bonus, 0,{x:240,opacity:0,onComplete:this.generateBonusValue})
+            .to(this.ui.bonus, 0.5,{opacity:1})
+            .to(this.ui.bonus, this.view.model.get('speedBonus'),{x:-240,onUpdate:this.checkTouchChariot})
             .to(this.ui.bonus, 0.5,{opacity:0});
 
         this.escalator.add([oscilatorScale,move]);
     },
     init:function(){
-        this.escalator.play('begin');
+        this.escalator.play();
     },
     generateBonusValue:function(){
         this.view.model.set('availableBonuses',_.shuffle(this.view.model.get('availableBonuses')));
@@ -66,8 +72,6 @@ module.exports = Mn.Behavior.extend({
     applyBonus:function(){
         if(this.view.model.get('bonusTouched')){
             this.view.model.set('x',this.view.model.get('x')+this.view.model.get('bonus'));
-            // TweenMax.to(this.ui.bonus, 0.5,{opacity:0});
-            console.log('bonus touch:'+this.view.model.get('bonus'));
         }
     },
 

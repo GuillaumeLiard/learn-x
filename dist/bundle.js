@@ -32397,6 +32397,9 @@ module.exports = Mn.Behavior.extend({
 },{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1}],17:[function(require,module,exports){
 var _ = require("./../../../bower_components/underscore/underscore.js");
 var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
+require("./../../../bower_components/gsap/src/uncompressed/TweenMax.js");
+var Draggable = require('./../../../bower_components/gsap/src/uncompressed/utils/Draggable.js');
+
 
 
 module.exports = Mn.Behavior.extend({
@@ -32409,12 +32412,15 @@ module.exports = Mn.Behavior.extend({
     ui:{
         bonus:'#bonus-1',
         bonusValue:'#bonus-span-1',
+        chariot:'#chariot',
     },
     modelEvents: {
         'change:bonus': 'updateBonus',
+        'change:bonusTouched': 'applyBonus',
     },
     initialize:function(){
         _.bindAll(this,'generateBonusValue');
+        _.bindAll(this,'checkTouchChariot');
     },
     onAttach:function(){
         this.buildEscalatorTimeline();
@@ -32428,7 +32434,7 @@ module.exports = Mn.Behavior.extend({
 
         move.to(this.ui.bonus, 0,{x:-240,opacity:0,onComplete:this.generateBonusValue})
             .to(this.ui.bonus, 0.5,{opacity:1})
-            .to(this.ui.bonus, this.view.model.get('speedBonus'),{x:240})
+            .to(this.ui.bonus, this.view.model.get('speedBonus'),{x:240,onUpdate:this.checkTouchChariot})
             .to(this.ui.bonus, 0.5,{opacity:0});
 
         this.escalator.add([oscilatorScale,move]);
@@ -32438,6 +32444,7 @@ module.exports = Mn.Behavior.extend({
     },
     generateBonusValue:function(){
         this.view.model.set('availableBonuses',_.shuffle(this.view.model.get('availableBonuses')));
+        this.view.model.set('bonusTouched',false);
         this.view.model.set('bonus',this.view.model.get('availableBonuses')[0]);
     },
     updateBonus:function(){
@@ -32448,10 +32455,22 @@ module.exports = Mn.Behavior.extend({
         }
         this.ui.bonusValue.text(prepend+bonus);
     },
+    checkTouchChariot:function(){
+        if(Draggable.hitTest(this.ui.bonus, this.ui.chariot)){
+            this.view.model.set('bonusTouched',true);
+        }
+    },
+    applyBonus:function(){
+        if(this.view.model.get('bonusTouched')){
+            this.view.model.set('x',this.view.model.get('x')+this.view.model.get('bonus'));
+            // TweenMax.to(this.ui.bonus, 0.5,{opacity:0});
+            console.log('bonus touch:'+this.view.model.get('bonus'));
+        }
+    },
 
 });
 
-},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/underscore/underscore.js":9}],18:[function(require,module,exports){
+},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/gsap/src/uncompressed/TweenMax.js":5,"./../../../bower_components/gsap/src/uncompressed/utils/Draggable.js":7,"./../../../bower_components/underscore/underscore.js":9}],18:[function(require,module,exports){
 var _ = require("./../../../bower_components/underscore/underscore.js");
 var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 require("./../../../bower_components/gsap/src/uncompressed/TweenMax.js");
@@ -32479,10 +32498,10 @@ module.exports = Mn.Behavior.extend({
     handleStartJump: function(event) {
         TweenMax.to(this.ui.chariot, 0.5, {y:-90,ease:Power4.easeOut});
         TweenMax.to(this.ui.chariot, 0.5, {y:0,ease:Power4.easeIn,delay:0.20,onComplete:this.handleEndJump});
-        // TweenMax.to(this.ui.chariot, 0.5, {y:0,ease:Power4.easeIn,delay:0.1,onComplete:this.handleEndJump}).invalidate();
     },
     handleEndJump: function(event) {
         this.view.model.set("isJumping",false);
+        this.view.model.set('bonusTouched',false);
     },
 });
 
@@ -32747,12 +32766,12 @@ module.exports = Backbone.Model.extend({
         'life':3,
         'score':0,
         'x':0,
-        'step':50,
+        'step':5,
         'speedKey':2,
         'speedAppearingKey':0.5,
-        'speedBonus':1,
+        'speedBonus':20,
         'bonus':100,
-        'availableBonuses':[-200,-100,100,200],
+        'availableBonuses':[-200,-400,400,200],
         'gameOver':false,
         'isJumping':true
     },

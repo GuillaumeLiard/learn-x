@@ -28,6 +28,7 @@
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",
     "gulp-file-contents-to-json": "^0.2.1",
+    "gulp-jsmin": "^0.1.5",
     "gulp-sourcemaps": "^2.2.0",
     "gulp-underscore-template": "^1.0.0",
     "gulp-util": "^3.0.7",

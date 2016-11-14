@@ -34,7 +34,7 @@ module.exports = Mn.Behavior.extend({
             .add(this.outroStart)
             .add(this.timelines.request('output:outro'),"=0.5")
             .add(this.timelines.request('input:outro'),"=-2");
-        // this.master.timeScale(20);
+        this.master.timeScale(20);
     },
     startIntro:function(){
         this.master.play("intro");

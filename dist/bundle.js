@@ -33021,7 +33021,7 @@ module.exports = Mn.Behavior.extend({
             .add(this.outroStart)
             .add(this.timelines.request('output:outro'),"=0.5")
             .add(this.timelines.request('input:outro'),"=-2");
-        // this.master.timeScale(20);
+        this.master.timeScale(20);
     },
     startIntro:function(){
         this.master.play("intro");
@@ -33131,6 +33131,7 @@ var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.m
 var Keyboard = require("./../../../bower_components/keyboardjs/keyboardjs.js");
 // var Keyboard = require('./../../../bower_components/keyboardjs/dist/keyboard.js');
 
+var arrow;
 
 module.exports = Mn.Behavior.extend({
     intervalDuration:31,
@@ -33152,6 +33153,8 @@ module.exports = Mn.Behavior.extend({
         _.bindAll(this,'goUpHoldKeyboard');
         _.bindAll(this,'goDownHoldKeyboard');
         _.bindAll(this,'clearHold');
+        _.bindAll(this,'clearHoldUp');
+        _.bindAll(this,'clearHoldDown');
         _.bindAll(this,'goUpHold');
         _.bindAll(this,'goDownHold');
         _.bindAll(this,'goUp');
@@ -33161,15 +33164,19 @@ module.exports = Mn.Behavior.extend({
         $(document).on('mouseup',this.clearHold);
     },
     setKeyBinding:function(){
-        Keyboard.bind('up', this.goUpHoldKeyboard,this.clearHold);
-        Keyboard.bind('down', this.goDownHoldKeyboard,this.clearHold);
+        Keyboard.bind('up', this.goUpHoldKeyboard,this.clearHoldUp);
+        Keyboard.bind('down', this.goDownHoldKeyboard,this.clearHoldDown);
         Keyboard.bind('space', this.jump);
     },
     goUpHoldKeyboard:function(e){
+        console.log('up');
+        arrow = 'up';
         e.preventRepeat();
         this.goUpHold();
     },
     goDownHoldKeyboard:function(e){
+        console.log('down');
+        arrow = 'down';
         e.preventRepeat();
         this.goDownHold();
     },
@@ -33180,6 +33187,16 @@ module.exports = Mn.Behavior.extend({
     goDownHold:function(e){
         this.clearHold();
         this.view.model.set('interval',setInterval(this.goDown, this.intervalDuration));
+    },
+    clearHoldUp:function(e){
+        if(arrow==='up'){
+            this.clearHold();
+        }
+    },
+    clearHoldDown:function(e){
+        if(arrow==='down'){
+            this.clearHold();
+        }
     },
     clearHold:function(e){
         clearInterval(this.view.model.get('interval'));

@@ -3,6 +3,9 @@ var Backbone = require('backbone');
 var Mn = require('backbone.marionette');
 require('gsap');
 
+var game = Backbone.Radio.channel('game');
+
+
 module.exports = Mn.Behavior.extend({
     timelines:Backbone.Radio.channel('timelines'),
     master:new TimelineMax({paused:true}),
@@ -28,9 +31,10 @@ module.exports = Mn.Behavior.extend({
             .addLabel("ready")
             .addPause("ready+=0.1")
             .addLabel("outro")
+            .add(this.outroStart)
             .add(this.timelines.request('output:outro'),"=0.5")
             .add(this.timelines.request('input:outro'),"=-2");
-        this.master.timeScale(20);
+        // this.master.timeScale(20);
     },
     startIntro:function(){
         this.master.play("intro");
@@ -41,5 +45,8 @@ module.exports = Mn.Behavior.extend({
     },
     introEnd:function(){
         this.view.triggerMethod('start');
+    },
+    outroStart:function(){
+        game.trigger('end');
     }
 });

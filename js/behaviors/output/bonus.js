@@ -3,6 +3,8 @@ var Mn = require('backbone.marionette');
 require('gsap');
 var Draggable = require('./../../../bower_components/gsap/src/uncompressed/utils/Draggable.js');
 
+var absBonusX = 260;
+var offsetBonusX = 15;
 
 
 module.exports = Mn.Behavior.extend({
@@ -11,6 +13,7 @@ module.exports = Mn.Behavior.extend({
     channelName: 'game',
     radioEvents: {
         'start': 'init',
+        'end': 'stop',
     },
     ui:{
         bonus:'#bonus-1',
@@ -36,20 +39,24 @@ module.exports = Mn.Behavior.extend({
             .to(this.ui.bonus, 0.5,{skewX:"-=10"});
 
         move.addLabel('toTheRight')
-            .to(this.ui.bonus, 0,{x:-240,opacity:0,onComplete:this.generateBonusValue})
+            .to(this.ui.bonus, 0,{x:-absBonusX-offsetBonusX,opacity:0,onComplete:this.generateBonusValue})
             .to(this.ui.bonus, 0.5,{opacity:1})
-            .to(this.ui.bonus, this.view.model.get('speedBonus'),{x:240,onUpdate:this.checkTouchChariot})
+            .to(this.ui.bonus, this.view.model.get('speedBonus'),{x:absBonusX-offsetBonusX,onUpdate:this.checkTouchChariot})
             .to(this.ui.bonus, 0.5,{opacity:0})
             .addLabel('toTheLeft')
-            .to(this.ui.bonus, 0,{x:240,opacity:0,onComplete:this.generateBonusValue})
+            .to(this.ui.bonus, 0,{x:absBonusX-offsetBonusX,opacity:0,onComplete:this.generateBonusValue})
             .to(this.ui.bonus, 0.5,{opacity:1})
-            .to(this.ui.bonus, this.view.model.get('speedBonus'),{x:-240,onUpdate:this.checkTouchChariot})
+            .to(this.ui.bonus, this.view.model.get('speedBonus'),{x:-absBonusX-offsetBonusX,onUpdate:this.checkTouchChariot})
             .to(this.ui.bonus, 0.5,{opacity:0});
 
         this.escalator.add([oscilatorScale,move]);
     },
     init:function(){
         this.escalator.play();
+    },
+    stop:function(){
+        this.escalator.play('toTheRight');
+        this.escalator.stop();
     },
     generateBonusValue:function(){
         this.view.model.set('availableBonuses',_.shuffle(this.view.model.get('availableBonuses')));

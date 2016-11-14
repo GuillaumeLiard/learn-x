@@ -32990,6 +32990,9 @@ var Backbone = require("./../../../bower_components/backbone/backbone.js");
 var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 require("./../../../bower_components/gsap/src/uncompressed/TweenMax.js");
 
+var game = Backbone.Radio.channel('game');
+
+
 module.exports = Mn.Behavior.extend({
     timelines:Backbone.Radio.channel('timelines'),
     master:new TimelineMax({paused:true}),
@@ -33015,9 +33018,10 @@ module.exports = Mn.Behavior.extend({
             .addLabel("ready")
             .addPause("ready+=0.1")
             .addLabel("outro")
+            .add(this.outroStart)
             .add(this.timelines.request('output:outro'),"=0.5")
             .add(this.timelines.request('input:outro'),"=-2");
-        this.master.timeScale(20);
+        // this.master.timeScale(20);
     },
     startIntro:function(){
         this.master.play("intro");
@@ -33028,6 +33032,9 @@ module.exports = Mn.Behavior.extend({
     },
     introEnd:function(){
         this.view.triggerMethod('start');
+    },
+    outroStart:function(){
+        game.trigger('end');
     }
 });
 
@@ -33218,6 +33225,8 @@ var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.m
 require("./../../../bower_components/gsap/src/uncompressed/TweenMax.js");
 var Draggable = require('./../../../bower_components/gsap/src/uncompressed/utils/Draggable.js');
 
+var absBonusX = 260;
+var offsetBonusX = 15;
 
 
 module.exports = Mn.Behavior.extend({
@@ -33226,6 +33235,7 @@ module.exports = Mn.Behavior.extend({
     channelName: 'game',
     radioEvents: {
         'start': 'init',
+        'end': 'stop',
     },
     ui:{
         bonus:'#bonus-1',
@@ -33251,20 +33261,24 @@ module.exports = Mn.Behavior.extend({
             .to(this.ui.bonus, 0.5,{skewX:"-=10"});
 
         move.addLabel('toTheRight')
-            .to(this.ui.bonus, 0,{x:-240,opacity:0,onComplete:this.generateBonusValue})
+            .to(this.ui.bonus, 0,{x:-absBonusX-offsetBonusX,opacity:0,onComplete:this.generateBonusValue})
             .to(this.ui.bonus, 0.5,{opacity:1})
-            .to(this.ui.bonus, this.view.model.get('speedBonus'),{x:240,onUpdate:this.checkTouchChariot})
+            .to(this.ui.bonus, this.view.model.get('speedBonus'),{x:absBonusX-offsetBonusX,onUpdate:this.checkTouchChariot})
             .to(this.ui.bonus, 0.5,{opacity:0})
             .addLabel('toTheLeft')
-            .to(this.ui.bonus, 0,{x:240,opacity:0,onComplete:this.generateBonusValue})
+            .to(this.ui.bonus, 0,{x:absBonusX-offsetBonusX,opacity:0,onComplete:this.generateBonusValue})
             .to(this.ui.bonus, 0.5,{opacity:1})
-            .to(this.ui.bonus, this.view.model.get('speedBonus'),{x:-240,onUpdate:this.checkTouchChariot})
+            .to(this.ui.bonus, this.view.model.get('speedBonus'),{x:-absBonusX-offsetBonusX,onUpdate:this.checkTouchChariot})
             .to(this.ui.bonus, 0.5,{opacity:0});
 
         this.escalator.add([oscilatorScale,move]);
     },
     init:function(){
         this.escalator.play();
+    },
+    stop:function(){
+        this.escalator.play('toTheRight');
+        this.escalator.stop();
     },
     generateBonusValue:function(){
         this.view.model.set('availableBonuses',_.shuffle(this.view.model.get('availableBonuses')));
@@ -33585,11 +33599,11 @@ module.exports = Backbone.Model.extend({
     //     console.log('new Model');
     // },
     defaults:{
-        'life':3,
+        'life':1,
         'score':0,
         'x':0,
         'step':5,
-        'speedKey':2000,
+        'speedKey':2,
         'speedAppearingKey':0.5,
         'speedBonus':20,
         'bonus':100,

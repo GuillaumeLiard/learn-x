@@ -8,11 +8,11 @@ module.exports = Backbone.Model.extend({
     //     console.log('new Model');
     // },
     defaults:{
-        'life':3,
+        'life':1,
         'score':0,
         'x':0,
         'step':5,
-        'speedKey':2000,
+        'speedKey':2,
         'speedAppearingKey':0.5,
         'speedBonus':20,
         'bonus':100,

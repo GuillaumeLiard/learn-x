@@ -9,7 +9,7 @@ module.exports = Mn.Behavior.extend({
         'change:x': 'updateDisplay'
     },
     updateDisplay:function(){
-        this.ui.display.text(this.view.model.get('x'));
+        this.ui.display.text("x:"+this.view.model.get('x'));
     },
 
 });

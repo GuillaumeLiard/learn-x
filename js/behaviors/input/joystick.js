@@ -11,12 +11,14 @@ module.exports = Mn.Behavior.extend({
     ui:{
         up:'#up',
         down:'#down',
+        jump:'#jump',
     },
     events:{
         'mousedown @ui.up':'goUpHold',
-        'mousedown @ui.down':'goDownHold',
         'mouseleave @ui.up':'clearHold',
+        'mousedown @ui.down':'goDownHold',
         'mouseleave @ui.down':'clearHold',
+        'mousedown @ui.jump':'jump',
     },
     onAttach:function(){
         this.view.model.set('interval',null);
@@ -27,7 +29,7 @@ module.exports = Mn.Behavior.extend({
         _.bindAll(this,'goDownHold');
         _.bindAll(this,'goUp');
         _.bindAll(this,'goDown');
-        _.bindAll(this,'jump');        
+        _.bindAll(this,'jump');
         this.setKeyBinding();
         $(document).on('mouseup',this.clearHold);
     },

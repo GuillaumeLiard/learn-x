@@ -8,7 +8,7 @@ module.exports = Backbone.Model.extend({
     //     console.log('new Model');
     // },
     defaults:{
-        'life':1,
+        'life':5,
         'score':0,
         'x':0,
         'step':5,

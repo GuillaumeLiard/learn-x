@@ -63,7 +63,7 @@ module.exports = Mn.Behavior.extend({
             .to(this.ui.key, 0.3, {opacity:0})
             .to(this.ui.chariot, 0.3, {opacity:0})
             .to(this.ui.rail, 0.3, {opacity:0})
-            .to(this.ui.score,1,{scale:1.5})
+            .to(this.ui.score,1,{x:-210,scale:1.5})
             // .to(this.ui.score,1,{scale:3,x:-270,y:120})
             .addLabel('showReplay')
             .to(this.ui.play,2,{opacity:1, ease:Power4.easeIn},"showReplay+=0")

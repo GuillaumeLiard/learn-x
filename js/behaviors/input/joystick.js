@@ -13,13 +13,20 @@ module.exports = Mn.Behavior.extend({
         up:'#up',
         down:'#down',
         jump:'#jump',
+    },    
+    eventsDesktop:function(){
+        this.ui.up.on('mousedown',this.goUpHold);
+        this.ui.up.on('mouseleave',this.clearHold);
+        this.ui.down.on('mousedown',this.goDownHold);
+        this.ui.down.on('mouseleave',this.clearHold);
+        this.ui.jump.on('mousedown',this.jump);
+        $(document).on('mouseup',this.clearHold);
     },
-    events:{
-        'mousedown @ui.up':'goUpHold',
-        'mouseleave @ui.up':'clearHold',
-        'mousedown @ui.down':'goDownHold',
-        'mouseleave @ui.down':'clearHold',
-        'mousedown @ui.jump':'jump',
+    eventsMobile:function(){
+        this.ui.up.on('touchstart',this.goUpHold);
+        this.ui.down.on('touchstart',this.goDownHold);
+        this.ui.jump.on('touchstart',this.jump);
+        $(document).on('touchend',this.clearHold);
     },
     onAttach:function(){
         this.view.model.set('interval',null);
@@ -34,7 +41,16 @@ module.exports = Mn.Behavior.extend({
         _.bindAll(this,'goDown');
         _.bindAll(this,'jump');
         this.setKeyBinding();
-        $(document).on('mouseup',this.clearHold);
+        this.setTouchMouseBinding();
+    },
+    setTouchMouseBinding:function(){
+        if (('ontouchstart' in window) ||
+            (navigator.maxTouchPoints > 0) ||
+                (navigator.msMaxTouchPoints > 0)) {
+            this.eventsMobile();
+        } else{
+            this.eventsDesktop();
+        }
     },
     setKeyBinding:function(){
         Keyboard.bind('up', this.goUpHoldKeyboard,this.clearHoldUp);
@@ -42,13 +58,11 @@ module.exports = Mn.Behavior.extend({
         Keyboard.bind('space', this.jump);
     },
     goUpHoldKeyboard:function(e){
-        console.log('up');
         arrow = 'up';
         e.preventRepeat();
         this.goUpHold();
     },
     goDownHoldKeyboard:function(e){
-        console.log('down');
         arrow = 'down';
         e.preventRepeat();
         this.goDownHold();

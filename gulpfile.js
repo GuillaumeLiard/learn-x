@@ -27,8 +27,8 @@ gulp.task('templates', function () {
 // add custom browserify options here
 var customOpts = {
   entries: ['./js/app.js'],
-  // debug: true
-  debug: false
+  debug: true
+  // debug: false
 };
 var opts = assign({}, watchify.args, customOpts);
 var b = watchify(browserify(opts));
@@ -48,9 +48,9 @@ function bundle() {
     .pipe(source('bundle.js'))
     // optional, remove if you don't need to buffer file contents
     .pipe(buffer())
-    .pipe(jsmin())
-    // .pipe(sourcemaps.init({loadMaps: true})) // loads map from browserify file
-    // .pipe(sourcemaps.write('./')) // writes .map file
+    // .pipe(jsmin())
+    .pipe(sourcemaps.init({loadMaps: true})) // loads map from browserify file
+    .pipe(sourcemaps.write('./')) // writes .map file
     .pipe(gulp.dest('./dist'));
 }
 

@@ -1,6 +1,9 @@
 var _ = require('underscore');
+var Backbone = require('backbone');
 var Mn = require('backbone.marionette');
 require('gsap');
+
+var game = Backbone.Radio.channel('game');
 
 module.exports = Mn.Behavior.extend({
     channelName:'timelines',
@@ -21,7 +24,12 @@ module.exports = Mn.Behavior.extend({
         lifeIconPath:'#life-icon path',
         scoreIcon:'#score-icon',
         outputs:'#layerOutputs',
+        play:'#play',
     },
+    events:{
+        'mousedown @ui.play':'playAgain',
+    },
+
     intro:new TimelineMax({paused:true}),
     outro:new TimelineMax({paused:true}),
     initialize:function(){
@@ -42,6 +50,7 @@ module.exports = Mn.Behavior.extend({
     buildIntro:function(){
         this.intro
             .to(this.ui.key,0,{opacity:0})
+            .to(this.ui.play,0,{opacity:0})
             .from(this.ui.outputs,1,{opacity:0,x:-1000})
             .from(this.ui.chariot,1,{opacity:0,y:-200,ease:Bounce.easeOut,onComplete:this.onTheGround});
     },
@@ -54,9 +63,16 @@ module.exports = Mn.Behavior.extend({
             .to(this.ui.key, 0.3, {opacity:0})
             .to(this.ui.chariot, 0.3, {opacity:0})
             .to(this.ui.rail, 0.3, {opacity:0})
-            .to(this.ui.score,1,{scale:3,x:-270,y:120});
+            .to(this.ui.score,1,{scale:1.5})
+            // .to(this.ui.score,1,{scale:3,x:-270,y:120})
+            .addLabel('showReplay')
+            .to(this.ui.play,2,{opacity:1, ease:Power4.easeIn},"showReplay+=0")
+            .from(this.ui.play,2,{y:-200},"showReplay+=0");
     },
     onTheGround:function(){
         this.view.model.set("isJumping",false);
-    }
+    },
+    playAgain:function(){
+        game.trigger('play:again');
+    },
 });

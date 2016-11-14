@@ -71,6 +71,9 @@ html, body {
 #g3135{
 	cursor: pointer;
 }
+#play{
+	cursor: pointer;
+}
 
 #layerInputs{
 	/*stroke:black;

@@ -33660,7 +33660,7 @@ module.exports = Backbone.Model.extend({
         'score':0,
         'x':0,
         'step':5,
-        'speedKey':2,
+        'speedKey':2000,
         'speedAppearingKey':0.5,
         'speedBonus':20,
         'bonus':100,

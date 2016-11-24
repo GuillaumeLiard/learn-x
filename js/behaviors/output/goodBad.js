@@ -41,10 +41,11 @@ module.exports = Mn.Behavior.extend({
         .fromTo(this.ui.rail, 0.3, {y:"+=-2"}, {y:"+=2", ease:RoughEase.ease.config({strength:8, points:20, template:Linear.easeNone, randomize:false})})
         .to(this.ui.railPath, 0.3, {fill:"red"},0)
         .to(this.ui.railPath, 0.3, {fill:"#dcfafc"})
-        .to(this.ui.key, 0.3, {scale:0,opacity:0,transformOrigin:'50% 100%'},0.3)
+        .to(this.ui.key, 0.3, {scale:0,opacity:0,transformOrigin:'50% 100%',onComplete:this.loseLife},0.3)
         .fromTo(this.ui.lifeIcon, 0.3, {y:"+=-2"}, {y:"+=2", ease:RoughEase.ease.config({strength:8, points:20, template:Linear.easeNone, randomize:false})},0)
         .to(this.ui.lifeIconPath, 0.3, {fill:"red"},0)
-        .to(this.ui.lifeIconPath, 0.3, {fill:"#dcfafc",onComplete:this.loseLife});
+        .to(this.ui.lifeIconPath, 0.3, {fill:"#dcfafc"});
+        // .to(this.ui.lifeIconPath, 0.3, {fill:"#dcfafc",onComplete:this.loseLife});
     },
     buildGoodTimeline:function(){
         this.good
@@ -57,6 +58,7 @@ module.exports = Mn.Behavior.extend({
         .to(this.ui.key, 0.3, {opacity:0,ease:Power2.easeOut},"begin+=0.3")
         .to(this.ui.keyPath, 0.3, {fill:"#dcfafc"})
         .to(this.ui.scoreIcon, 0.3, {scale:"+=0.05",fill:"green",ease:Bounce.easeOut},"begin+=0.6")
+        // .to(this.ui.scoreIcon, 0.1, {scale:"-=0.05",fill:"#dcfafc",ease:Bounce.easeOut},"begin+=1.3");
         .to(this.ui.scoreIcon, 0.1, {scale:"-=0.05",fill:"#dcfafc",ease:Bounce.easeOut,onComplete:this.gainScore},"begin+=1.3");
         // this.good.timeScale(0.20);
     },

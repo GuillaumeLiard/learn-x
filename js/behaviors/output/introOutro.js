@@ -24,6 +24,7 @@ module.exports = Mn.Behavior.extend({
         lifeIconPath:'#life-icon path',
         scoreIcon:'#score-icon',
         outputs:'#layerOutputs',
+        outputs2:'#g3252',
         play:'#play',
     },
     events:{
@@ -51,6 +52,7 @@ module.exports = Mn.Behavior.extend({
         this.intro
             .to(this.ui.key,0,{opacity:0})
             .to(this.ui.play,0,{opacity:0})
+            // .to(this.ui.outputs,1,{rotation:-90,scale:0.5,transformOrigin:'50% 50%'})
             .from(this.ui.outputs,1,{opacity:0,x:-1000})
             .from(this.ui.chariot,1,{opacity:0,y:-200,ease:Bounce.easeOut,onComplete:this.onTheGround});
     },

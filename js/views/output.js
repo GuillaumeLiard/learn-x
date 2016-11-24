@@ -11,5 +11,5 @@ var Bonus = require('./../behaviors/output/bonus');
 module.exports = Mn.View.extend({
     template:templates['outputs.svg'],
     className:'output',
-    behaviors: [IntroOutro,Chariot,Key,Life,Score,GoodBad,Bonus],
+    behaviors: [IntroOutro,Chariot,Key,Life,Score,GoodBad],
 });

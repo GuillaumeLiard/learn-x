@@ -29,10 +29,12 @@ module.exports = Mn.Behavior.extend({
     buildIntro:function(){
         this.intro
             .staggerFrom(this.ui.items, 2, {rotation:90, opacity:0, ease:Elastic.easeOut, },0.5)
+            .to(this.ui.inputs,1,{scale:1.2,transformOrigin:'50% 50%'})
             .staggerFrom(this.ui.texts, 2, {x:30, opacity:0, ease:Power4.easeOut},0.5,"-=3");
     },
     buildOutro:function(){
         this.outro
-            .to(this.ui.inputs, 1, {scale:0, transformOrigin:'50% 50%', ease:Power4.easeOut});
+            .to(this.ui.inputs, 1, {scale:0, transformOrigin:'50% 50%', ease:Power4.easeOut})
+            .to(this.ui.texts, 1, {scale:0, transformOrigin:'50% 50%', ease:Power4.easeOut});
     },
 });

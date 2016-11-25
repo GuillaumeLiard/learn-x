@@ -10,8 +10,10 @@ module.exports = Mn.Behavior.extend({
     ui:{
         up:'#up',
         down:'#down',
-        plus:'#text3779',
-        minus:'#text13',
+        // plus:'#rect3000 #rect3000-3',
+        plus:'#up',
+        minus:'#down',
+        // minus:'#rect3000-3-6',
         container:'#layerInputs',
     },
     channelName: 'game',
@@ -23,8 +25,8 @@ module.exports = Mn.Behavior.extend({
         this.hour = (Math.floor(Math.random()*4))*90;
         console.log(this.hour);
         TweenMax.to(this.ui.container, this.view.model.get('speedWheel'), {rotation:this.hour,transformOrigin:'50% 50%'});
-        TweenMax.to(this.ui.plus, this.view.model.get('speedWheel'), {rotation:-this.hour, transformOrigin:'50% 52%'});
-        TweenMax.to(this.ui.minus, this.view.model.get('speedWheel'), {rotation:-this.hour, transformOrigin:'50% 55%'});
+        TweenMax.to(this.ui.minus, this.view.model.get('speedWheel'), {rotation:-this.hour, transformOrigin:'50% 50%'});
+        TweenMax.to(this.ui.plus, this.view.model.get('speedWheel'), {rotation:-this.hour, transformOrigin:'50% 50%'});
     }
 
 });

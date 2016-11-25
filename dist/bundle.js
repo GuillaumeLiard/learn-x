@@ -33150,7 +33150,7 @@ module.exports = Mn.Behavior.extend({
         up:'#up',
         down:'#down',
         jump:'#jump',
-    },    
+    },
     eventsDesktop:function(){
         this.ui.up.on('mousedown',this.goUpHold);
         this.ui.up.on('mouseleave',this.clearHold);
@@ -33177,7 +33177,7 @@ module.exports = Mn.Behavior.extend({
         _.bindAll(this,'goUp');
         _.bindAll(this,'goDown');
         _.bindAll(this,'jump');
-        this.setKeyBinding();
+        // this.setKeyBinding();
         this.setTouchMouseBinding();
     },
     setTouchMouseBinding:function(){
@@ -33696,14 +33696,14 @@ module.exports = Backbone.Model.extend({
     //     console.log('new Model');
     // },
     defaults:{
-        'life':30,
+        'life':3,
         'score':0,
         'x':0,
         'step':20,
         'speedKey':1.2,
         'speedAppearingKey':0.5,
         'speedBonus':20,
-        'speedWheel':1.25,
+        'speedWheel':0.1,
         'bonus':100,
         'availableBonuses':[-200,-400,400,200],
         'gameOver':false,

@@ -13,7 +13,7 @@ module.exports = Mn.Behavior.extend({
         up:'#up',
         down:'#down',
         jump:'#jump',
-    },    
+    },
     eventsDesktop:function(){
         this.ui.up.on('mousedown',this.goUpHold);
         this.ui.up.on('mouseleave',this.clearHold);
@@ -40,7 +40,7 @@ module.exports = Mn.Behavior.extend({
         _.bindAll(this,'goUp');
         _.bindAll(this,'goDown');
         _.bindAll(this,'jump');
-        this.setKeyBinding();
+        // this.setKeyBinding();
         this.setTouchMouseBinding();
     },
     setTouchMouseBinding:function(){

@@ -7,9 +7,10 @@ var Life = require('./../behaviors/output/life');
 var Score = require('./../behaviors/output/score');
 var GoodBad = require('./../behaviors/output/goodBad');
 var Bonus = require('./../behaviors/output/bonus');
+var Level = require('./../behaviors/output/level');
 
 module.exports = Mn.View.extend({
     template:templates['outputs.svg'],
     className:'output',
-    behaviors: [IntroOutro,Chariot,Key,Life,Score,GoodBad],
+    behaviors: [IntroOutro,Chariot,Key,Life,Score,GoodBad,Level],
 });

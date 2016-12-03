@@ -11,7 +11,7 @@ var offsetKey = 58;
 module.exports = Mn.Behavior.extend({
     channelName: 'game',
     radioEvents: {
-        'start': 'init',
+        // 'start': 'init',
         'key:launch': 'init',
         'key:stop:fall': 'keyStopFall',
     },

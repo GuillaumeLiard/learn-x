@@ -23,7 +23,6 @@ module.exports = Mn.Behavior.extend({
     hour:0,
     rotateWheel:function(){
         this.hour = (Math.floor(Math.random()*4))*90;
-        console.log(this.hour);
         TweenMax.to(this.ui.container, this.view.model.get('speedWheel'), {rotation:this.hour,transformOrigin:'50% 50%'});
         TweenMax.to(this.ui.minus, this.view.model.get('speedWheel'), {rotation:-this.hour, transformOrigin:'50% 50%'});
         TweenMax.to(this.ui.plus, this.view.model.get('speedWheel'), {rotation:-this.hour, transformOrigin:'50% 50%'});

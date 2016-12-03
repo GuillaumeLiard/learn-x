@@ -32992,7 +32992,7 @@ $(document).ready(function(){
     myApp.start();
 });
 
-},{"./../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../bower_components/jquery/dist/jquery.js":8,"./views/game":32}],16:[function(require,module,exports){
+},{"./../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../bower_components/jquery/dist/jquery.js":8,"./views/game":33}],16:[function(require,module,exports){
 var _ = require("./../../../bower_components/underscore/underscore.js");
 var Backbone = require("./../../../bower_components/backbone/backbone.js");
 var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
@@ -33065,7 +33065,7 @@ module.exports = Mn.Behavior.extend({
         this.view.triggerMethod('intro');
     },
     onStart: function() {
-        game.trigger('start');
+        game.trigger('new:level');
     },
     handleLife:function(){
         if(this.view.model.get('life')===0){
@@ -33075,8 +33075,12 @@ module.exports = Mn.Behavior.extend({
         }
     },
     handleScore:function(){
-        console.log('l');
-        game.trigger('key:launch');
+        // console.log('l');
+        if(this.view.model.get('score')%3 === 0){
+            game.trigger('new:level');
+        } else{
+            game.trigger('key:launch');
+        }
     },
     handleGameOver:function(){
         this.view.triggerMethod('outro');
@@ -33303,7 +33307,6 @@ module.exports = Mn.Behavior.extend({
     hour:0,
     rotateWheel:function(){
         this.hour = (Math.floor(Math.random()*4))*90;
-        console.log(this.hour);
         TweenMax.to(this.ui.container, this.view.model.get('speedWheel'), {rotation:this.hour,transformOrigin:'50% 50%'});
         TweenMax.to(this.ui.minus, this.view.model.get('speedWheel'), {rotation:-this.hour, transformOrigin:'50% 50%'});
         TweenMax.to(this.ui.plus, this.view.model.get('speedWheel'), {rotation:-this.hour, transformOrigin:'50% 50%'});
@@ -33549,6 +33552,7 @@ module.exports = Mn.Behavior.extend({
         outputs:'#layerOutputs',
         outputs2:'#g3252',
         play:'#play',
+        level:'#level',
     },
     events:{
         'mousedown @ui.play':'playAgain',
@@ -33575,6 +33579,7 @@ module.exports = Mn.Behavior.extend({
         this.intro
             .to(this.ui.key,0,{opacity:0})
             .to(this.ui.play,0,{opacity:0})
+            .to(this.ui.level,0,{opacity:0})
             // .to(this.ui.outputs,1,{rotation:-90,scale:0.5,transformOrigin:'50% 50%'})
             .from(this.ui.outputs,1,{opacity:0,x:-1000})
             .from(this.ui.chariot,1,{opacity:0,y:-200,ease:Bounce.easeOut,onComplete:this.onTheGround});
@@ -33616,7 +33621,7 @@ var offsetKey = 58;
 module.exports = Mn.Behavior.extend({
     channelName: 'game',
     radioEvents: {
-        'start': 'init',
+        // 'start': 'init',
         'key:launch': 'init',
         'key:stop:fall': 'keyStopFall',
     },
@@ -33661,6 +33666,77 @@ module.exports = Mn.Behavior.extend({
 });
 
 },{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/gsap/src/uncompressed/TweenMax.js":5,"./../../../bower_components/gsap/src/uncompressed/utils/Draggable.js":7,"./../../../bower_components/underscore/underscore.js":14}],28:[function(require,module,exports){
+var _ = require("./../../../bower_components/underscore/underscore.js");
+var Backbone = require("./../../../bower_components/backbone/backbone.js");
+var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
+require("./../../../bower_components/gsap/src/uncompressed/TweenMax.js");
+
+var game = Backbone.Radio.channel('game');
+module.exports = Mn.Behavior.extend({
+    channelName: 'game',
+    radioEvents: {
+        // 'start': 'init',
+        'new:level': 'newLevel',
+    },
+    ui:{
+        level:'#level',
+        levelSpan:'#level-span',
+    },
+    level:new TimelineMax({paused:true}),
+    onAttach:function(){
+        this.level.addLabel("show")
+            .to(this.ui.level, 0, {x:-300,opacity:0},"show")
+            .to(this.ui.level, 1.5, {opacity:1},"show+=0.1")
+            .to(this.ui.level, 3, {x:600,ease:SlowMo.ease.config(0.7, 0.7, false)},"show+=0.1")
+            .to(this.ui.level, 0.5, {opacity:0,onComplete:this.newLevelEnd},"-=0.5");
+    },
+    newLevel:function(){
+        this.addLevel();
+        this.level.play("show");
+    },
+    addLevel:function(){
+        var speed = this.view.model.get('speedKey');
+        var step;
+        if (speed > 5){
+            speed -= 1;
+            step = 10;
+        } else if (speed > 4){
+            speed -= 1;
+            step = 15;
+
+        } else if (speed > 3){
+            speed -= 0.5;
+            step = 20;
+
+        } else if (speed > 2){
+            speed -= 0.3;
+            step = 30;
+
+        } else if (speed > 1){
+            speed -= 0.1;
+            step = 100;
+
+        } else {
+            speed -= 0.05;
+            step = 200;
+        }
+        this.view.model.set('speedKey',speed);
+        this.view.model.set('step',step);
+        this.view.model.set('level',this.view.model.get('level')+1);
+        this.ui.levelSpan.text('Niveau '+this.view.model.get('level'));
+        // console.log("level "+this.view.model.get('level'));
+        // console.log("speed "+this.view.model.get('speedKey'));
+        // console.log("step "+this.view.model.get('step'));
+    },
+    newLevelEnd:function(){
+        game.trigger('key:launch');
+    }
+
+
+
+});
+
+},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../../bower_components/backbone/backbone.js":3,"./../../../bower_components/gsap/src/uncompressed/TweenMax.js":5,"./../../../bower_components/underscore/underscore.js":14}],29:[function(require,module,exports){
 var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 
 
@@ -33680,7 +33756,7 @@ module.exports = Mn.Behavior.extend({
 
 });
 
-},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1}],29:[function(require,module,exports){
+},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1}],30:[function(require,module,exports){
 var Mn = require("./../../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 
 
@@ -33700,7 +33776,7 @@ module.exports = Mn.Behavior.extend({
 
 });
 
-},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1}],30:[function(require,module,exports){
+},{"./../../../bower_components/backbone.marionette/lib/backbone.marionette.js":1}],31:[function(require,module,exports){
 var Backbone = require("./../../bower_components/backbone/backbone.js");
 
 var xMin = -240;
@@ -33714,9 +33790,10 @@ module.exports = Backbone.Model.extend({
         'life':3,
         'score':0,
         'x':0,
-        'step':20,
+        'step':11,
+        'level':0,
         'speedIntroOutro':2,
-        'speedKey':1.2,
+        'speedKey':6,
         'speedAppearingKey':0.5,
         'speedBonus':20,
         'speedWheel':0.1,
@@ -33750,7 +33827,7 @@ module.exports = Backbone.Model.extend({
     }
 });
 
-},{"./../../bower_components/backbone/backbone.js":3}],31:[function(require,module,exports){
+},{"./../../bower_components/backbone/backbone.js":3}],32:[function(require,module,exports){
 exports['game']=function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
@@ -33775,11 +33852,11 @@ return __p;
 exports['outputs.svg']=function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
-__p+='<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n<!-- Created with Inkscape (http://www.inkscape.org/) -->\n<svg id="compo" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" height="100%" width="100%" version="1.1" preserveAspectRatio="xMidYMax meet" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">\n <metadata id="metadata7">\n  <rdf:RDF>\n   <cc:Work rdf:about="">\n    <dc:format>image/svg+xml</dc:format>\n    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>\n    <dc:title/>\n   </cc:Work>\n  </rdf:RDF>\n </metadata>\n <g id="layerOutputs" transform="translate(0,-652.36218)">\n  <rect id="bgOutputs" height="296.05" width="476.05" y="654.34" x="1.9743" fill="#080e1f"/>\n  <g id="g3252" transform="translate(139.17662,819.89404)">\n    <g id="key" fill="#dcfafc" transform="matrix(0.41345981,0,0,0.37990032,177.20059,-112.4827)">\n    <path id="path6" d="m49.174,14.246c-2.529,0-4.586-2.057-4.586-4.585,0-2.529,2.057-4.586,4.586-4.586s4.586,2.058,4.586,4.586-2.058,4.585-4.586,4.585zm0-7.172c-1.426,0-2.586,1.16-2.586,2.586s1.16,2.585,2.586,2.585,2.586-1.16,2.586-2.585c0-1.426-1.161-2.586-2.586-2.586z"/>\n    <path id="path8" d="m64.5,86.197c0.55,0,1-0.44,1-1v-4.14c0-0.56-0.45-1-1-1h-11.45v-3.71h1.08c0.55,0,1-0.44,1-1v-5.18c0-0.55-0.45-1-1-1h-1.08v-40.03c6.21-1.71,10.79-7.4,10.79-14.15,0-8.09-6.58-14.67-14.67-14.67-8.08,0-14.67,6.58-14.67,14.67,0,6.77,4.61,12.48,10.85,14.16v40.02h-1.07c-0.56,0-1,0.45-1,1v5.18c0,0.56,0.44,1,1,1h1.07v22.34c0,0.55,0.45,1,1,1h5.7c0.55,0,1-0.45,1-1v-2.63h11.45c0.55,0,1-0.45,1-1v-4.15c0-0.55-0.45-1-1-1h-3.15v-3.71h3.15zm-28-71.21c0-6.99,5.69-12.67,12.67-12.67,6.99,0,12.67,5.68,12.67,12.67s-5.68,12.67-12.67,12.67c-6.98,0-12.67-5.68-12.67-12.67zm14.55,14.54v39.64h-3.7v-39.63c0.6,0.08,1.2,0.12,1.82,0.12,0.64,0,1.27-0.04,1.88-0.13zm0,68.16h-3.7v-21.34h3.7v21.34zm-5.77-23.34v-3.18h7.85v3.18h-7.85zm15.07,17.56h3.15v2.15h-10.45v-12h10.45v2.14h-3.15c-0.55,0-1,0.45-1,1v5.71c0,0.55,0.45,1,1,1z"/>\n   </g>\n   <g id="rail" transform="matrix(10.102235,0,0,2.7677669,-141.12515,39.471711)">\n    <g id="g3238" fill="#dcfafc">\n     <path id="path3240" fill="#dcfafc" d="M46.1,25.1h-44.4c-0.5,0-1-0.399-1-1s0.4-1,1-1h44.5c0.5,0,1,0.4,1,1s-0.5,1-1.1,1z"/>\n    </g>\n   </g>\n   <g id="chariot">\n    <g id="g1234" fill="#dcfafc" transform="translate(33.792726,-137.79648)">\n     <g id="g3361" fill="#dcfafc" transform="matrix(0.48299279,0,0,0.46834076,56.610567,182.17033)">\n      <g id="g3363">\n       <path id="path3365" fill="#dcfafc" d="m83.074,53.495h-123c-1.1,0-2-0.9-2-2v-17.5c0-1.1,0.9-2,2-2h123c1.1,0,2,0.9,2,2v17.5c0,1.1-0.9,2-2,2zm-121-4h119v-13.5h-119v13.5z"/>\n      </g>\n      <g id="g3367" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3369" fill="#dcfafc" d="m93.7,127.5c-7.2,0-13-5.8-13-13,0-2,0.5-4,1.4-5.8,2.2-4.4,6.7-7.2,11.7-7.2s9.4,2.8,11.7,7.2c0.9,1.8,1.4,3.8,1.4,5.8-0.2,7.2-6,13-13.2,13zm0-22c-3.4,0-6.5,1.9-8.1,5-0.6,1.3-1,2.6-1,4,0,5,4.1,9,9,9,5,0,9-4,9-9,0-1.4-0.3-2.8-1-4-1.4-3.1-4.5-5-7.9-5z"/>\n      </g>\n      <g id="g3371" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3373" fill="#dcfafc" d="m93.7,120.5c-3.3,0-6-2.7-6-6,0-0.9,0.2-1.8,0.6-2.7,1-2.1,3.1-3.3,5.4-3.3s4.4,1.3,5.4,3.3c0.4,0.8,0.6,1.7,0.6,2.7,0,3.3-2.7,6-6,6zm0-10c-1.5,0-2.9,0.9-3.6,2.2-0.3,0.6-0.4,1.2-0.4,1.8,0,2.2,1.8,4,4,4s4-1.8,4-4c0-0.6-0.1-1.2-0.4-1.8-0.7-1.4-2.1-2.2-3.6-2.2z"/>\n      </g>\n      <g id="g3375" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3377" fill="#dcfafc" d="m34.3,127.5c-7.2,0-13-5.8-13-13,0-2,0.5-4,1.4-5.8,2.2-4.4,6.7-7.2,11.7-7.2s9.4,2.8,11.7,7.2c0.9,1.8,1.4,3.8,1.4,5.8-0.1,7.2-6,13-13.2,13zm0-22c-3.4,0-6.5,1.9-8.1,5-0.6,1.3-1,2.6-1,4,0,5,4.1,9,9,9s9-4,9-9c0-1.4-0.3-2.8-1-4-1.3-3.1-4.4-5-7.9-5z"/>\n      </g>\n      <g id="g3379" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3381" fill="#dcfafc" d="m34.3,120.5c-3.3,0-6-2.7-6-6,0-0.9,0.2-1.8,0.6-2.7,1-2.1,3.1-3.3,5.4-3.3s4.4,1.3,5.4,3.3c0.4,0.8,0.6,1.8,0.6,2.7,0.1,3.3-2.6,6-6,6zm0-10c-1.5,0-2.9,0.9-3.6,2.2-0.3,0.6-0.4,1.2-0.4,1.8,0,2.2,1.8,4,4,4s4-1.8,4-4c0-0.6-0.1-1.2-0.4-1.8-0.7-1.4-2-2.2-3.6-2.2z"/>\n      </g>\n      <g id="g3387" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3389" fill="#dcfafc" d="m111.3,111.6h-7.7c-0.8,0-1.4-0.4-1.8-1.1-1.5-3.1-4.6-5-8.1-5-3.4,0-6.5,1.9-8.1,5-0.3,0.7-1,1.1-1.8,1.1h-39.6c-0.8,0-1.4-0.4-1.8-1.1-1.5-3.1-4.6-5-8.1-5s-6.5,1.9-8.1,5c-0.3,0.7-1,1.1-1.8,1.1h-7.7c-1,0-1.8-0.7-2-1.7l-8.3-57.6c-0.1-0.6,0.1-1.2,0.5-1.6s0.9-0.7,1.5-0.7h111.3c0.6,0,1.1,0.3,1.5,0.7s0.5,1,0.5,1.6l-8.4,57.5c-0.2,1-1,1.8-2,1.8zm-6.6-4h4.8l7.8-53.5h-106.6l7.8,53.5h4.8c2.4-3.8,6.5-6.1,11-6.1s8.7,2.3,11,6.1h37.3c2.4-3.8,6.5-6.1,11-6.1,4.6,0,8.7,2.3,11.1,6.1z"/>\n      </g>\n      <g id="g3391" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3393" fill="#dcfafc" d="m97.7,84.3c-0.6,0-1-0.4-1-1v-22.7c0-0.6,0.4-1,1-1s1,0.4,1,1v22.7c0,0.5-0.5,1-1,1z"/>\n      </g>\n      <g id="g3395" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3397" fill="#dcfafc" d="m75.2,84.3c-0.6,0-1-0.4-1-1v-22.7c0-0.6,0.4-1,1-1s1,0.4,1,1v22.7c0,0.5-0.4,1-1,1z"/>\n      </g>\n      <g id="g3399" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3401" fill="#dcfafc" d="m52.8,84.3c-0.6,0-1-0.4-1-1v-22.7c0-0.6,0.4-1,1-1s1,0.4,1,1v22.7c0,0.5-0.5,1-1,1z"/>\n      </g>\n      <g id="g3403" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3405" fill="#dcfafc" d="m30.3,84.3c-0.6,0-1-0.4-1-1v-22.7c0-0.6,0.4-1,1-1s1,0.4,1,1v22.7c0,0.5-0.4,1-1,1z"/>\n      </g>\n      <g id="g3407" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3409" fill="#dcfafc" d="M113.9,92.8h-99.8c-0.6,0-1-0.4-1-1s0.4-1,1-1h99.7c0.6,0,1,0.4,1,1s-0.4,1-0.9,1z"/>\n      </g>\n     </g>\n    </g>\n   </g>\n   <g id="score" fill="#dcfafc">\n    <g id="score-icon" transform="matrix(0.25061563,-0.13758201,0.12641482,0.23027379,259.91169,-154.90306)">\n     <path id="path6-6" d="m49.174,14.246c-2.529,0-4.586-2.057-4.586-4.585,0-2.529,2.057-4.586,4.586-4.586s4.586,2.058,4.586,4.586-2.058,4.585-4.586,4.585zm0-7.172c-1.426,0-2.586,1.16-2.586,2.586s1.16,2.585,2.586,2.585,2.586-1.16,2.586-2.585c0-1.426-1.161-2.586-2.586-2.586z"/>\n     <path id="path8-7" d="m64.5,86.197c0.55,0,1-0.44,1-1v-4.14c0-0.56-0.45-1-1-1h-11.45v-3.71h1.08c0.55,0,1-0.44,1-1v-5.18c0-0.55-0.45-1-1-1h-1.08v-40.03c6.21-1.71,10.79-7.4,10.79-14.15,0-8.09-6.58-14.67-14.67-14.67-8.08,0-14.67,6.58-14.67,14.67,0,6.77,4.61,12.48,10.85,14.16v40.02h-1.07c-0.56,0-1,0.45-1,1v5.18c0,0.56,0.44,1,1,1h1.07v22.34c0,0.55,0.45,1,1,1h5.7c0.55,0,1-0.45,1-1v-2.63h11.45c0.55,0,1-0.45,1-1v-4.15c0-0.55-0.45-1-1-1h-3.15v-3.71h3.15zm-28-71.21c0-6.99,5.69-12.67,12.67-12.67,6.99,0,12.67,5.68,12.67,12.67s-5.68,12.67-12.67,12.67c-6.98,0-12.67-5.68-12.67-12.67zm14.55,14.54v39.64h-3.7v-39.63c0.6,0.08,1.2,0.12,1.82,0.12,0.64,0,1.27-0.04,1.88-0.13zm0,68.16h-3.7v-21.34h3.7v21.34zm-5.77-23.34v-3.18h7.85v3.18h-7.85zm15.07,17.56h3.15v2.15h-10.45v-12h10.45v2.14h-3.15c-0.55,0-1,0.45-1,1v5.71c0,0.55,0.45,1,1,1z"/>\n    </g>\n    <text id="score-value" style="word-spacing:0px;letter-spacing:0px;" font-family="Sans" xml:space="preserve" font-size="20px" line-height="125%" font-style="normal" y="-143.26068" x="289.53915" font-weight="normal"><tspan id="score-value-span" y="-143.26068" x="289.53915" fill="#dcfafc">x0</tspan></text>\n   </g>\n   <g id="life">\n    <g id="life-icon" fill="#dcfafc" transform="translate(-21.356326,-155.79564)">\n     <g id="g3272" transform="matrix(0.49845044,0,0,0.49845044,-121.10352,-19.345717)">\n      <path id="path3274" fill="#dcfafc" d="m50.001,68.908c-0.127,0-0.252-0.031-0.365-0.094-0.915-0.512-22.395-12.631-22.395-24.619,0-7.593,5.09-13.104,12.104-13.104,3.89,0,8.203,2.599,10.656,5.261,2.451-2.662,6.765-5.261,10.655-5.261,7.014,0,12.104,5.511,12.104,13.104,0,11.988-21.479,24.107-22.394,24.619-0.113,0.063-0.24,0.094-0.365,0.094zm-10.656-36.316c-6.145,0-10.604,4.88-10.604,11.604,0,10.311,18.414,21.441,21.26,23.098,2.845-1.659,21.259-12.794,21.259-23.099,0-6.724-4.459-11.604-10.604-11.604-3.754,0-7.99,2.771-10.069,5.378-0.285,0.356-0.888,0.356-1.173,0-2.08-2.606-6.315-5.377-10.069-5.377z"/>\n     </g>\n     <g id="g3276" transform="matrix(0.49845044,0,0,0.49845044,-121.10352,-19.345717)">\n      <path id="path3278" fill="#dcfafc" d="m32.038,41.814c-0.104,0-0.21-0.021-0.311-0.067-0.377-0.172-0.543-0.617-0.371-0.994,1.449-3.18,4.045-5.337,7.311-6.076,0.405-0.093,0.806,0.162,0.896,0.566,0.092,0.404-0.162,0.806-0.566,0.897-2.797,0.633-5.025,2.492-6.275,5.235-0.127,0.276-0.399,0.439-0.684,0.439z"/>\n     </g>\n    </g>\n    <text id="life-value" style="word-spacing:0px;letter-spacing:0px;" font-family="Sans" xml:space="preserve" font-size="20px" line-height="125%" font-style="normal" y="-143.26068" x="-103.16403" font-weight="normal" fill="#000000"><tspan id="life-value-span" y="-143.26068" x="-103.16403" fill="#dcfafc">x3</tspan></text>\n   </g>\n   <g id="play" stroke="#dcfafc" fill="#dcfafc" transform="translate(53.99088,-64.36986)">\n    <rect id="rect3824-2" fill-rule="evenodd" stroke-dashoffset="0" height="97.725" width="96.221" y="-2.0245" x="-1.2778" stroke-width="1.2229" stroke="#080e1f" fill="#080e1f"/>\n    <path id="path4" d="M46.835,0c-25.826,0-46.835,21.009-46.835,46.841,0,25.826,21.009,46.835,46.835,46.835s46.83-21.009,46.83-46.835c0-25.832-21.004-46.841-46.83-46.841zm0,83.709c-20.36,0-36.875-16.508-36.875-36.868,0-20.369,16.515-36.874,36.875-36.874,20.361,0,36.873,16.505,36.873,36.874,0,20.36-16.512,36.868-36.873,36.868z"/>\n    <path id="path6-3" d="m37.396,31.478c-0.829-0.833-2.949-0.833-2.949,0v33.845c0,0.834,2.125,0.834,2.957,0l27.781-15.417c0.832-0.829,0.846-2.178,0.016-3.01l-27.805-15.418z"/>\n   </g>\n  </g>\n </g>\n</svg>\n';
+__p+='<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n<!-- Created with Inkscape (http://www.inkscape.org/) -->\n<svg id="compo" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" height="100%" width="100%" version="1.1" preserveAspectRatio="xMidYMax meet" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">\n <metadata id="metadata7">\n  <rdf:RDF>\n   <cc:Work rdf:about="">\n    <dc:format>image/svg+xml</dc:format>\n    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>\n    <dc:title/>\n   </cc:Work>\n  </rdf:RDF>\n </metadata>\n <g id="layerOutputs" transform="translate(0,-652.36218)">\n  <rect id="bgOutputs" height="296.05" width="476.05" y="654.34" x="1.9743" fill="#080e1f"/>\n  <text id="level" style="letter-spacing:0px;word-spacing:0px;" line-height="125%" font-family="Sans" xml:space="preserve" font-size="30.39061165px" y="798.49408" x="44.987003" font-weight="normal" font-style="normal"><tspan id="level-span" y="798.49408" x="44.987003" fill="#dcfafc">Niveau 1</tspan></text>\n  <g id="g3252" transform="translate(139.17662,819.89404)">\n   <g id="key" transform="matrix(0.41345981,0,0,0.37990032,177.20059,-112.4827)" fill="#dcfafc">\n    <path id="path6" d="m49.174,14.246c-2.529,0-4.586-2.057-4.586-4.585,0-2.529,2.057-4.586,4.586-4.586s4.586,2.058,4.586,4.586-2.058,4.585-4.586,4.585zm0-7.172c-1.426,0-2.586,1.16-2.586,2.586s1.16,2.585,2.586,2.585,2.586-1.16,2.586-2.585c0-1.426-1.161-2.586-2.586-2.586z"/>\n    <path id="path8" d="m64.5,86.197c0.55,0,1-0.44,1-1v-4.14c0-0.56-0.45-1-1-1h-11.45v-3.71h1.08c0.55,0,1-0.44,1-1v-5.18c0-0.55-0.45-1-1-1h-1.08v-40.03c6.21-1.71,10.79-7.4,10.79-14.15,0-8.09-6.58-14.67-14.67-14.67-8.08,0-14.67,6.58-14.67,14.67,0,6.77,4.61,12.48,10.85,14.16v40.02h-1.07c-0.56,0-1,0.45-1,1v5.18c0,0.56,0.44,1,1,1h1.07v22.34c0,0.55,0.45,1,1,1h5.7c0.55,0,1-0.45,1-1v-2.63h11.45c0.55,0,1-0.45,1-1v-4.15c0-0.55-0.45-1-1-1h-3.15v-3.71h3.15zm-28-71.21c0-6.99,5.69-12.67,12.67-12.67,6.99,0,12.67,5.68,12.67,12.67s-5.68,12.67-12.67,12.67c-6.98,0-12.67-5.68-12.67-12.67zm14.55,14.54v39.64h-3.7v-39.63c0.6,0.08,1.2,0.12,1.82,0.12,0.64,0,1.27-0.04,1.88-0.13zm0,68.16h-3.7v-21.34h3.7v21.34zm-5.77-23.34v-3.18h7.85v3.18h-7.85zm15.07,17.56h3.15v2.15h-10.45v-12h10.45v2.14h-3.15c-0.55,0-1,0.45-1,1v5.71c0,0.55,0.45,1,1,1z"/>\n   </g>\n   <g id="rail" transform="matrix(10.102235,0,0,2.7677669,-141.12515,39.471711)">\n    <g id="g3238" fill="#dcfafc">\n     <path id="path3240" d="M46.1,25.1h-44.4c-0.5,0-1-0.399-1-1s0.4-1,1-1h44.5c0.5,0,1,0.4,1,1s-0.5,1-1.1,1z" fill="#dcfafc"/>\n    </g>\n   </g>\n   <g id="chariot">\n    <g id="g1234" transform="translate(33.792726,-137.79648)" fill="#dcfafc">\n     <g id="g3361" transform="matrix(0.48299279,0,0,0.46834076,56.610567,182.17033)" fill="#dcfafc">\n      <g id="g3363">\n       <path id="path3365" d="m83.074,53.495h-123c-1.1,0-2-0.9-2-2v-17.5c0-1.1,0.9-2,2-2h123c1.1,0,2,0.9,2,2v17.5c0,1.1-0.9,2-2,2zm-121-4h119v-13.5h-119v13.5z" fill="#dcfafc"/>\n      </g>\n      <g id="g3367" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3369" d="m93.7,127.5c-7.2,0-13-5.8-13-13,0-2,0.5-4,1.4-5.8,2.2-4.4,6.7-7.2,11.7-7.2s9.4,2.8,11.7,7.2c0.9,1.8,1.4,3.8,1.4,5.8-0.2,7.2-6,13-13.2,13zm0-22c-3.4,0-6.5,1.9-8.1,5-0.6,1.3-1,2.6-1,4,0,5,4.1,9,9,9,5,0,9-4,9-9,0-1.4-0.3-2.8-1-4-1.4-3.1-4.5-5-7.9-5z" fill="#dcfafc"/>\n      </g>\n      <g id="g3371" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3373" d="m93.7,120.5c-3.3,0-6-2.7-6-6,0-0.9,0.2-1.8,0.6-2.7,1-2.1,3.1-3.3,5.4-3.3s4.4,1.3,5.4,3.3c0.4,0.8,0.6,1.7,0.6,2.7,0,3.3-2.7,6-6,6zm0-10c-1.5,0-2.9,0.9-3.6,2.2-0.3,0.6-0.4,1.2-0.4,1.8,0,2.2,1.8,4,4,4s4-1.8,4-4c0-0.6-0.1-1.2-0.4-1.8-0.7-1.4-2.1-2.2-3.6-2.2z" fill="#dcfafc"/>\n      </g>\n      <g id="g3375" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3377" d="m34.3,127.5c-7.2,0-13-5.8-13-13,0-2,0.5-4,1.4-5.8,2.2-4.4,6.7-7.2,11.7-7.2s9.4,2.8,11.7,7.2c0.9,1.8,1.4,3.8,1.4,5.8-0.1,7.2-6,13-13.2,13zm0-22c-3.4,0-6.5,1.9-8.1,5-0.6,1.3-1,2.6-1,4,0,5,4.1,9,9,9s9-4,9-9c0-1.4-0.3-2.8-1-4-1.3-3.1-4.4-5-7.9-5z" fill="#dcfafc"/>\n      </g>\n      <g id="g3379" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3381" d="m34.3,120.5c-3.3,0-6-2.7-6-6,0-0.9,0.2-1.8,0.6-2.7,1-2.1,3.1-3.3,5.4-3.3s4.4,1.3,5.4,3.3c0.4,0.8,0.6,1.8,0.6,2.7,0.1,3.3-2.6,6-6,6zm0-10c-1.5,0-2.9,0.9-3.6,2.2-0.3,0.6-0.4,1.2-0.4,1.8,0,2.2,1.8,4,4,4s4-1.8,4-4c0-0.6-0.1-1.2-0.4-1.8-0.7-1.4-2-2.2-3.6-2.2z" fill="#dcfafc"/>\n      </g>\n      <g id="g3387" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3389" d="m111.3,111.6h-7.7c-0.8,0-1.4-0.4-1.8-1.1-1.5-3.1-4.6-5-8.1-5-3.4,0-6.5,1.9-8.1,5-0.3,0.7-1,1.1-1.8,1.1h-39.6c-0.8,0-1.4-0.4-1.8-1.1-1.5-3.1-4.6-5-8.1-5s-6.5,1.9-8.1,5c-0.3,0.7-1,1.1-1.8,1.1h-7.7c-1,0-1.8-0.7-2-1.7l-8.3-57.6c-0.1-0.6,0.1-1.2,0.5-1.6s0.9-0.7,1.5-0.7h111.3c0.6,0,1.1,0.3,1.5,0.7s0.5,1,0.5,1.6l-8.4,57.5c-0.2,1-1,1.8-2,1.8zm-6.6-4h4.8l7.8-53.5h-106.6l7.8,53.5h4.8c2.4-3.8,6.5-6.1,11-6.1s8.7,2.3,11,6.1h37.3c2.4-3.8,6.5-6.1,11-6.1,4.6,0,8.7,2.3,11.1,6.1z" fill="#dcfafc"/>\n      </g>\n      <g id="g3391" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3393" d="m97.7,84.3c-0.6,0-1-0.4-1-1v-22.7c0-0.6,0.4-1,1-1s1,0.4,1,1v22.7c0,0.5-0.5,1-1,1z" fill="#dcfafc"/>\n      </g>\n      <g id="g3395" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3397" d="m75.2,84.3c-0.6,0-1-0.4-1-1v-22.7c0-0.6,0.4-1,1-1s1,0.4,1,1v22.7c0,0.5-0.4,1-1,1z" fill="#dcfafc"/>\n      </g>\n      <g id="g3399" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3401" d="m52.8,84.3c-0.6,0-1-0.4-1-1v-22.7c0-0.6,0.4-1,1-1s1,0.4,1,1v22.7c0,0.5-0.5,1-1,1z" fill="#dcfafc"/>\n      </g>\n      <g id="g3403" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3405" d="m30.3,84.3c-0.6,0-1-0.4-1-1v-22.7c0-0.6,0.4-1,1-1s1,0.4,1,1v22.7c0,0.5-0.4,1-1,1z" fill="#dcfafc"/>\n      </g>\n      <g id="g3407" transform="translate(-42.426407,-0.50507627)">\n       <path id="path3409" d="M113.9,92.8h-99.8c-0.6,0-1-0.4-1-1s0.4-1,1-1h99.7c0.6,0,1,0.4,1,1s-0.4,1-0.9,1z" fill="#dcfafc"/>\n      </g>\n     </g>\n    </g>\n   </g>\n   <g id="score" fill="#dcfafc">\n    <g id="score-icon" transform="matrix(0.25061563,-0.13758201,0.12641482,0.23027379,259.91169,-154.90306)">\n     <path id="path6-6" d="m49.174,14.246c-2.529,0-4.586-2.057-4.586-4.585,0-2.529,2.057-4.586,4.586-4.586s4.586,2.058,4.586,4.586-2.058,4.585-4.586,4.585zm0-7.172c-1.426,0-2.586,1.16-2.586,2.586s1.16,2.585,2.586,2.585,2.586-1.16,2.586-2.585c0-1.426-1.161-2.586-2.586-2.586z"/>\n     <path id="path8-7" d="m64.5,86.197c0.55,0,1-0.44,1-1v-4.14c0-0.56-0.45-1-1-1h-11.45v-3.71h1.08c0.55,0,1-0.44,1-1v-5.18c0-0.55-0.45-1-1-1h-1.08v-40.03c6.21-1.71,10.79-7.4,10.79-14.15,0-8.09-6.58-14.67-14.67-14.67-8.08,0-14.67,6.58-14.67,14.67,0,6.77,4.61,12.48,10.85,14.16v40.02h-1.07c-0.56,0-1,0.45-1,1v5.18c0,0.56,0.44,1,1,1h1.07v22.34c0,0.55,0.45,1,1,1h5.7c0.55,0,1-0.45,1-1v-2.63h11.45c0.55,0,1-0.45,1-1v-4.15c0-0.55-0.45-1-1-1h-3.15v-3.71h3.15zm-28-71.21c0-6.99,5.69-12.67,12.67-12.67,6.99,0,12.67,5.68,12.67,12.67s-5.68,12.67-12.67,12.67c-6.98,0-12.67-5.68-12.67-12.67zm14.55,14.54v39.64h-3.7v-39.63c0.6,0.08,1.2,0.12,1.82,0.12,0.64,0,1.27-0.04,1.88-0.13zm0,68.16h-3.7v-21.34h3.7v21.34zm-5.77-23.34v-3.18h7.85v3.18h-7.85zm15.07,17.56h3.15v2.15h-10.45v-12h10.45v2.14h-3.15c-0.55,0-1,0.45-1,1v5.71c0,0.55,0.45,1,1,1z"/>\n    </g>\n    <text id="score-value" style="word-spacing:0px;letter-spacing:0px;" font-weight="normal" xml:space="preserve" font-size="20px" line-height="125%" y="-143.26068" font-style="normal" x="289.53915" font-family="Sans"><tspan id="score-value-span" y="-143.26068" x="289.53915" fill="#dcfafc">x0</tspan></text>\n   </g>\n   <g id="life">\n    <g id="life-icon" transform="translate(-21.356326,-155.79564)" fill="#dcfafc">\n     <g id="g3272" transform="matrix(0.49845044,0,0,0.49845044,-121.10352,-19.345717)">\n      <path id="path3274" d="m50.001,68.908c-0.127,0-0.252-0.031-0.365-0.094-0.915-0.512-22.395-12.631-22.395-24.619,0-7.593,5.09-13.104,12.104-13.104,3.89,0,8.203,2.599,10.656,5.261,2.451-2.662,6.765-5.261,10.655-5.261,7.014,0,12.104,5.511,12.104,13.104,0,11.988-21.479,24.107-22.394,24.619-0.113,0.063-0.24,0.094-0.365,0.094zm-10.656-36.316c-6.145,0-10.604,4.88-10.604,11.604,0,10.311,18.414,21.441,21.26,23.098,2.845-1.659,21.259-12.794,21.259-23.099,0-6.724-4.459-11.604-10.604-11.604-3.754,0-7.99,2.771-10.069,5.378-0.285,0.356-0.888,0.356-1.173,0-2.08-2.606-6.315-5.377-10.069-5.377z" fill="#dcfafc"/>\n     </g>\n     <g id="g3276" transform="matrix(0.49845044,0,0,0.49845044,-121.10352,-19.345717)">\n      <path id="path3278" d="m32.038,41.814c-0.104,0-0.21-0.021-0.311-0.067-0.377-0.172-0.543-0.617-0.371-0.994,1.449-3.18,4.045-5.337,7.311-6.076,0.405-0.093,0.806,0.162,0.896,0.566,0.092,0.404-0.162,0.806-0.566,0.897-2.797,0.633-5.025,2.492-6.275,5.235-0.127,0.276-0.399,0.439-0.684,0.439z" fill="#dcfafc"/>\n     </g>\n    </g>\n    <text id="life-value" style="word-spacing:0px;letter-spacing:0px;" font-weight="normal" xml:space="preserve" font-size="20px" line-height="125%" y="-143.26068" font-style="normal" x="-103.16403" font-family="Sans" fill="#000000"><tspan id="life-value-span" y="-143.26068" x="-103.16403" fill="#dcfafc">x3</tspan></text>\n   </g>\n   <g id="play" stroke="#dcfafc" transform="translate(53.99088,-64.36986)" fill="#dcfafc">\n    <rect id="rect3824-2" fill-rule="evenodd" stroke-dashoffset="0" height="97.725" width="96.221" stroke="#080e1f" y="-2.0245" x="-1.2778" stroke-width="1.2229" fill="#080e1f"/>\n    <path id="path4" d="M46.835,0c-25.826,0-46.835,21.009-46.835,46.841,0,25.826,21.009,46.835,46.835,46.835s46.83-21.009,46.83-46.835c0-25.832-21.004-46.841-46.83-46.841zm0,83.709c-20.36,0-36.875-16.508-36.875-36.868,0-20.369,16.515-36.874,36.875-36.874,20.361,0,36.873,16.505,36.873,36.874,0,20.36-16.512,36.868-36.873,36.868z"/>\n    <path id="path6-3" d="m37.396,31.478c-0.829-0.833-2.949-0.833-2.949,0v33.845c0,0.834,2.125,0.834,2.957,0l27.781-15.417c0.832-0.829,0.846-2.178,0.016-3.01l-27.805-15.418z"/>\n   </g>\n  </g>\n </g>\n</svg>\n';
 }
 return __p;
 };
-},{}],32:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 var _ = require("./../../bower_components/underscore/underscore.js");
 var Backbone = require("./../../bower_components/backbone/backbone.js");
 var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
@@ -33807,7 +33884,7 @@ module.exports = Mn.View.extend({
     }
 });
 
-},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/backbone/backbone.js":3,"./../../bower_components/underscore/underscore.js":14,"./../behaviors/game/introOutro":16,"./../behaviors/game/mecha":17,"./../models/gameModel":30,"./../utils/templates.js":31,"./input.js":33,"./output.js":34}],33:[function(require,module,exports){
+},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/backbone/backbone.js":3,"./../../bower_components/underscore/underscore.js":14,"./../behaviors/game/introOutro":16,"./../behaviors/game/mecha":17,"./../models/gameModel":31,"./../utils/templates.js":32,"./input.js":34,"./output.js":35}],34:[function(require,module,exports){
 var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 var templates = require('./../utils/templates.js');
 var IntroOutro = require('./../behaviors/input/introOutro');
@@ -33822,7 +33899,7 @@ module.exports = Mn.View.extend({
     behaviors: [IntroOutro,Joystick,CoordinateDisplay,Step,Wheel],
 });
 
-},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../behaviors/input/coordinateDisplay":18,"./../behaviors/input/introOutro":19,"./../behaviors/input/joystick":20,"./../behaviors/input/step":21,"./../behaviors/input/wheel":22,"./../utils/templates.js":31}],34:[function(require,module,exports){
+},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../behaviors/input/coordinateDisplay":18,"./../behaviors/input/introOutro":19,"./../behaviors/input/joystick":20,"./../behaviors/input/step":21,"./../behaviors/input/wheel":22,"./../utils/templates.js":32}],35:[function(require,module,exports){
 var Mn = require("./../../bower_components/backbone.marionette/lib/backbone.marionette.js");
 var templates = require('./../utils/templates.js');
 var IntroOutro = require('./../behaviors/output/introOutro');
@@ -33832,14 +33909,15 @@ var Life = require('./../behaviors/output/life');
 var Score = require('./../behaviors/output/score');
 var GoodBad = require('./../behaviors/output/goodBad');
 var Bonus = require('./../behaviors/output/bonus');
+var Level = require('./../behaviors/output/level');
 
 module.exports = Mn.View.extend({
     template:templates['outputs.svg'],
     className:'output',
-    behaviors: [IntroOutro,Chariot,Key,Life,Score,GoodBad],
+    behaviors: [IntroOutro,Chariot,Key,Life,Score,GoodBad,Level],
 });
 
-},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../behaviors/output/bonus":23,"./../behaviors/output/chariot":24,"./../behaviors/output/goodBad":25,"./../behaviors/output/introOutro":26,"./../behaviors/output/key":27,"./../behaviors/output/life":28,"./../behaviors/output/score":29,"./../utils/templates.js":31}]},{},[15])
+},{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../behaviors/output/bonus":23,"./../behaviors/output/chariot":24,"./../behaviors/output/goodBad":25,"./../behaviors/output/introOutro":26,"./../behaviors/output/key":27,"./../behaviors/output/level":28,"./../behaviors/output/life":29,"./../behaviors/output/score":30,"./../utils/templates.js":32}]},{},[15])
 
 
 //# sourceMappingURL=bundle.js.map

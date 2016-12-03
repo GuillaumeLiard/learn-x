@@ -19,7 +19,7 @@ module.exports = Mn.Behavior.extend({
         this.view.triggerMethod('intro');
     },
     onStart: function() {
-        game.trigger('start');
+        game.trigger('new:level');
     },
     handleLife:function(){
         if(this.view.model.get('life')===0){
@@ -29,8 +29,12 @@ module.exports = Mn.Behavior.extend({
         }
     },
     handleScore:function(){
-        console.log('l');
-        game.trigger('key:launch');
+        // console.log('l');
+        if(this.view.model.get('score')%3 === 0){
+            game.trigger('new:level');
+        } else{
+            game.trigger('key:launch');
+        }
     },
     handleGameOver:function(){
         this.view.triggerMethod('outro');

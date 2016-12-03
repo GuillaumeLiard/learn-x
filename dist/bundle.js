@@ -33007,10 +33007,8 @@ module.exports = Mn.Behavior.extend({
     initialize:function(){
         _.bindAll(this,'introEnd');
     },
-    onInit:function(){
-        this.buildMasterTimeline();
-    },
     onIntro:function(){
+        this.buildMasterTimeline();
         this.startIntro();
     },
     onOutro:function(){
@@ -33029,13 +33027,12 @@ module.exports = Mn.Behavior.extend({
             .add(this.outroStart)
             .add(this.timelines.request('output:outro'),"=0.5")
             .add(this.timelines.request('input:outro'),"outro+=3.5");
-        this.master.timeScale(20);
+        this.master.timeScale(this.view.model.get('speedIntroOutro'));
     },
     startIntro:function(){
         this.master.play("intro");
     },
     startOutro:function(){
-
         this.master.play("outro");
     },
     introEnd:function(){
@@ -33060,6 +33057,16 @@ module.exports = Mn.Behavior.extend({
         "change:score":'handleScore',
         "change:gameOver":'handleGameOver'
     },
+    onAttach: function() {
+        _.bindAll(this,'initGame');
+        setTimeout(this.initGame,0);
+    },
+    initGame: function() {
+        this.view.triggerMethod('intro');
+    },
+    onStart: function() {
+        game.trigger('start');
+    },
     handleLife:function(){
         if(this.view.model.get('life')===0){
             this.view.model.set('gameOver',true);
@@ -33068,6 +33075,7 @@ module.exports = Mn.Behavior.extend({
         }
     },
     handleScore:function(){
+        console.log('l');
         game.trigger('key:launch');
     },
     handleGameOver:function(){
@@ -33103,9 +33111,11 @@ module.exports = Mn.Behavior.extend({
         'input:outro':'getOutro',
     },
     ui:{
-        'inputs':'#layerInputs',
-        'items':'.item',
-        'texts':'text',
+        inputs:'#layerInputs',
+        items:'.item',
+        texts:'text',
+        up:'#up',
+        down:'#down',
     },
     intro:new TimelineMax({paused:true}),
     outro:new TimelineMax({paused:true}),
@@ -33123,9 +33133,14 @@ module.exports = Mn.Behavior.extend({
     },
     buildIntro:function(){
         this.intro
-            .staggerFrom(this.ui.items, 2, {rotation:90, opacity:0, ease:Elastic.easeOut, },0.5)
-            .to(this.ui.inputs,1,{scale:1.2,transformOrigin:'50% 50%'})
-            .staggerFrom(this.ui.texts, 2, {x:30, opacity:0, ease:Power4.easeOut},0.5,"-=3");
+            .addLabel("start")
+            // .set(this.ui.inputs,{scale:1.2,transformOrigin:'50% 50%'},'start+=-0.1')
+            .from(this.ui.texts, 6, {opacity:0, ease:Power4.easeOut},'start+=0')
+            .to(this.ui.up, 1, {scale:0.6,transformOrigin:'50% 50%'},'start+=0')
+            .to(this.ui.down, 1, {scale:0.6,transformOrigin:'50% 50%'},'start+=0')
+            .from(this.ui.down, 4, {opacity:0, x:300, ease:Power4.easeOut},'start+=1')
+            .from(this.ui.up, 4, {opacity:0, x:-300, ease:Power4.easeOut},'start+=1');
+            // .staggerFrom(this.ui.items, 2, {rotation:90, opacity:0, ease:Elastic.easeOut, },0.5)
     },
     buildOutro:function(){
         this.outro
@@ -33700,6 +33715,7 @@ module.exports = Backbone.Model.extend({
         'score':0,
         'x':0,
         'step':20,
+        'speedIntroOutro':2,
         'speedKey':1.2,
         'speedAppearingKey':0.5,
         'speedBonus':20,
@@ -33788,19 +33804,7 @@ module.exports = Mn.View.extend({
     onRender: function() {
         this.showChildView('zone2', new Input({model:this.model}));
         this.showChildView('zone1', new Output({model:this.model}));
-    },
-    onAttach: function() {
-        _.bindAll(this,'initGame');
-        setTimeout(this.initGame,0);
-    },
-    initGame: function() {
-        this.triggerMethod('init');
-        this.triggerMethod('intro');
-    },
-    onStart: function() {
-        game.trigger('start');
-        // console.log('introEnd 3');
-    },
+    }
 });
 
 },{"./../../bower_components/backbone.marionette/lib/backbone.marionette.js":1,"./../../bower_components/backbone/backbone.js":3,"./../../bower_components/underscore/underscore.js":14,"./../behaviors/game/introOutro":16,"./../behaviors/game/mecha":17,"./../models/gameModel":30,"./../utils/templates.js":31,"./input.js":33,"./output.js":34}],33:[function(require,module,exports){

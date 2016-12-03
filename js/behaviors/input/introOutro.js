@@ -8,9 +8,11 @@ module.exports = Mn.Behavior.extend({
         'input:outro':'getOutro',
     },
     ui:{
-        'inputs':'#layerInputs',
-        'items':'.item',
-        'texts':'text',
+        inputs:'#layerInputs',
+        items:'.item',
+        texts:'text',
+        up:'#up',
+        down:'#down',
     },
     intro:new TimelineMax({paused:true}),
     outro:new TimelineMax({paused:true}),
@@ -28,9 +30,14 @@ module.exports = Mn.Behavior.extend({
     },
     buildIntro:function(){
         this.intro
-            .staggerFrom(this.ui.items, 2, {rotation:90, opacity:0, ease:Elastic.easeOut, },0.5)
-            .to(this.ui.inputs,1,{scale:1.2,transformOrigin:'50% 50%'})
-            .staggerFrom(this.ui.texts, 2, {x:30, opacity:0, ease:Power4.easeOut},0.5,"-=3");
+            .addLabel("start")
+            // .set(this.ui.inputs,{scale:1.2,transformOrigin:'50% 50%'},'start+=-0.1')
+            .from(this.ui.texts, 6, {opacity:0, ease:Power4.easeOut},'start+=0')
+            .to(this.ui.up, 1, {scale:0.6,transformOrigin:'50% 50%'},'start+=0')
+            .to(this.ui.down, 1, {scale:0.6,transformOrigin:'50% 50%'},'start+=0')
+            .from(this.ui.down, 4, {opacity:0, x:300, ease:Power4.easeOut},'start+=1')
+            .from(this.ui.up, 4, {opacity:0, x:-300, ease:Power4.easeOut},'start+=1');
+            // .staggerFrom(this.ui.items, 2, {rotation:90, opacity:0, ease:Elastic.easeOut, },0.5)
     },
     buildOutro:function(){
         this.outro

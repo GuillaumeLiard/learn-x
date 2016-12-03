@@ -11,6 +11,16 @@ module.exports = Mn.Behavior.extend({
         "change:score":'handleScore',
         "change:gameOver":'handleGameOver'
     },
+    onAttach: function() {
+        _.bindAll(this,'initGame');
+        setTimeout(this.initGame,0);
+    },
+    initGame: function() {
+        this.view.triggerMethod('intro');
+    },
+    onStart: function() {
+        game.trigger('start');
+    },
     handleLife:function(){
         if(this.view.model.get('life')===0){
             this.view.model.set('gameOver',true);
@@ -19,6 +29,7 @@ module.exports = Mn.Behavior.extend({
         }
     },
     handleScore:function(){
+        console.log('l');
         game.trigger('key:launch');
     },
     handleGameOver:function(){

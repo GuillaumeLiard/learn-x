@@ -12,10 +12,8 @@ module.exports = Mn.Behavior.extend({
     initialize:function(){
         _.bindAll(this,'introEnd');
     },
-    onInit:function(){
-        this.buildMasterTimeline();
-    },
     onIntro:function(){
+        this.buildMasterTimeline();
         this.startIntro();
     },
     onOutro:function(){
@@ -34,13 +32,12 @@ module.exports = Mn.Behavior.extend({
             .add(this.outroStart)
             .add(this.timelines.request('output:outro'),"=0.5")
             .add(this.timelines.request('input:outro'),"outro+=3.5");
-        this.master.timeScale(20);
+        this.master.timeScale(this.view.model.get('speedIntroOutro'));
     },
     startIntro:function(){
         this.master.play("intro");
     },
     startOutro:function(){
-
         this.master.play("outro");
     },
     introEnd:function(){

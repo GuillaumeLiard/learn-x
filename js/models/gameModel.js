@@ -12,6 +12,7 @@ module.exports = Backbone.Model.extend({
         'score':0,
         'x':0,
         'step':20,
+        'speedIntroOutro':2,
         'speedKey':1.2,
         'speedAppearingKey':0.5,
         'speedBonus':20,

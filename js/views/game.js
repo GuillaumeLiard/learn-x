@@ -22,17 +22,5 @@ module.exports = Mn.View.extend({
     onRender: function() {
         this.showChildView('zone2', new Input({model:this.model}));
         this.showChildView('zone1', new Output({model:this.model}));
-    },
-    onAttach: function() {
-        _.bindAll(this,'initGame');
-        setTimeout(this.initGame,0);
-    },
-    initGame: function() {
-        this.triggerMethod('init');
-        this.triggerMethod('intro');
-    },
-    onStart: function() {
-        game.trigger('start');
-        // console.log('introEnd 3');
-    },
+    }
 });

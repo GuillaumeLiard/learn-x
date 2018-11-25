@@ -3,7 +3,7 @@ learn x
 
 ## Demo
 
-https://guillaumeliard.github.io/x/
+https://guillaumeliard.github.io/learn-x/
 
 ## Goal
 

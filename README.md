@@ -1,4 +1,4 @@
-X
+learn x
 # Serious game experiment
 
 ## Demo
@@ -18,7 +18,7 @@ The meta goal of the game is to enable the gamer/learner to intuitively associat
 - the right direction with the addition operation
 - the left direction with the substraction operation
 
-Those are conventions which are commonly found in math or computer science when one wants to move an element along a line in a given direction
+Those are conventions which are commonly found in math or computer science when one wants to move an element along a line in a given direction (x axis in this case)
 
 n.b: the position of those two signs is shuffled every n seconds to disambiguate their position with there meaning
 
